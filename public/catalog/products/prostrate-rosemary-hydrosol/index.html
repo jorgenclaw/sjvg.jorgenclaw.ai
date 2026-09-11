@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prostrate Rosemary Hydrosol — San Joaquin Victory Gardens</title>
+  <meta name="description" content=Steam-distilled from prostrate rosemary leaf, this hydrosol carries a woody, resinous bouquet built on 1,8-cineole and camphor, with a bright, pine-like to>
+  <link rel="stylesheet" href="/catalog/style.css">
+</head>
+<body>
+  <div class="container">
+
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/catalog/">Catalog</a>
+      <a href="https://jorgenclaw.ai">jorgenclaw.ai</a>
+    </nav>
+
+    <a class="detail-back" href="/catalog/">← Back to Catalog</a>
+
+    <header class="detail-hero">
+      <h1 class="detail-name">Prostrate Rosemary Hydrosol</h1>
+      <p class="detail-botanical"><em>Salvia rosmarinus 'Prostratus' (syn. Rosmarinus officinalis 'Prostratus')</em></p>
+    </header>
+
+    <div class="detail-section">
+      <h2>Description</h2>
+      <p>Steam-distilled from prostrate rosemary leaf, this hydrosol carries a woody, resinous bouquet built on 1,8-cineole and camphor, with a bright, pine-like top note from alpha-pinene. Trailing rosemary tends to run a touch milder and less camphorous than upright culinary rosemary, giving a rounder, more wearable version of that classic evergreen scent. A brisk, invigorating facial and scalp mist, a natural water substitute in lotions and hair rinses, or a bracing addition to a morning routine. Popular in DIY hair care for the scalp, and a clean, herbaceous note in room and linen sprays.</p>
+    </div>
+
+    <div class="detail-section">
+      <h2>Technical Note</h2>
+      <p>Distilled from fresh prostrate rosemary leaf and stem via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.</p>
+    </div>
+
+    <div class="detail-section">
+      <h2>Ingredients</h2>
+      <p>100% pure hydrosol. No fillers, no synthetic fragrance, no preservatives added.</p>
+    </div>
+
+    <div class="detail-section">
+      <h2>Sizes</h2>
+      <p class="detail-sizes">4 oz. amber glass spray</p>
+    </div>
+
+    <p class="detail-price">$16 · 4 oz.</p>
+
+    <button class="detail-add-btn" id="detail-add-btn">Add to Cart</button>
+
+    <section class="consult-section">
+      <h2>Get in Touch</h2>
+      <p>Questions? Reach out.</p>
+      <ul style="list-style:none;padding:0;margin:1.5rem 0;line-height:2.2;font-size:1.05rem;">
+        <li><strong>Phone:</strong> <a href="tel:+12096840510" style="color:var(--amber, #d69e2e);">(209) 684-0510</a></li>
+        <li><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#592a3a362d2d1933362b3e3c373a35382e773830" style="color:var(--amber, #d69e2e);">hello@jorgenclaw.ai</a></li>
+      </ul>
+    </section>
+
+    <footer class="footer-nav">
+    </footer>
+
+  </div>
+
+  <script>
+  const slug = 'prostrate-rosemary-hydrosol';
+  let cart = JSON.parse(localStorage.getItem('sjvg-cart') || '[]');
+  
+  const btn = document.getElementById('detail-add-btn');
+  const inCart = cart.find(item => item.slug === slug);
+  if (inCart) {
+    btn.textContent = 'In Cart (' + inCart.qty + ')';
+    btn.classList.add('added');
+  }
+  
+  btn.addEventListener('click', () => {
+    const existing = cart.find(item => item.slug === slug);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ slug, qty: 1 });
+    }
+    localStorage.setItem('sjvg-cart', JSON.stringify(cart));
+    btn.textContent = 'In Cart (' + cart.find(i => i.slug === slug).qty + ')';
+    btn.classList.add('added');
+  });
+  </script>
+</body>
+</html>

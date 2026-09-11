@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>San Joaquin Victory Gardens</title>
+  <meta name="description" content="Small-batch hydrosols and essential oils from our garden in Manteca, CA. Steam-distilled lavender, citrus blossoms, and more.">
+  <meta property="og:title" content="San Joaquin Victory Gardens">
+  <meta property="og:description" content="Small-batch hydrosols and essential oils from the San Joaquin Valley.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sjvg.jorgenclaw.ai/">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Construction Banner -->
+    <div style="background:#d69e2e;color:#000;text-align:center;padding:0.5rem;font-weight:bold;font-size:0.9rem;">This site is under heavy construction and change, estimated completion October 2026</div>
+  <div class="container">
+
+    <!-- Hero -->
+    <header class="hero">
+      <h1>San Joaquin Victory Gardens</h1>
+      <p class="hero-sub">Small-batch hydrosols and essential oils from our garden in Manteca, CA.</p>
+    </header>
+
+    <!-- Carousel -->
+    <section class="carousel" id="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide active" data-caption="Our small-batch copper alembic still, where lavender and citrus blossoms are steam-distilled into hydrosols and essential oils.">
+          <img src="assets/slide1.jpg" alt="Copper alembic still">
+          <div class="carousel-caption"></div>
+        </div>
+        <div class="carousel-slide" data-caption="First flowering of a lavender planting in Manteca, 2026.">
+          <img src="assets/slide2.jpg" alt="Lavender rows, 2026">
+          <div class="carousel-caption"></div>
+        </div>
+      </div>
+      <div class="carousel-controls">
+        <button class="carousel-btn prev" id="prevBtn">&#8249;</button>
+        <button class="carousel-btn next" id="nextBtn">&#8250;</button>
+      </div>
+      <div class="carousel-dots" id="carouselDots">
+        <span class="dot active" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+      </div>
+    </section>
+
+    <!-- Breakdown -->
+    <section class="breakdown">
+      <div class="breakdown-item">
+        <h2>What We Do</h2>
+        <p>We do long-term tenant farming with homeowners to achieve fallow land restoration with lavender and other plantings in Manteca neighborhoods.</p>
+      </div>
+    </section>
+
+    <!-- Image Cards -->
+    <section class="image-cards">
+      <div class="img-card">
+        <img src="assets/products.jpg" alt="Products">
+        <a href="/catalog/" class="img-card-link">See our Products</a>
+      </div>
+      <div class="img-card">
+        <img src="assets/bees.jpg" alt="Blog">
+        <a href="https://njump.me/npub16pg5zadrrhseg2qjt9lwfcl50zcc8alnt7mnaend3j04wjz4gnjqn6efzc" class="img-card-link" target="_blank" rel="noopener">Read our Blog</a>
+      </div>
+      <div class="img-card">
+        <img src="assets/plants.jpg" alt="Jorgenclaw">
+        <a href="https://jorgenclaw.ai" class="img-card-link">What is Jorgenclaw.ai</a>
+      </div>
+      <div class="img-card">
+        <img src="assets/host.jpg" alt="Host a SJVG">
+        <a href="#" class="img-card-link">Host a SJVG</a>
+      </div>
+    </section>
+
+    <!-- Stay in the Loop -->
+    <section class="consult-section">
+      <h2>Stay in the loop</h2>
+      <p>Get notified about new product releases, cut flower deliveries, and SJVG updates.</p>
+      <form id="signup-form" style="max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:0.75rem;text-align:left;">
+        <input name="email" type="email" required placeholder="Email (required)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <input name="name" type="text" placeholder="Name (optional)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <input name="phone" type="tel" placeholder="Phone — for workshop reminders (optional)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <input name="signal" type="text" placeholder="Signal username — e.g. @username.01 (optional)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <button type="submit" class="consult-cta" style="border:none;cursor:pointer;font-size:0.95rem;">Join the list</button>
+        <p style="font-size:0.75rem;color:#888;margin:0;text-align:center;">No spam. Used only for workshop updates.</p>
+      </form>
+      <div id="signup-result" style="display:none;padding:1rem 0;font-size:0.95rem;"></div>
+    </section>
+    <script>
+    document.getElementById('signup-form').addEventListener('submit',async function(e){
+      e.preventDefault();
+      var f=e.target,d=new FormData(f);
+      var body={email:d.get('email'),name:d.get('name'),phone:d.get('phone'),signal:d.get('signal'),source:location.hostname};
+      try{
+        var r=await fetch('https://email-collector.jorgenclaw.workers.dev/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        var j=await r.json();
+        var res=document.getElementById('signup-result');
+        f.style.display='none';res.style.display='block';
+        if(j.duplicate){res.textContent='Already on the list.';res.style.color='#b7791f';}
+        else if(j.ok){res.textContent='\u2713 You\u2019re in.';res.style.color='#38a169';}
+        else{res.textContent='Something went wrong \u2014 try again.';res.style.color='#e53e3e';f.style.display='flex';}
+      }catch(err){
+        var res=document.getElementById('signup-result');
+        res.style.display='block';res.textContent='Something went wrong \u2014 try again.';res.style.color='#e53e3e';
+      }
+    });
+    </script>
+
+    <!-- Get in Touch -->
+    <section class="consult-section">
+      <h2>Get in Touch</h2>
+      <p>Questions, orders, or want to learn more? Reach out.</p>
+      <ul style="list-style:none;padding:0;margin:1.5rem 0;line-height:2.2;font-size:1.05rem;">
+        <li><strong>Phone:</strong> <a href="tel:+12096840510" style="color:var(--amber, #d69e2e);">(209) 684-0510</a></li>
+        <li><strong>Signal:</strong> ScottJorgensen.51</li>
+        <li><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#592a3a362d2d1933362b3e3c373a35382e773830" style="color:var(--amber, #d69e2e);">hello@jorgenclaw.ai</a></li>
+      </ul>
+    </section>
+
+    <!-- Footer Nav -->
+    <footer class="footer-nav">
+      <div class="footer-col">
+        <h3>Pages</h3>
+        <a href="/">Home</a>
+        <a href="/catalog/">Catalog</a>
+      </div>
+      <div class="footer-col">
+        <h3>Connect</h3>
+        <a href="https://njump.me/npub1ghawdls89y3vsjnz0505c2zpkccv7vjpddnpf9rt9m3x7nvsv30qchw63y" target="_blank" rel="noopener">Scott on Nostr</a>
+        <a href="https://njump.me/npub16pg5zadrrhseg2qjt9lwfcl50zcc8alnt7mnaend3j04wjz4gnjqn6efzc" target="_blank" rel="noopener">Jorgenclaw on Nostr</a>
+        <a href="https://github.com/jorgenclaw" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="footer-col">
+        <h3>Other</h3>
+        <a href="https://jorgenclaw.ai">jorgenclaw.ai</a>
+        <a href="https://sovereignty.jorgenclaw.ai">Sovereignty</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    let current = 0;
+    let autoTimer;
+
+    function showSlide(n) {
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+      // Update caption
+      const captionEl = slides[current].querySelector('.carousel-caption');
+      if (captionEl) {
+        captionEl.textContent = slides[current].getAttribute('data-caption') || '';
+      }
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => { showSlide(current - 1); resetAuto(); });
+    document.getElementById('nextBtn').addEventListener('click', () => { showSlide(current + 1); resetAuto(); });
+    dots.forEach(d => d.addEventListener('click', () => { showSlide(parseInt(d.dataset.index)); resetAuto(); }));
+
+    function startAuto() { autoTimer = setInterval(() => showSlide(current + 1), 5000); }
+    function resetAuto() { clearInterval(autoTimer); startAuto(); }
+    // Set initial caption
+    const initCaption = slides[0].querySelector('.carousel-caption');
+    if (initCaption) initCaption.textContent = slides[0].getAttribute('data-caption') || '';
+    startAuto();
+  </script>
+</body>
+</html>

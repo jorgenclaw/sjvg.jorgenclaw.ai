@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yerba Buena (Sweet Mint) Hydrosol — San Joaquin Victory Gardens</title>
+  <meta name="description" content=Steam-distilled from yerba buena leaf, this hydrosol opens with a cool, green mint bouquet built on pulegone and isomenthone — softer and sweeter than pepp>
+  <link rel="stylesheet" href="/catalog/style.css">
+</head>
+<body>
+  <div class="container">
+
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/catalog/">Catalog</a>
+      <a href="https://jorgenclaw.ai">jorgenclaw.ai</a>
+    </nav>
+
+    <a class="detail-back" href="/catalog/">← Back to Catalog</a>
+
+    <header class="detail-hero">
+      <h1 class="detail-name">Yerba Buena (Sweet Mint) Hydrosol</h1>
+      <p class="detail-botanical"><em>Clinopodium douglasii (syn. Satureja douglasii)</em></p>
+    </header>
+
+    <div class="detail-section">
+      <h2>Description</h2>
+      <p>Steam-distilled from yerba buena leaf, this hydrosol opens with a cool, green mint bouquet built on pulegone and isomenthone — softer and sweeter than peppermint's sharp menthol edge. Yerba buena, literally 'the good herb,' is a native Pacific coast mint relative long prized for that gentler character. Makes a soothing facial mist for warm days or after sun exposure, a cooling toner, a water substitute in lotions and after-sun gels, or a light room and pillow spray. Pairs well with lavender, chamomile, or a touch of spearmint essential oil.</p>
+    </div>
+
+    <div class="detail-section">
+      <h2>Technical Note</h2>
+      <p>Distilled from fresh yerba buena leaf and stem via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.</p>
+    </div>
+
+    <div class="detail-section">
+      <h2>Ingredients</h2>
+      <p>100% pure hydrosol. No fillers, no synthetic fragrance, no preservatives added.</p>
+    </div>
+
+    <div class="detail-section">
+      <h2>Sizes</h2>
+      <p class="detail-sizes">4 oz. amber glass spray</p>
+    </div>
+
+    <p class="detail-price">$16 · 4 oz.</p>
+
+    <button class="detail-add-btn" id="detail-add-btn">Add to Cart</button>
+
+    <section class="consult-section">
+      <h2>Get in Touch</h2>
+      <p>Questions? Reach out.</p>
+      <ul style="list-style:none;padding:0;margin:1.5rem 0;line-height:2.2;font-size:1.05rem;">
+        <li><strong>Phone:</strong> <a href="tel:+12096840510" style="color:var(--amber, #d69e2e);">(209) 684-0510</a></li>
+        <li><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#592a3a362d2d1933362b3e3c373a35382e773830" style="color:var(--amber, #d69e2e);">hello@jorgenclaw.ai</a></li>
+      </ul>
+    </section>
+
+    <footer class="footer-nav">
+    </footer>
+
+  </div>
+
+  <script>
+  const slug = 'yerba-buena-hydrosol';
+  let cart = JSON.parse(localStorage.getItem('sjvg-cart') || '[]');
+  
+  const btn = document.getElementById('detail-add-btn');
+  const inCart = cart.find(item => item.slug === slug);
+  if (inCart) {
+    btn.textContent = 'In Cart (' + inCart.qty + ')';
+    btn.classList.add('added');
+  }
+  
+  btn.addEventListener('click', () => {
+    const existing = cart.find(item => item.slug === slug);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ slug, qty: 1 });
+    }
+    localStorage.setItem('sjvg-cart', JSON.stringify(cart));
+    btn.textContent = 'In Cart (' + cart.find(i => i.slug === slug).qty + ')';
+    btn.classList.add('added');
+  });
+  </script>
+</body>
+</html>
