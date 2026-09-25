@@ -104,7 +104,8 @@
   // Product data loaded from JSON
   let products = [];
   let cart = JSON.parse(localStorage.getItem('sjvg-cart') || '[]')
-    .map(item => item.slug === 'prostrate-rosemary-hydrosol' ? { ...item, slug: 'rosemary-hydrosol' } : item);
+    .map(item => item.slug === 'prostrate-rosemary-hydrosol' ? { ...item, slug: 'rosemary-hydrosol' } : item)
+    .map(item => item.slug === 'yerba-buena-hydrosol' ? { ...item, slug: 'spearmint-hydrosol' } : item);
   let activeCategory = 'hydrosol';
   let activeUses = [];
   let searchQuery = '';
