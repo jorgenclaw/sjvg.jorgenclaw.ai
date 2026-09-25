@@ -22,7 +22,22 @@
     "detail_html": "/catalog/products/phenomenal-lavender-hydrosol/",
     "description_full": "Steam-distilled from our own 'Phenomenal' lavandin flower spikes, this hydrosol carries the classic floral-herbaceous bouquet of lavender \u2014 linalool and linalyl acetate forward \u2014 with a touch more camphor than true English lavender. 'Phenomenal' is a robust lavandin cultivar prized by growers for its vigor, disease resistance, and unusually high oil content, traits that carry through into a hydrosol with real depth and staying power. A go-to calming facial and body mist, a natural addition to linen and pillow sprays, or a water substitute in lotions, creams, and bath products. Also a favorite for cooling sunburned or irritated skin.",
     "technical_note": "Distilled from fresh 'Phenomenal' lavender flower spikes via steam distillation. As a lavandin (a natural hybrid of true lavender and spike lavender), its aromatic profile carries a touch more camphor than Lavandula angustifolia hydrosols, alongside the expected linalool and linalyl acetate. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Sweet and floral, with a touch more camphor than true lavender",
+    "distilled_from": "Fresh 'Phenomenal' lavandin flower spikes",
+    "key_aromatics": "Linalool and linalyl acetate forward",
+    "uses": [
+      "Calming facial and body mist",
+      "Linen and pillow spray",
+      "Water swap in lotions, creams and bath products",
+      "Cooling mist for sunburned or irritated skin"
+    ],
+    "pairs_with": [
+      "meyer-lemon-hydrosol",
+      "spearmint-hydrosol"
+    ],
+    "art": "/catalog/art/phenomenal-lavender-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "meyer-lemon-hydrosol",
@@ -45,7 +60,7 @@
     "photo_license": "CC BY 2.0",
     "photo_source": "https://commons.wikimedia.org/wiki/File:Meyer_Lemon.jpg",
     "detail_html": "/catalog/products/meyer-lemon-hydrosol/",
-    "description_full": "Steam-distilled from Meyer lemon peel, this hydrosol trades true lemon's sharp citral edge for something softer and more floral, a natural result of Meyer lemon's lower acidity and gentler aromatic profile. A gentle, refreshing toner for all skin types, especially oily or combination skin. Mist onto the face after cleansing, use as a water substitute in lotions and creams, or add to a clay mask for a bright citrus lift. Also lovely as a light room or linen spray, or a splash in the rinse water for glassware and produce. Blends well with lavender, rosemary, or a few drops of Meyer lemon essential oil for a deeper citrus note.",
+    "description_full": "Steam-distilled from Meyer lemon peel, this hydrosol trades true lemon's sharp citral edge for something softer and more floral, a natural result of Meyer lemon's lower acidity and gentler aromatic profile. A gentle, refreshing toner for all skin types, especially oily or combination skin. Mist onto the face after cleansing, use as a water substitute in lotions and creams, or add to a clay mask for a bright citrus lift. Also lovely as a light room or linen spray. Blends well with lavender, rosemary, or a few drops of Meyer lemon essential oil for a deeper citrus note.",
     "technical_note": "Distilled from fresh, rinsed Meyer lemon peel via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
     "sizes": "4 oz. amber glass spray / 8 oz. refill",
     "scent": "Soft citrus, rounder and more floral than true lemon",
@@ -55,8 +70,7 @@
       "Facial toner after cleansing",
       "Water swap in lotions and creams",
       "Clay mask lift",
-      "Room and linen spray",
-      "Rinse water for glassware and produce"
+      "Room and linen spray"
     ],
     "pairs_with": [
       "phenomenal-lavender-hydrosol",
@@ -88,7 +102,23 @@
     "detail_html": "/catalog/products/spearmint-hydrosol/",
     "description_full": "Steam-distilled from spearmint leaf, this hydrosol carries the sweet, familiar bouquet of spearmint, built on carvone with limonene and 1,8-cineole in support. Spearmint holds little menthol, so it reads softer and sweeter than peppermint, without the sharp cooling edge. Makes a soothing facial mist for warm days or after sun exposure, a cooling toner, a water substitute in lotions and after-sun gels, or a light room and pillow spray. Pairs well with our lavender, lemongrass, or Meyer lemon hydrosols.",
     "technical_note": "Distilled from fresh spearmint leaf and stem via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Sweet, familiar spearmint, softer than peppermint",
+    "distilled_from": "Fresh spearmint leaf and stem",
+    "key_aromatics": "Carvone-led, with limonene and 1,8-cineole",
+    "uses": [
+      "Facial mist for warm days or after sun",
+      "Cooling toner",
+      "Water swap in lotions and after-sun gels",
+      "Room and pillow spray"
+    ],
+    "pairs_with": [
+      "phenomenal-lavender-hydrosol",
+      "lemongrass-hydrosol",
+      "meyer-lemon-hydrosol"
+    ],
+    "art": "/catalog/art/spearmint-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "rosemary-hydrosol",
@@ -113,7 +143,22 @@
     "detail_html": "/catalog/products/rosemary-hydrosol/",
     "description_full": "Steam-distilled from rosemary leaf, this hydrosol carries a woody, resinous bouquet built on 1,8-cineole and camphor, with a bright, pine-like top note from alpha-pinene. Trailing rosemary tends to run a touch milder and less camphorous than upright culinary rosemary, giving a rounder, more wearable version of that classic evergreen scent. A brisk, invigorating facial and scalp mist, a natural water substitute in lotions and hair rinses, or a bracing addition to a morning routine. Popular in DIY hair care for the scalp, and a clean, herbaceous note in room and linen sprays.",
     "technical_note": "Distilled from fresh rosemary leaf and stem via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Woody and resinous, with a bright pine-like lift",
+    "distilled_from": "Fresh rosemary leaf and stem",
+    "key_aromatics": "1,8-Cineole and camphor forward, alpha-pinene on top",
+    "uses": [
+      "Facial and scalp mist",
+      "Water swap in lotions and hair rinses",
+      "DIY scalp and hair care",
+      "Room and linen spray"
+    ],
+    "pairs_with": [
+      "meyer-lemon-hydrosol",
+      "phenomenal-lavender-hydrosol"
+    ],
+    "art": "/catalog/art/rosemary-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "valencia-orange-hydrosol",
@@ -138,7 +183,23 @@
     "detail_html": "/catalog/products/valencia-orange-hydrosol/",
     "description_full": "Steam-distilled from Valencia orange peel, this hydrosol carries a true peel-oil bouquet: d-limonene up front, the same aromatic terpene that defines orange essential oil, rounding out into a soft floral finish. Gentler than the essential oil itself, it's well suited to all skin types \u2014 especially normal-to-dry skin seeking a light, non-drying toner. Use as a refreshing facial mist, a water substitute in lotions, creams, and clay masks, or as a natural room and linen spray. A cheerful addition to DIY household cleaners, where citrus's natural degreasing properties shine. Pairs well with vanilla, ginger, cinnamon leaf, or ylang ylang for a warmer, richer variation.",
     "technical_note": "Distilled from fresh-cut Valencia orange peel at low heat via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Bright citrus peel with a soft floral finish",
+    "distilled_from": "Fresh-cut Valencia orange peel, distilled at low heat",
+    "key_aromatics": "d-Limonene forward",
+    "uses": [
+      "Toner for normal-to-dry skin",
+      "Facial mist",
+      "Water swap in lotions, creams and clay masks",
+      "Room and linen spray",
+      "DIY household cleaners"
+    ],
+    "pairs_with": [
+      "meyer-lemon-hydrosol",
+      "lemongrass-hydrosol"
+    ],
+    "art": "/catalog/art/valencia-orange-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "oregano-hydrosol",
@@ -163,7 +224,21 @@
     "detail_html": "/catalog/products/oregano-hydrosol/",
     "description_full": "Steam-distilled from oregano leaf, this hydrosol carries oregano's signature phenolic bouquet: carvacrol and thymol forward, warm, savory, and edging toward medicinal. Naturally antimicrobial and antifungal in character, it's prized as a purifying mist for the skin and scalp, a natural addition to DIY surface cleaners, and a traditional gargle or steam-inhalation herb for seasonal wellness. Its aromatic compounds carry real bite even in hydrosol form \u2014 more so than most hydrosols \u2014 so a patch test is recommended before facial use, especially for sensitive skin.",
     "technical_note": "Distilled from fresh oregano leaf and flower via steam distillation. Naturally rich in carvacrol and other phenolic compounds. As with all hydrosols, natural batch variation in scent and strength should be expected. Intended for cosmetic and household use only; not a substitute for medical treatment.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Warm, savory and herbaceous, edging toward medicinal",
+    "distilled_from": "Fresh oregano leaf and flower",
+    "key_aromatics": "Carvacrol and thymol forward",
+    "uses": [
+      "Purifying skin and scalp mist",
+      "DIY surface cleaners",
+      "Steam inhalation"
+    ],
+    "pairs_with": [
+      "rosemary-hydrosol",
+      "african-blue-basil-hydrosol"
+    ],
+    "art": "/catalog/art/oregano-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "lemongrass-hydrosol",
@@ -188,7 +263,23 @@
     "detail_html": "/catalog/products/lemongrass-hydrosol/",
     "description_full": "Steam-distilled from lemongrass leaf and stalk, this hydrosol carries a bright, grassy bouquet built on citral \u2014 the same aromatic aldehyde that gives lemon peel its sharp citrus top note. Lemongrass hydrosol makes a toning facial mist well suited to oily or blemish-prone skin, a refreshing addition to hair rinses, and a natural water substitute in lotions and clay masks. Popular as a base for body and room sprays, particularly blended with a few drops of citronella, lemongrass, or eucalyptus essential oil for an outdoor/insect-deterring variation. Also a bright note in DIY household cleaners.",
     "technical_note": "Distilled from fresh lemongrass stalk and leaf via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Bright, grassy and lemony",
+    "distilled_from": "Fresh lemongrass stalk and leaf",
+    "key_aromatics": "Citral forward",
+    "uses": [
+      "Toning mist for oily or blemish-prone skin",
+      "Hair rinse",
+      "Water swap in lotions and clay masks",
+      "Body and room spray",
+      "DIY household cleaners"
+    ],
+    "pairs_with": [
+      "spearmint-hydrosol",
+      "valencia-orange-hydrosol"
+    ],
+    "art": "/catalog/art/lemongrass-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "white-sage-hydrosol",
@@ -213,7 +304,21 @@
     "detail_html": "/catalog/products/white-sage-hydrosol/",
     "description_full": "A soft, herbal, resinous water distilled from white sage \u2014 gentler and more wearable than burning the dried leaf, with the same grounding, clarifying character. Use as a room and linen spray, a calming body mist, or a light facial toner for normal-to-oily skin. White sage has long held deep cultural and ceremonial significance for Indigenous peoples of California, and wild populations have faced real pressure from over-harvesting. This hydrosol is distilled entirely from garden-grown, responsibly cultivated California white sage \u2014 never wild-harvested \u2014 so you can use it with a clear conscience.",
     "technical_note": "Distilled from fresh, garden-grown white sage leaf via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Soft, herbal and resinous",
+    "distilled_from": "Garden-grown white sage leaf, never wild-harvested",
+    "key_aromatics": "1,8-Cineole-led, with camphor and pinene",
+    "uses": [
+      "Room and linen spray",
+      "Calming body mist",
+      "Light toner for normal-to-oily skin"
+    ],
+    "pairs_with": [
+      "phenomenal-lavender-hydrosol",
+      "rosemary-hydrosol"
+    ],
+    "art": "/catalog/art/white-sage-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "african-blue-basil-hydrosol",
@@ -238,6 +343,20 @@
     "detail_html": "/catalog/products/african-blue-basil-hydrosol/",
     "description_full": "Steam-distilled from African blue basil leaf and flower, this hydrosol carries a bold, layered bouquet: camphor and 1,8-cineole up front, a spicy eugenol edge reminiscent of clove, and a faint sweet, floral finish. African blue basil is a striking, sterile hybrid between camphor basil and dark opal basil, prized by growers for its purple-veined leaves, lavender flower spikes, and unusually rich fragrance. Bolder and more medicinal than a culinary basil hydrosol, it makes an invigorating room and body spray, a bracing addition to a post-workout mist, or a distinctive note in DIY cleaning sprays. Best appreciated by those who like their herbal scents assertive rather than delicate.",
     "technical_note": "Distilled from fresh African blue basil leaf and flower via steam distillation. As a hybrid of camphor basil (Ocimum kilimandscharicum) and basil (Ocimum basilicum), its aromatic profile is naturally higher in camphor and 1,8-cineole than culinary basil varieties. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only; the camphorous character means a patch test is recommended before facial use.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Bold and spicy, with a clove-like edge and a faint sweet finish",
+    "distilled_from": "Fresh African blue basil leaf and flower",
+    "key_aromatics": "Camphor and 1,8-cineole up front, a eugenol edge",
+    "uses": [
+      "Room and body spray",
+      "Post-workout mist",
+      "DIY cleaning sprays"
+    ],
+    "pairs_with": [
+      "oregano-hydrosol",
+      "rosemary-hydrosol"
+    ],
+    "art": "/catalog/art/african-blue-basil-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   }
 ]

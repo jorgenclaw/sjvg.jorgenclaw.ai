@@ -119,7 +119,7 @@ function page(p) {
       </details>
       <details>
         <summary>Care</summary>
-        <p>Shake well. Keep out of direct sunlight.</p>
+        <p>Shake well. Keep out of direct sunlight. Refrigeration extends shelf life, but it isn't required.</p>
       </details>
       <details>
         <summary>What is a hydrosol?</summary>
@@ -133,6 +133,7 @@ ${pairsBlock(p)}
       <p>Questions? Reach out.</p>
       <ul>
         <li><strong>Phone:</strong> <a href="tel:+12096840510">(209) 684-0510</a></li>
+        <li><strong>Signal:</strong> Scott.Jorgensen.51</li>
         <li><strong>Email:</strong> <a href="mailto:hello@jorgenclaw.ai">hello@jorgenclaw.ai</a></li>
       </ul>
     </section>
