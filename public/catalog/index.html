@@ -103,7 +103,8 @@
   <script>
   // Product data loaded from JSON
   let products = [];
-  let cart = JSON.parse(localStorage.getItem('sjvg-cart') || '[]');
+  let cart = JSON.parse(localStorage.getItem('sjvg-cart') || '[]')
+    .map(item => item.slug === 'prostrate-rosemary-hydrosol' ? { ...item, slug: 'rosemary-hydrosol' } : item);
   let activeCategory = 'hydrosol';
   let activeUses = [];
   let searchQuery = '';
