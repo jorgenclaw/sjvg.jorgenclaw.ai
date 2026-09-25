@@ -47,7 +47,23 @@
     "detail_html": "/catalog/products/meyer-lemon-hydrosol/",
     "description_full": "Steam-distilled from Meyer lemon peel, this hydrosol trades true lemon's sharp citral edge for something softer and more floral, a natural result of Meyer lemon's lower acidity and gentler aromatic profile. A gentle, refreshing toner for all skin types, especially oily or combination skin. Mist onto the face after cleansing, use as a water substitute in lotions and creams, or add to a clay mask for a bright citrus lift. Also lovely as a light room or linen spray, or a splash in the rinse water for glassware and produce. Blends well with lavender, rosemary, or a few drops of Meyer lemon essential oil for a deeper citrus note.",
     "technical_note": "Distilled from fresh, rinsed Meyer lemon peel via steam distillation. As with all hydrosols, natural batch variation in scent and color should be expected. Intended for cosmetic and household use only.",
-    "sizes": "4 oz. amber glass spray / 8 oz. refill"
+    "sizes": "4 oz. amber glass spray / 8 oz. refill",
+    "scent": "Soft citrus, rounder and more floral than true lemon",
+    "distilled_from": "Fresh Meyer lemon peel",
+    "key_aromatics": "Limonene-led, with less citral than true lemon",
+    "uses": [
+      "Facial toner after cleansing",
+      "Water swap in lotions and creams",
+      "Clay mask lift",
+      "Room and linen spray",
+      "Rinse water for glassware and produce"
+    ],
+    "pairs_with": [
+      "phenomenal-lavender-hydrosol",
+      "rosemary-hydrosol"
+    ],
+    "art": "/catalog/art/meyer-lemon-hydrosol.jpg",
+    "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer"
   },
   {
     "slug": "spearmint-hydrosol",
