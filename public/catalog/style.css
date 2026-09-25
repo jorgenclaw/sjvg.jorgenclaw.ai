@@ -110,6 +110,14 @@ body {
   object-fit: contain;
 }
 
+.product-title { font-size: 1.15rem; font-weight: 600; line-height: 1.3; color: #f0f0f0; margin-bottom: 0.15rem; }
+.product-botanical { font-size: 0.82rem; font-style: italic; color: #999; line-height: 1.4; margin-bottom: 0.75rem; }
+.product-photo { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 8px; background: #1a1a1a; }
+.product-photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.photo-credit { font-size: 0.68rem; color: #666; line-height: 1.4; margin: 0.35rem 0 0.75rem; }
+.photo-credit a { color: #777; text-decoration: underline; text-decoration-color: #444; }
+.photo-credit a:hover { color: #aaa; }
+
 .product-info h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; color: #e8e8e8; }
 .product-info .botanical { font-size: 0.8rem; color: #666; font-style: italic; margin-bottom: 0.5rem; }
 .product-info .tagline { font-size: 0.82rem; color: #888; line-height: 1.5; margin-bottom: 0.5rem; }

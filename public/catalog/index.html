@@ -9,7 +9,7 @@
   <meta property="og:description" content="Steam-distilled hydrosols from the San Joaquin Valley. 4 oz. amber glass spray bottles, $16 each.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sjvg.jorgenclaw.ai/catalog/">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2026-09-24">
 </head>
 <body>
   <div class="container">
@@ -210,9 +210,16 @@
       
       html += `
         <div class="product-card" onclick="window.location.href='/catalog/products/${p.slug}/'" style="cursor:pointer;">
+          <h3 class="product-title">${p.name}</h3>
+          <p class="product-botanical">${p.botanical.replace(/\s*\([^)]*\)\s*$/, '')}</p>
+          ${p.photo ? `
+          <div class="product-photo">
+            <img src="${p.photo}" alt="${p.photo_alt}" loading="lazy">
+          </div>
+          <p class="photo-credit">Photo: <a href="${p.photo_source}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${p.photo_credit}</a>, ${p.photo_license}</p>` : `
           <div class="product-label">
             <img src="${p.image}" alt="${p.name}" style="width:100%;height:auto;border-radius:8px;object-fit:contain;">
-          </div>
+          </div>`}
           <div class="product-info">
             <p class="packaging-line">Sold in a 4 oz. amber glass bottle with a pump-action spray atomizer.</p>
             <p class="price">$${p.price_usd} · ${p.size}</p>
