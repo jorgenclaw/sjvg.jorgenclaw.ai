@@ -12,9 +12,10 @@ const { execFileSync } = require('child_process');
 
 const PUBLIC = path.join(__dirname, 'public');
 const SITE = 'https://sjvg.jorgenclaw.ai';
-const OUT = path.resolve(process.argv[2] || path.join(
-  process.env.HOME,
-  'NanoClaw/groups/main/Jorgenclaw.ai_LLC/San Joaquin Victory Gardens/hydrosol_and_oils_marketing/market-binder'));
+// The bottle labels' print sheets (batch-<label>.html) live in the marketing folder.
+const MARKETING = path.join(process.env.HOME,
+  'NanoClaw/groups/main/Jorgenclaw.ai_LLC/San Joaquin Victory Gardens/hydrosol_and_oils_marketing');
+const OUT = path.resolve(process.argv[2] || path.join(MARKETING, 'market-binder'));
 
 const products = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'))
   .filter(p => p.category === 'hydrosol');
@@ -30,6 +31,27 @@ const botanical = p => p.botanical.replace(/\s*\([^)]*\)\s*$/, '');
 const btcPrice = p => (p.price_usd * (1 - (p.btc_discount_pct || 0) / 100)).toFixed(2);
 const comingText = p => p.availability.replace(/^Expected available /, 'Coming ');
 const shortName = p => p.name.replace(/ Hydrosol$/, '');
+
+// Renders one label from the bottle print sheet, exactly as printed, to OUT/labels/<label>.png.
+// Label cell on the sheet is 3.79 x 1.894 in; drawn at 4x for a crisp print.
+function renderLabel(p) {
+  const name = path.basename(p.image, '.png');
+  const src = path.join(MARKETING, `batch-${name}.html`);
+  const png = path.join(OUT, 'labels', `${name}.png`);
+  const tmp = path.join(OUT, 'labels', `.${name}.html`);
+  const html = fs.readFileSync(src, 'utf8')
+    .replace('<head>', `<head><base href="file://${MARKETING}/">`)
+    .replace('</style>', `  .sheet { display: block; height: auto; }
+  .label { box-sizing: border-box; width: 3.79in; height: 1.894in; border: none; border-radius: 0; }
+  .label ~ .label { display: none; }
+</style>`);
+  fs.writeFileSync(tmp, html);
+  execFileSync('google-chrome', ['--headless=new', '--disable-gpu', '--no-sandbox', '--allow-file-access-from-files',
+    '--hide-scrollbars', '--force-device-scale-factor=4', '--window-size=364,182', '--virtual-time-budget=5000',
+    `--screenshot=${png}`, 'file://' + tmp], { stdio: 'ignore' });
+  fs.unlinkSync(tmp);
+  return png;
+}
 
 function qr(url) {
   const svg = execFileSync('qrencode', ['-t', 'SVG', '-m', '0', '-l', 'M', '--rle', '-o', '-', url], { encoding: 'utf8' });
@@ -94,8 +116,8 @@ body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink);
 .uses li { font-size: 10.5pt; padding-left: 0.22in; position: relative; line-height: 1.35; }
 .uses li::before { content: '❧'; position: absolute; left: 0; top: -0.01in; color: var(--leaf); font-size: 11pt; }
 .label-box { text-align: center; }
-.label-crop { position: relative; height: 1.15in; overflow: hidden; border-radius: 6px; box-shadow: 0 1px 6px rgba(0,0,0,0.25); }
-.label-crop img { position: absolute; width: 175%; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.label-img { width: 100%; aspect-ratio: 2 / 1; display: block; margin: 0 auto; border: 1px solid var(--line);
+             border-radius: 4px; box-shadow: 0 1px 6px rgba(60, 50, 20, 0.2); }
 .cap { font-size: 7.5pt; color: var(--olive); margin-top: 0.06in; font-style: italic; }
 
 .bottom { display: grid; grid-template-columns: 1fr 2.3in; gap: 0.3in; align-items: end; margin-top: auto; }
@@ -203,7 +225,7 @@ function productSheet(p) {
     </div>
     <div class="label-box">
       <h2 class="h2">Look for this label</h2>
-      <div class="label-crop"><img src="${img(p.image)}" alt="${esc(p.name)} label"></div>
+      <img class="label-img" src="file://${renderLabel(p)}" alt="${esc(p.name)} label">
       <p class="cap">The label on the bottle</p>
     </div>
   </div>
@@ -359,6 +381,7 @@ function orderSheet() {
 </section>`;
 }
 
+for (const d of ['sheets', 'pdf', 'preview', 'labels']) fs.mkdirSync(path.join(OUT, d), { recursive: true });
 const sheets = [
   ['01-cover', 'Cover', coverSheet()],
   ['02-prices-and-ordering', 'Prices & how to order', orderSheet()],
@@ -366,7 +389,6 @@ const sheets = [
   ...ordered.map((p, i) => [`${String(i + 4).padStart(2, '0')}-${p.slug}`, p.name, productSheet(p)]),
 ];
 
-for (const d of ['sheets', 'pdf', 'preview']) fs.mkdirSync(path.join(OUT, d), { recursive: true });
 const pdfs = [];
 for (const [file, title, body] of sheets) {
   const html = path.join(OUT, 'sheets', file + '.html');
