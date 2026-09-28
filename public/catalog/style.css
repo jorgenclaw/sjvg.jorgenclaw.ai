@@ -21,6 +21,12 @@ body {
 .nav a { font-size: 0.8rem; color: #555; text-decoration: none; transition: color 0.15s; }
 .nav a:hover { color: #5b8dd9; text-decoration: none; }
 .nav a.active { color: #e8e8e8; }
+.nav a.nav-cart { margin-left: auto; position: relative; color: #e8e8e8; display: inline-flex; align-items: center; }
+.nav a.nav-cart:hover { color: #5b8dd9; }
+.nav-cart-count { position: absolute; top: -6px; right: -10px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #5b8dd9; color: #fff; font-size: 0.65rem; font-weight: 700; line-height: 16px; text-align: center; }
+.nav-cart-count[hidden] { display: none; }
+.empty-cart-note { text-align: center; color: #888; font-size: 0.9rem; margin: 0 0 1rem; }
+#cart-section { scroll-margin-top: 1rem; }
 
 /* Hero */
 .hero { text-align: center; padding: 2rem 0 1rem; }

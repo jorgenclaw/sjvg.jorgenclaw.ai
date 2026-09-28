@@ -9,7 +9,7 @@
   <meta property="og:description" content="Steam-distilled hydrosols from the San Joaquin Valley. 4 oz. amber glass spray bottles, $16 each.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sjvg.jorgenclaw.ai/catalog/">
-  <link rel="stylesheet" href="style.css?v=2026-09-24">
+  <link rel="stylesheet" href="style.css?v=2026-09-28">
 </head>
 <body>
   <div class="container">
@@ -19,6 +19,10 @@
       <a href="/">Home</a>
       <a href="/catalog/" class="active">Catalog</a>
       <a href="https://jorgenclaw.ai">jorgenclaw.ai</a>
+      <a href="#cart-section" class="nav-cart" id="nav-cart" aria-label="View cart">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        <span class="nav-cart-count" id="nav-cart-count" hidden>0</span>
+      </a>
     </nav>
 
     <!-- Hero -->
@@ -80,7 +84,7 @@
         <span>Bitcoin (10% off)</span>
         <span id="cart-btc"></span>
       </div>
-      <button class="send-order-btn" id="send-order-btn">Send Order via SMS</button>
+      <button class="send-order-btn" id="send-order-btn">Send Order with Your Name and Other Questions via SMS</button>
       <p class="cart-note">Opens your SMS app pre-addressed to (209) 684-0510 with your order summary.</p>
     </section>
 
@@ -111,6 +115,16 @@
   let activeUses = [];
   let searchQuery = '';
 
+  document.getElementById('nav-cart').addEventListener('click', e => {
+    if (cart.length > 0) return;
+    e.preventDefault();
+    const grid = document.getElementById('product-grid');
+    if (!document.getElementById('empty-cart-note')) {
+      grid.insertAdjacentHTML('beforebegin', '<p id="empty-cart-note" class="empty-cart-note">Your cart is empty — tap "Add to Cart" on any product below.</p>');
+    }
+    document.getElementById('empty-cart-note').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
   async function loadProducts() {
     try {
       const resp = await fetch('/catalog/data/products.json');
@@ -126,6 +140,10 @@
   function updateCartUI() {
     const cartSection = document.getElementById('cart-section');
     const cartItems = document.getElementById('cart-items');
+    const navCount = document.getElementById('nav-cart-count');
+    const itemCount = cart.reduce((n, item) => n + item.qty, 0);
+    navCount.textContent = itemCount;
+    navCount.hidden = itemCount === 0;
     
     if (cart.length === 0) {
       cartSection.style.display = 'none';
