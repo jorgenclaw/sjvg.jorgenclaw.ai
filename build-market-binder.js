@@ -53,6 +53,14 @@ function renderLabel(p) {
   return png;
 }
 
+// Printed on every product sheet's footer; the catalog links to each product page.
+const CATALOG_ADDR = 'sjvg.jorgenclaw.ai/catalog';
+// Payment details Scott confirmed on 2026-09-29. Check with him before changing them: customers pay into these.
+const PAY = {
+  lightning: 'scott@jorgenclaw.ai',
+  silentPayment: 'sp1qqdlm5jjcxtx8l3pkjz7atw3j0jkxp339mk6w89hhpmc82ny96wj6jqmu6zqm6wxycn8nnnf2q5q6mx3jdat00tvs4vlhk3ux7wnc38urd5lxafs7',
+};
+
 function qr(url) {
   const svg = execFileSync('qrencode', ['-t', 'SVG', '-m', '0', '-l', 'M', '--rle', '-o', '-', url], { encoding: 'utf8' });
   return svg.slice(svg.indexOf('<svg')).replace(/ width="[^"]*" height="[^"]*"/, '');
@@ -120,7 +128,7 @@ body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink);
              border-radius: 4px; box-shadow: 0 1px 6px rgba(60, 50, 20, 0.2); }
 .cap { font-size: 7.5pt; color: var(--olive); margin-top: 0.06in; font-style: italic; }
 
-.bottom { display: grid; grid-template-columns: 1fr 2.3in; gap: 0.3in; align-items: end; margin-top: auto; }
+.bottom { margin-top: auto; }
 .pairs { display: flex; gap: 0.16in; }
 .pair { width: 1.2in; }
 .pair img { width: 1.2in; height: 0.8in; object-fit: cover; border-radius: 6px; display: block; }
@@ -131,8 +139,10 @@ body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink);
 .qr-t { font-size: 10pt; font-weight: 700; line-height: 1.25; }
 .qr-u { font-size: 6.5pt; color: var(--olive); margin-top: 0.05in; word-break: break-all; }
 
-.foot { margin-top: 0.12in; padding-top: 0.08in; border-top: 1px solid var(--line); display: flex;
-        justify-content: space-between; font-size: 7.5pt; color: var(--olive); }
+.foot { margin-top: 0.12in; padding-top: 0.08in; border-top: 1px solid var(--line); display: grid;
+        grid-template-columns: 1fr auto 1fr; gap: 0.2in; font-size: 7.5pt; color: var(--olive); }
+.foot-c { text-align: center; font-size: 9pt; font-weight: 700; color: var(--ink, #2b2b1f); letter-spacing: 0.02em; }
+.foot-r { text-align: right; }
 
 /* Cover */
 .cover-top { padding: 0.55in 0.5in 0.45in; text-align: center; }
@@ -168,15 +178,17 @@ table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
 .prices td.num, .prices th.num { text-align: right; white-space: nowrap; }
 .prices .soon td { color: #8a8a70; }
 .soon-when { display: block; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
-.pay { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.16in; margin-top: 0.1in; }
+.pay { display: grid; grid-template-columns: 0.8fr 0.8fr 1fr 1fr; align-items: start; gap: 0.16in; margin-top: 0.1in; }
 .pay div { border: 1px solid var(--line); border-radius: 10px; padding: 0.12in; text-align: center; }
 .pay b { display: block; font-size: 12pt; }
 .pay span { font-size: 8.5pt; color: var(--olive); }
 .pay .btc { border-color: var(--amber); }
+.pay svg { display: block; width: 0.95in; height: 0.95in; margin: 0.08in auto 0.05in; }
+.pay-a { font-size: 5.5pt; color: var(--olive); word-break: break-all; line-height: 1.3; }
 .contact { font-size: 11pt; line-height: 1.8; }
 .contact b { display: inline-block; width: 0.8in; font-weight: 700; }
 .bigqr { display: flex; gap: 0.2in; align-items: center; }
-.bigqr svg { width: 1.35in; height: 1.35in; flex: none; }
+.bigqr svg { width: 1.05in; height: 1.05in; flex: none; }
 `;
 
 function doc(title, body) {
@@ -184,8 +196,8 @@ function doc(title, body) {
 <style>${CSS}</style></head><body>${body}</body></html>`;
 }
 
-function footer(right) {
-  return `<div class="foot"><span>San Joaquin Victory Gardens · Manteca, California</span><span>${right}</span></div>`;
+function footer(right, center = '') {
+  return `<div class="foot"><span>San Joaquin Victory Gardens · Manteca, California</span><span class="foot-c">${center}</span><span class="foot-r">${right}</span></div>`;
 }
 
 function productSheet(p) {
@@ -239,11 +251,8 @@ function productSheet(p) {
           <p class="pair-n">${esc(q.name)}</p><p class="pair-b">${esc(botanical(q))}</p></div>`).join('')}
       </div>` : ''}
     </div>
-    <div class="qr">${qr(url)}
-      <div><p class="qr-t">Scan to order or read more</p><p class="qr-u sans">${esc(url.replace('https://', ''))}</p></div>
-    </div>
   </div>
-  ${footer(`${CONTACT.phone} · ${CONTACT.email}`)}
+  ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
 </section>`;
 }
 
@@ -359,17 +368,18 @@ function orderSheet() {
     <div class="pay">
       <div><b>Cash</b><span>Listed price</span></div>
       <div><b>Zelle</b><span>Listed price</span></div>
-      <div class="btc"><b>Bitcoin</b><span>Save ${pct}%</span></div>
+      <div class="btc"><b>Lightning</b><span>Bitcoin · save ${pct}%</span>${qr(`lightning:${PAY.lightning}`)}<p class="pay-a sans">${PAY.lightning}</p></div>
+      <div class="btc"><b>On-chain</b><span>Bitcoin silent payments · save ${pct}%</span>${qr(PAY.silentPayment)}<p class="pay-a sans">${PAY.silentPayment}</p></div>
     </div>
   </div>
 
   <div class="section two">
     <div>
       <h2 class="h2">Order anytime</h2>
-      <p class="body">Buy here at the table today, or order later from our online catalog.
-        Local pickup or hand delivery in the Manteca, CA area.</p>
-      <div class="bigqr" style="margin-top:0.14in;">${qr(catalog)}
-        <div><p class="qr-t">Scan for the online catalog</p><p class="qr-u sans">sjvg.jorgenclaw.ai/catalog</p></div></div>
+      <div class="bigqr">${qr(catalog)}
+        <div><p class="body">Buy here at the table today, or order later from our online catalog.
+          Local pickup or hand delivery in the Manteca, CA area.</p>
+          <p class="qr-t" style="margin-top:0.06in;">Scan for the online catalog</p><p class="qr-u sans">${CATALOG_ADDR}</p></div></div>
     </div>
     <div>
       <h2 class="h2">Get in touch</h2>
