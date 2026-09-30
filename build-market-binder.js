@@ -277,7 +277,7 @@ function coverSheet() {
   <p class="cover-line">4 oz. amber glass spray bottles · Pure hydrosol, nothing added</p>
   <div style="margin-top:auto;">
     <p class="credits sans">Plant photos via Wikimedia Commons — ${esc(credits)}.</p>
-    ${footer(`${CONTACT.phone} · sjvg.jorgenclaw.ai`)}
+    ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
   </div>
 </section>`;
 }
