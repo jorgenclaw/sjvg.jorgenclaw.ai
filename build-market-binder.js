@@ -57,6 +57,8 @@ function renderLabel(p) {
 const CATALOG_ADDR = 'sjvg.jorgenclaw.ai/catalog';
 // Payment details Scott confirmed on 2026-09-29. Check with him before changing them: customers pay into these.
 const PAY = {
+  // Cropped from Scott's Zelle PDF (payment/scott-zelle-qr-source.pdf).
+  zelleQr: path.join(MARKETING, 'payment/zelle-qr.png'),
   lightning: 'scott@jorgenclaw.ai',
   silentPayment: 'sp1qqdlm5jjcxtx8l3pkjz7atw3j0jkxp339mk6w89hhpmc82ny96wj6jqmu6zqm6wxycn8nnnf2q5q6mx3jdat00tvs4vlhk3ux7wnc38urd5lxafs7',
 };
@@ -178,12 +180,12 @@ table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
 .prices td.num, .prices th.num { text-align: right; white-space: nowrap; }
 .prices .soon td { color: #8a8a70; }
 .soon-when { display: block; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
-.pay { display: grid; grid-template-columns: 0.8fr 0.8fr 1fr 1fr; align-items: start; gap: 0.16in; margin-top: 0.1in; }
+.pay { display: grid; grid-template-columns: 0.6fr 1fr 1fr 1fr; align-items: start; gap: 0.16in; margin-top: 0.1in; }
 .pay div { border: 1px solid var(--line); border-radius: 10px; padding: 0.12in; text-align: center; }
 .pay b { display: block; font-size: 12pt; }
 .pay span { font-size: 8.5pt; color: var(--olive); }
 .pay .btc { border-color: var(--amber); }
-.pay svg { display: block; width: 0.95in; height: 0.95in; margin: 0.08in auto 0.05in; }
+.pay svg, .pay-qr { display: block; width: 0.95in; height: 0.95in; margin: 0.08in auto 0.05in; }
 .pay-a { font-size: 5.5pt; color: var(--olive); word-break: break-all; line-height: 1.3; }
 .contact { font-size: 11pt; line-height: 1.8; }
 .contact b { display: inline-block; width: 0.8in; font-weight: 700; }
@@ -367,7 +369,7 @@ function orderSheet() {
     <h2 class="h2">Ways to pay</h2>
     <div class="pay">
       <div><b>Cash</b><span>Listed price</span></div>
-      <div><b>Zelle</b><span>Listed price</span></div>
+      <div><b>Zelle</b><span>Listed price</span><img class="pay-qr" src="file://${PAY.zelleQr}" alt="Zelle QR code"><p class="pay-a sans">Scott Jorgensen · scan in your banking app</p></div>
       <div class="btc"><b>Lightning</b><span>Bitcoin · save ${pct}%</span>${qr(`lightning:${PAY.lightning}`)}<p class="pay-a sans">${PAY.lightning}</p></div>
       <div class="btc"><b>On-chain</b><span>Bitcoin silent payments · save ${pct}%</span>${qr(PAY.silentPayment)}<p class="pay-a sans">${PAY.silentPayment}</p></div>
     </div>
