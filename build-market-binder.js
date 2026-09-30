@@ -130,7 +130,10 @@ body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink);
              border-radius: 4px; box-shadow: 0 1px 6px rgba(60, 50, 20, 0.2); }
 .cap { font-size: 7.5pt; color: var(--olive); margin-top: 0.06in; font-style: italic; }
 
-.bottom { margin-top: auto; }
+.bottom { margin-top: auto; display: grid; grid-template-columns: 1fr 3.05in; gap: 0.3in; align-items: end; }
+.try { background: var(--cream); border: 1px solid var(--line); border-left: 3px solid var(--amber); border-radius: 10px; padding: 0.16in 0.2in; }
+.try-k { font-size: 7.5pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.06in; }
+.try-t { font-size: 11pt; font-style: italic; line-height: 1.45; }
 .pairs { display: flex; gap: 0.16in; }
 .pair { width: 1.2in; }
 .pair img { width: 1.2in; height: 0.8in; object-fit: cover; border-radius: 6px; display: block; }
@@ -253,6 +256,7 @@ function productSheet(p) {
           <p class="pair-n">${esc(q.name)}</p><p class="pair-b">${esc(botanical(q))}</p></div>`).join('')}
       </div>` : ''}
     </div>
+    ${p.try_this ? `<div class="try"><p class="try-k sans">Try this</p><p class="try-t">${esc(p.try_this)}</p></div>` : ''}
   </div>
   ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
 </section>`;
