@@ -167,6 +167,7 @@ table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
 .prices th { font-size: 7.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); font-weight: 400; }
 .prices td.num, .prices th.num { text-align: right; white-space: nowrap; }
 .prices .soon td { color: #8a8a70; }
+.soon-when { display: block; font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
 .pay { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.16in; margin-top: 0.1in; }
 .pay div { border: 1px solid var(--line); border-radius: 10px; padding: 0.12in; text-align: center; }
 .pay b { display: block; font-size: 12pt; }
@@ -332,9 +333,9 @@ function orderSheet() {
   const catalog = `${SITE}/catalog/`;
   const rows = ordered.map(p => {
     const soon = p.availability !== 'In stock';
-    return `<tr class="${soon ? 'soon' : ''}"><td>${esc(p.name)}</td><td>${esc(p.size)}</td>
-      <td class="num">${soon ? esc(comingText(p)) : `$${p.price_usd}`}</td>
-      <td class="num">${soon ? '' : `$${btcPrice(p)}`}</td></tr>`;
+    return `<tr class="${soon ? 'soon' : ''}"><td>${esc(p.name)}${soon ? `<span class="soon-when sans">${esc(comingText(p))}</span>` : ''}</td><td>${esc(p.size)}</td>
+      <td class="num">$${p.price_usd}</td>
+      <td class="num">$${btcPrice(p)}</td></tr>`;
   }).join('');
   const pct = products[0].btc_discount_pct;
   return `<section class="sheet">
