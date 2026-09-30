@@ -11,7 +11,7 @@ const path = require('path');
 const PUBLIC = path.join(__dirname, 'public');
 const products = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'));
 const bySlug = Object.fromEntries(products.map(p => [p.slug, p]));
-const CSS_VERSION = '2026-09-25';
+const CSS_VERSION = '2026-09-29';
 
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -101,6 +101,7 @@ function page(p) {
       <ul class="pd-uses">
         ${p.uses.map(u => `<li>${esc(u)}</li>`).join('\n        ')}
       </ul>
+      ${p.try_this ? `<aside class="pd-try"><p class="pd-try-k">Try this</p><p class="pd-try-t">${esc(p.try_this)}</p></aside>` : ''}
     </section>
 
     <section class="pd-section">
