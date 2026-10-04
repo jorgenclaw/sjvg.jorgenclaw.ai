@@ -16,7 +16,9 @@ const CSS_VERSION = '2026-09-29';
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const hasPageFields = p => ['scent', 'distilled_from', 'key_aromatics', 'uses', 'art'].every(k => p[k]);
+// Hydrosols only for now: the page template is written for hydrosols, and the essential
+// oils (in products.json for the market binder) have no prices or pages yet.
+const hasPageFields = p => p.category === 'hydrosol' && ['scent', 'distilled_from', 'key_aromatics', 'uses', 'art'].every(k => p[k]);
 
 function priceBlock(p) {
   const btc = (p.price_usd * (1 - (p.btc_discount_pct || 0) / 100)).toFixed(2);

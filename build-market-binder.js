@@ -5,7 +5,9 @@
 //
 // Writes <out-dir>/sheets/*.html, pdf/*.pdf (one per sheet),
 // preview/*.png and SJVG-market-binder.pdf (every sheet, in binder order).
-// Needs google-chrome, qrencode, pdfunite and pdftoppm on the PATH.
+// The binder ends with the four Sovereignty by Design flyers, printed from their
+// own HTML in the SbD flyers folder.
+// Needs google-chrome, qrencode, pdfunite, pdfinfo and pdftoppm on the PATH.
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
@@ -13,16 +15,22 @@ const { execFileSync } = require('child_process');
 const PUBLIC = path.join(__dirname, 'public');
 const SITE = 'https://sjvg.jorgenclaw.ai';
 // The bottle labels' print sheets (batch-<label>.html) live in the marketing folder.
-const MARKETING = path.join(process.env.HOME,
-  'NanoClaw/groups/main/Jorgenclaw.ai_LLC/San Joaquin Victory Gardens/hydrosol_and_oils_marketing');
+const LLC = path.join(process.env.HOME, 'NanoClaw/groups/main/Jorgenclaw.ai_LLC');
+const MARKETING = path.join(LLC, 'San Joaquin Victory Gardens/hydrosol_and_oils_marketing');
+const FLYERS = path.join(LLC, 'Sovereignty by Design/flyers');
 const OUT = path.resolve(process.argv[2] || path.join(MARKETING, 'market-binder'));
 
-const products = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'))
-  .filter(p => p.category === 'hydrosol');
-const bySlug = Object.fromEntries(products.map(p => [p.slug, p]));
+const all = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'));
+const bySlug = Object.fromEntries(all.map(p => [p.slug, p]));
 // In-stock first (catalog order), then what's coming.
-const ordered = [...products.filter(p => p.availability === 'In stock'),
-                 ...products.filter(p => p.availability !== 'In stock')];
+const inStockFirst = list => [...list.filter(p => p.availability === 'In stock'),
+                              ...list.filter(p => p.availability !== 'In stock')];
+const products = all.filter(p => p.category === 'hydrosol');
+const ordered = inStockFirst(products);
+const oils = inStockFirst(all.filter(p => p.category === 'essential_oil'));
+const isOil = p => p.category === 'essential_oil';
+// Not distilled at volume yet: listed as one line on the price page until its lab analysis is back.
+const COMING_OIL_LINE = { name: 'African Blue Basil Essential Oil', when: 'Coming June 2027, after lab testing' };
 
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -30,7 +38,7 @@ const img = p => 'file://' + path.join(PUBLIC, p);              // site path -> 
 const botanical = p => p.botanical.replace(/\s*\([^)]*\)\s*$/, '');
 const btcPrice = p => (p.price_usd * (1 - (p.btc_discount_pct || 0) / 100)).toFixed(2);
 const comingText = p => p.availability.replace(/^Expected available /, 'Coming ');
-const shortName = p => p.name.replace(/ Hydrosol$/, '');
+const shortName = p => p.name.replace(/ (Hydrosol|Essential Oil)$/, '');
 
 // Renders one label from the bottle print sheet, exactly as printed, to OUT/labels/<label>.png.
 // Label cell on the sheet is 3.79 x 1.894 in; drawn at 4x for a crisp print.
@@ -189,11 +197,59 @@ table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
 .pay span { font-size: 8.5pt; color: var(--olive); }
 .pay .btc { border-color: var(--amber); }
 .pay svg, .pay-qr { display: block; width: 0.95in; height: 0.95in; margin: 0.08in auto 0.05in; }
+.pay-lg svg, .pay-lg .pay-qr { width: 1.35in; height: 1.35in; }
 .pay-a { font-size: 5.5pt; color: var(--olive); word-break: break-all; line-height: 1.3; }
 .contact { font-size: 11pt; line-height: 1.8; }
 .contact b { display: inline-block; width: 0.8in; font-weight: 700; }
 .bigqr { display: flex; gap: 0.2in; align-items: center; }
 .bigqr svg { width: 1.05in; height: 1.05in; flex: none; }
+
+/* Essential-oil sheets: dilution box where the hydrosol sheets show the label */
+table.dil { width: 100%; border-collapse: collapse; font-size: 9pt; text-align: left; }
+.dil td { padding: 0.05in 0.04in; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.3; }
+.dil td:first-child { font-weight: 700; white-space: nowrap; }
+.dil td:last-child { color: var(--soft); }
+.safety { margin-top: 0.08in; font-size: 8.5pt; line-height: 1.4; color: var(--soft); text-align: left;
+          border-left: 3px solid var(--amber); padding-left: 0.1in; }
+.safety b { color: var(--ink); }
+
+/* Cover with two product rows */
+.cover-k { text-align: center; margin-top: 0.22in; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.16in; margin: 0.1in 0 0; }
+.grid4 img { height: 1.1in; }
+.grid5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.12in 0.14in; margin: 0.1in 0 0; }
+.grid5 img { height: 0.85in; }
+.grid4 .g-n, .grid5 .g-n { font-size: 9pt; line-height: 1.2; }
+.grid5 .g-s { font-size: 6.5pt; }
+.also { margin-top: 0.18in; text-align: center; font-size: 9.5pt; color: var(--soft); font-style: italic; }
+.also b { font-style: normal; color: var(--ink); }
+
+/* Price page */
+.note-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in; margin-top: 0.1in; }
+.prices .line td { font-style: italic; }
+
+/* Sovereignty by Design divider: same palette as the SbD flyers */
+.sbd { padding: 0; }
+.sbd-head { background: #1a2332; color: #fff; padding: 0.5in 0.55in 0.4in; }
+.sbd-k { font-family: 'DejaVu Sans Mono', monospace; font-size: 9pt; letter-spacing: 0.2em; text-transform: uppercase; color: #d69e2e; }
+.sbd-t { font-family: Arial, sans-serif; font-size: 34pt; font-weight: 700; line-height: 1.05; margin: 0.1in 0 0.12in; }
+.sbd-s { font-family: Arial, sans-serif; font-size: 13pt; line-height: 1.45; color: #d6dbe4; max-width: 6.2in; }
+.sbd-body { padding: 0.35in 0.55in 0; font-family: Arial, sans-serif; color: #2d3748; display: flex; flex-direction: column; flex: 1; }
+.sbd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2in; }
+.sbd-card { border: 1px solid #e2e6ed; border-top: 4px solid #1a2332; border-radius: 8px; padding: 0.18in 0.2in; }
+.sbd-n { font-family: 'DejaVu Sans Mono', monospace; font-size: 7.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: #b7791f; }
+.sbd-card h3 { font-size: 15pt; margin: 0.05in 0 0.06in; color: #1a2332; }
+.sbd-card p { font-size: 10pt; line-height: 1.45; color: #5c6577; }
+.sbd-p { font-family: 'DejaVu Sans Mono', monospace; font-size: 16pt; font-weight: 700; color: #1a2332; margin-top: 0.1in; }
+.sbd-p span { font-family: Arial, sans-serif; font-size: 8.5pt; font-weight: 400; color: #5c6577; }
+.sbd-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.2in; margin-top: 0.25in; font-size: 9.5pt; line-height: 1.45; color: #5c6577; }
+.sbd-notes b { color: #2d3748; }
+.sbd-foot { margin-top: auto; background: #d69e2e; color: #1a2332; padding: 0.22in 0.55in; font-family: Arial, sans-serif;
+            display: flex; justify-content: space-between; align-items: center; }
+.sbd-qr { display: flex; align-items: center; gap: 0.14in; font-family: 'DejaVu Sans Mono', monospace; font-size: 8.5pt; font-weight: 700; }
+.sbd-qr svg { width: 0.9in; height: 0.9in; background: #fff; padding: 4px; border-radius: 4px; }
+.sbd-foot b { font-size: 16pt; display: block; margin-bottom: 0.04in; }
+.sbd-foot span { font-size: 11pt; font-weight: 700; margin-right: 0.35in; }
 `;
 
 function doc(title, body) {
@@ -203,6 +259,24 @@ function doc(title, body) {
 
 function footer(right, center = '') {
   return `<div class="foot"><span>San Joaquin Victory Gardens · Manteca, California</span><span class="foot-c">${center}</span><span class="foot-r">${right}</span></div>`;
+}
+
+// Drops assume about 20 drops per mL. 1 tablespoon = 15 mL, so 3 drops = 1%.
+// Lemongrass ("strong") is citral-rich and kept under the 0.7% skin maximum.
+const DILUTION = {
+  standard: [['Face', '3 drops per tablespoon of carrier oil (1%)'],
+             ['Body', '6 drops per tablespoon of carrier oil (2%)'],
+             ['Diffuser', '3–5 drops in the water']],
+  strong: [['Skin', '1 drop per 2 teaspoons of carrier oil, no more'],
+           ['Diffuser', '2–3 drops in the water']],
+};
+
+function dilutionBox(p) {
+  return `<div>
+      <h2 class="h2">How much to use</h2>
+      <table class="dil">${DILUTION[p.dilution || 'standard'].map(([k, v]) => `<tr><td>${k}</td><td>${esc(v)}</td></tr>`).join('')}</table>
+      <p class="safety"><b>Never use it undiluted on skin.</b> ${esc(p.safety)}</p>
+    </div>`;
 }
 
 function productSheet(p) {
@@ -233,7 +307,7 @@ function productSheet(p) {
     <div class="tile"><span class="tile-k sans">Bottle</span><span class="tile-v">${esc(p.page_size || p.size)}</span></div>
   </section>
 
-  <h2 class="h2">About this hydrosol</h2>
+  <h2 class="h2">About this ${isOil(p) ? 'oil' : 'hydrosol'}</h2>
   <p class="about">${esc(p.description_full)}</p>
 
   <div class="mid">
@@ -241,11 +315,11 @@ function productSheet(p) {
       <h2 class="h2">Ways to use it</h2>
       <ul class="uses">${p.uses.map(u => `<li>${esc(u)}</li>`).join('')}</ul>
     </div>
-    <div class="label-box">
+    ${isOil(p) ? dilutionBox(p) : `<div class="label-box">
       <h2 class="h2">Look for this label</h2>
       <img class="label-img" src="file://${renderLabel(p)}" alt="${esc(p.name)} label">
       <p class="cap">The label on the bottle</p>
-    </div>
+    </div>`}
   </div>
 
   <div class="bottom">
@@ -262,6 +336,11 @@ function productSheet(p) {
 </section>`;
 }
 
+const coverTile = p => `
+    <div class="g"><img src="${img(p.photo)}" alt="">
+      <p class="g-n">${esc(shortName(p))}</p>
+      <p class="g-s sans">${p.availability === 'In stock' ? 'Available now' : esc(comingText(p))}</p></div>`;
+
 function coverSheet() {
   const credits = ordered.map(p => `${shortName(p)}: ${p.photo_credit} (${p.photo_license})`).join(' · ');
   return `<section class="sheet">
@@ -272,13 +351,14 @@ function coverSheet() {
     <p class="cover-sub">Essential oil distillery, beehive products, and more from our garden in Manteca, California.</p>
     <p class="rule-orn">❦</p>
   </header>
-  <p class="kicker" style="text-align:center;margin-top:0.3in;">Our hydrosols</p>
-  <div class="grid9" style="margin-top:0.12in;">${ordered.map(p => `
-    <div class="g"><img src="${img(p.photo)}" alt="">
-      <p class="g-n">${esc(shortName(p))}</p>
-      <p class="g-s sans">${p.availability === 'In stock' ? 'Available now' : esc(comingText(p))}</p></div>`).join('')}
+  <p class="kicker cover-k">Our essential oils</p>
+  <div class="grid4">${oils.map(coverTile).join('')}
   </div>
-  <p class="cover-line">4 oz. amber glass spray bottles · Pure hydrosol, nothing added</p>
+  <p class="kicker cover-k">Our hydrosols</p>
+  <div class="grid5">${ordered.map(coverTile).join('')}
+  </div>
+  <p class="cover-line" style="margin-top:0.2in;">Essential oils in 15 mL amber glass bottles · Hydrosols in 4 oz. amber glass spray bottles<br>Pure and steam-distilled, nothing added</p>
+  <p class="also">Also in this binder: <b>Sovereignty by Design</b>, privacy setup for your home network, phone, bitcoin and computer.</p>
   <div style="margin-top:auto;">
     <p class="credits sans">Plant photos via Wikimedia Commons — ${esc(credits)}.</p>
     ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
@@ -344,34 +424,117 @@ function hydrosolSheet() {
 </section>`;
 }
 
-function orderSheet() {
-  const catalog = `${SITE}/catalog/`;
-  const rows = ordered.map(p => {
+function oilSheet() {
+  return `<section class="sheet">
+  <header class="panel page-head">
+    <img class="panel-art" src="${img(bySlug['white-sage-hydrosol'].art)}" alt="">
+    <p class="kicker">San Joaquin Victory Gardens</p>
+    <h1 class="page-title">Using essential oils safely</h1>
+    <p class="page-lede">An essential oil is the small layer of oil that floats on top of the water coming out of the still.
+      It is the same run that makes our hydrosols, but the oil holds the plant's aromatic compounds at full strength.
+      A single drop is strong, so a 15 mL bottle (about 300 drops) lasts a long time.</p>
+  </header>
+
+  <div class="section two">
+    <div>
+      <h2 class="h2">How much to use</h2>
+      <table class="cmp">
+        <tr><th>For</th><th>Drops</th></tr>
+        <tr><td>Face</td><td>3 drops per tablespoon of carrier oil (1%)</td></tr>
+        <tr><td>Body &amp; massage</td><td>6 drops per tablespoon of carrier oil (2%)</td></tr>
+        <tr><td>Bath</td><td>5 drops, mixed into a tablespoon of carrier oil or bath salts first</td></tr>
+        <tr><td>Diffuser</td><td>3–5 drops in the water</td></tr>
+      </table>
+      <p class="body" style="margin-top:0.1in;">Carrier oils are plain plant oils such as jojoba, sweet almond, olive or fractionated coconut.
+        Lemongrass is stronger on skin: no more than 1 drop per 2 teaspoons of carrier oil.</p>
+    </div>
+    <div>
+      <h2 class="h2">Safety</h2>
+      <ul class="uses">
+        <li>Always dilute before it touches skin.</li>
+        <li>Patch-test a little on your inner arm and wait a day.</li>
+        <li>Do not swallow. Keep away from eyes.</li>
+        <li>Keep out of reach of children and pets. Cats are especially sensitive.</li>
+        <li>Pregnant, nursing, or managing a health condition? Ask your doctor first.</li>
+        <li>Essential oils can catch fire. Keep them away from open flame.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section two">
+    <div>
+      <h2 class="h2">Care</h2>
+      <p class="body">Keep the cap tight and the bottle in a cool, dark place. Most oils keep their scent for 2 to 3 years.
+        Citrus-scented oils like lemongrass are best used within a year or two.</p>
+    </div>
+    <div>
+      <h2 class="h2">What's inside</h2>
+      <p class="body">100% pure, steam-distilled essential oil from plants we grow in Manteca. Nothing added, nothing cut.
+        Every small batch smells a little different.</p>
+    </div>
+  </div>
+
+  <p class="body" style="margin-top:auto;font-style:italic;text-align:center;">For aromatic and external use only. Not intended to diagnose, treat, cure or prevent any disease.</p>
+  ${footer(`${CONTACT.phone} · ${CONTACT.email}`)}
+</section>`;
+}
+
+function priceRows(list) {
+  return list.map(p => {
     const soon = p.availability !== 'In stock';
+    const priced = p.price_usd != null;
     return `<tr class="${soon ? 'soon' : ''}"><td>${esc(p.name)}${soon ? `<span class="soon-when sans">${esc(comingText(p))}</span>` : ''}</td><td>${esc(p.size)}</td>
-      <td class="num">$${p.price_usd}</td>
-      <td class="num">$${btcPrice(p)}</td></tr>`;
+      <td class="num">${priced ? `$${p.price_usd}` : 'Price at release'}</td>
+      <td class="num">${priced ? `$${btcPrice(p)}` : ''}</td></tr>`;
   }).join('');
-  const pct = products[0].btc_discount_pct;
+}
+
+function pricesSheet() {
   return `<section class="sheet">
   <header class="panel page-head">
     <img class="panel-art" src="${img(bySlug['valencia-orange-hydrosol'].art)}" alt="">
     <p class="kicker">San Joaquin Victory Gardens</p>
-    <h1 class="page-title">Prices &amp; how to order</h1>
+    <h1 class="page-title">Prices</h1>
+    <p class="page-lede">Pay in bitcoin and save ${products[0].btc_discount_pct}%. Ways to pay and how to order are on the next page.</p>
   </header>
 
   <div class="section">
     <h2 class="h2">Hydrosols</h2>
     <table class="prices">
       <tr><th>Hydrosol</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
-      ${rows}
+      ${priceRows(ordered)}
     </table>
     <p class="body" style="margin-top:0.08in;">Ask about 8 oz. refills.</p>
   </div>
 
   <div class="section">
+    <h2 class="h2">Essential oils</h2>
+    <table class="prices">
+      <tr><th>Essential oil</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
+      ${priceRows(oils)}
+      <tr class="soon line"><td colspan="4">${esc(COMING_OIL_LINE.name)}<span class="soon-when sans">${esc(COMING_OIL_LINE.when)}</span></td></tr>
+    </table>
+    <p class="body" style="margin-top:0.08in;">Essential oils are concentrated. See "Using essential oils safely" before you use them.</p>
+  </div>
+
+  <div style="margin-top:auto;">${footer('sjvg.jorgenclaw.ai', CATALOG_ADDR)}</div>
+</section>`;
+}
+
+function orderSheet() {
+  const catalog = `${SITE}/catalog/`;
+  const pct = products[0].btc_discount_pct;
+  return `<section class="sheet">
+  <header class="panel page-head">
+    <img class="panel-art" src="${img(bySlug['lemongrass-hydrosol'].art)}" alt="">
+    <p class="kicker">San Joaquin Victory Gardens</p>
+    <h1 class="page-title">How to order &amp; pay</h1>
+    <p class="page-lede">Cash and Zelle pay the listed price. Pay in bitcoin and save ${pct}%.</p>
+  </header>
+
+  <div class="section">
     <h2 class="h2">Ways to pay</h2>
-    <div class="pay">
+    <div class="pay pay-lg">
       <div><b>Cash</b><span>Listed price</span></div>
       <div><b>Zelle</b><span>Listed price</span><img class="pay-qr" src="file://${PAY.zelleQr}" alt="Zelle QR code"><p class="pay-a sans">Scott Jorgensen · scan in your banking app</p></div>
       <div class="btc"><b>Lightning</b><span>Bitcoin · save ${pct}%</span>${qr(`lightning:${PAY.lightning}`)}<p class="pay-a sans">${PAY.lightning}</p></div>
@@ -394,28 +557,88 @@ function orderSheet() {
     </div>
   </div>
 
-  <div style="margin-top:auto;">${footer('sjvg.jorgenclaw.ai')}</div>
+  <div style="margin-top:auto;">
+    <div class="try" style="margin-bottom:0.1in;"><p class="try-k sans">Also from jorgenclaw.ai, LLC</p>
+      <p class="try-t">Sovereignty by Design: privacy setup for your home network, phone, bitcoin and computer, done in person.
+        See the back of this binder, or just ask.</p></div>
+    ${footer('sjvg.jorgenclaw.ai')}
+  </div>
 </section>`;
 }
 
-for (const d of ['sheets', 'pdf', 'preview', 'labels']) fs.mkdirSync(path.join(OUT, d), { recursive: true });
-const sheets = [
-  ['01-cover', 'Cover', coverSheet()],
-  ['02-prices-and-ordering', 'Prices & how to order', orderSheet()],
-  ['03-what-is-a-hydrosol', 'What is a hydrosol?', hydrosolSheet()],
-  ...ordered.map((p, i) => [`${String(i + 4).padStart(2, '0')}-${p.slug}`, p.name, productSheet(p)]),
+// SbD "from" prices. Keep in step with the four flyers in FLYERS.
+const SBD = [
+  ['1 of 4', 'Home Network Security', 'A firewall and router you own, with guests and smart-home gadgets walled off from your computers.', 'From $905', 'hardware at cost + setup'],
+  ['2 of 4', 'Private Phone Setup', 'GrapheneOS on your own Pixel, with your apps, accounts and banking set up and tested.', '$250', 'flat, up to 2 hrs'],
+  ['3 of 4', 'Bitcoin Self-Custody', 'Your own wallet, plus exchange, node or Bisq setup if you want them, all at your kitchen table.', 'From $150', 'add-ons à la carte'],
+  ['4 of 4', 'Private AI & Computing', 'Your own private AI agent, matched to the hardware you already have.', 'From $375', 'flat, up to 2.5 hrs'],
 ];
+const SBD_SITE = 'https://sovereignty.jorgenclaw.ai';
+const SBD_FLYERS = ['home-network-security-flyer', 'mobile-privacy-flyer', 'bitcoin-privacy-flyer-v2', 'computer-ai-privacy-flyer-v2'];
+
+function sbdSheet() {
+  return `<section class="sheet sbd">
+  <header class="sbd-head">
+    <p class="sbd-k">Also from jorgenclaw.ai, LLC</p>
+    <h1 class="sbd-t">Sovereignty by Design</h1>
+    <p class="sbd-s">Hardware-privacy services, installed in person, in your home. You watch every step and leave knowing how your setup works.</p>
+  </header>
+  <div class="sbd-body">
+    <div class="sbd-grid">${SBD.map(([n, t, d, p, s]) => `
+      <div class="sbd-card"><p class="sbd-n">${n}</p><h3>${esc(t)}</h3><p>${esc(d)}</p>
+        <p class="sbd-p">${p} <span>${esc(s)}</span></p></div>`).join('')}
+    </div>
+    <div class="sbd-notes">
+      <div><b>Flat, not hourly.</b> Each service includes the hours on its flyer; extra time is $150/hr.</div>
+      <div><b>Hardware at cost</b>, no markup. Hardware prices are moving fast in 2026, so we confirm them when we quote.</div>
+      <div><b>Bundle &amp; save 10%</b> when you add another service to the same visit.</div>
+    </div>
+    <p class="body" style="margin-top:0.3in;text-align:center;font-family:Arial,sans-serif;">The four flyers that follow have the details for each service.</p>
+  </div>
+  <footer class="sbd-foot"><div><b>Book a walkthrough</b><span>${CONTACT.email}</span><span>${CONTACT.phone}</span></div>
+    <div class="sbd-qr">${qr(SBD_SITE)}<p>Scan for details<br>&amp; booking</p></div></footer>
+</section>`;
+}
+
+// Sheet numbers shift when products are added, so clear the old ones out first.
+for (const d of ['sheets', 'pdf', 'preview']) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
+for (const d of ['sheets', 'pdf', 'preview', 'labels']) fs.mkdirSync(path.join(OUT, d), { recursive: true });
+const pages = [
+  ['cover', 'Cover', coverSheet()],
+  ['prices', 'Prices', pricesSheet()],
+  ['how-to-order', 'How to order & pay', orderSheet()],
+  ['what-is-a-hydrosol', 'What is a hydrosol?', hydrosolSheet()],
+  ...ordered.map(p => [p.slug, p.name, productSheet(p)]),
+  ['using-essential-oils', 'Using essential oils safely', oilSheet()],
+  ...oils.map(p => [p.slug, p.name, productSheet(p)]),
+  ['sovereignty-by-design', 'Sovereignty by Design', sbdSheet()],
+  ...SBD_FLYERS.map(f => [`sbd-${f.replace(/-v\d+$/, '')}`, null, path.join(FLYERS, f + '.html')]),
+];
+const num = i => String(i + 1).padStart(2, '0');
+
+const chrome = (url, pdf, extra = []) => execFileSync('google-chrome', ['--headless=new', '--disable-gpu', '--no-sandbox',
+  '--allow-file-access-from-files', '--no-pdf-header-footer', '--virtual-time-budget=5000', ...extra,
+  `--print-to-pdf=${pdf}`, url], { stdio: 'ignore' });
 
 const pdfs = [];
-for (const [file, title, body] of sheets) {
-  const html = path.join(OUT, 'sheets', file + '.html');
+pages.forEach(([name, title, body], i) => {
+  const file = `${num(i)}-${name}`;
   const pdf = path.join(OUT, 'pdf', file + '.pdf');
-  fs.writeFileSync(html, doc(title, body));
-  execFileSync('google-chrome', ['--headless=new', '--disable-gpu', '--no-sandbox', '--allow-file-access-from-files',
-    '--no-pdf-header-footer', '--virtual-time-budget=5000', `--print-to-pdf=${pdf}`, 'file://' + html], { stdio: 'ignore' });
+  if (title === null) {
+    // An SbD flyer, printed from its own HTML. Its Google Fonts are blocked on purpose: the approved
+    // flyers were laid out with the fallback fonts, and the web fonts push the footer onto a second page.
+    chrome(new URL('file://' + body).href, pdf,
+      ['--host-resolver-rules=MAP fonts.googleapis.com ~NOTFOUND, MAP fonts.gstatic.com ~NOTFOUND']);
+  } else {
+    const html = path.join(OUT, 'sheets', file + '.html');
+    fs.writeFileSync(html, doc(title, body));
+    chrome('file://' + html, pdf);
+  }
+  const n = execFileSync('pdfinfo', [pdf], { encoding: 'utf8' }).match(/Pages:\s+(\d+)/)[1];
+  if (n !== '1') throw new Error(`${file} runs to ${n} pages; it must fit on one`);
   execFileSync('pdftoppm', ['-png', '-r', '60', '-singlefile', pdf, path.join(OUT, 'preview', file)]);
   pdfs.push(pdf);
   console.log('built', file);
-}
+});
 execFileSync('pdfunite', [...pdfs, path.join(OUT, 'SJVG-market-binder.pdf')]);
 console.log('wrote', path.join(OUT, 'SJVG-market-binder.pdf'));

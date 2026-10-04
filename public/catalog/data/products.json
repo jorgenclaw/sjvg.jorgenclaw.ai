@@ -368,5 +368,154 @@
     "art": "/catalog/art/african-blue-basil-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
     "try_this": "Use it as a kitchen and bathroom cleaning spray with a bold herbal scent."
+  },
+  {
+    "slug": "white-sage-essential-oil",
+    "name": "White Sage Essential Oil",
+    "category": "essential_oil",
+    "size": "15 mL",
+    "page_size": "15 mL amber glass bottle",
+    "price_usd": 40,
+    "btc_discount_pct": 10,
+    "use_tags": [
+      "aromatherapy"
+    ],
+    "availability": "In stock",
+    "botanical": "Salvia apiana",
+    "photo": "/catalog/photos/white-sage-hydrosol.jpg",
+    "photo_alt": "Silvery-white leaves of California white sage",
+    "photo_credit": "HLWolfe",
+    "photo_license": "CC BY-SA 4.0",
+    "photo_source": "https://commons.wikimedia.org/wiki/File:White_Sage_(Salvia_apiana),_California.jpg",
+    "art": "/catalog/art/white-sage-hydrosol.jpg",
+    "description": "Steam-distilled from garden-grown white sage leaf. Fresh, herbal and resinous, with the clean camphor lift of the dried leaf.",
+    "description_full": "Our white sage oil comes from the same still runs as our White Sage Hydrosol: the oil is the small layer that floats on top of the water. White sage oil is fresh, herbal and resinous, led by 1,8-cineole with camphor and pinene, and it carries the clear, grounding character of the dried leaf without any smoke. A little goes a long way: a few drops in a diffuser scent a whole room. White sage holds deep cultural and ceremonial meaning for Indigenous peoples of California, and wild stands have suffered from over-harvesting. Every drop of ours is distilled from garden-grown plants, never wild-harvested.",
+    "scent": "Fresh, herbal and resinous, with a camphor lift",
+    "distilled_from": "Garden-grown white sage leaf, never wild-harvested",
+    "key_aromatics": "1,8-Cineole-led, with camphor and pinene (typical of the species)",
+    "uses": [
+      "A few drops in a diffuser to clear and freshen a room",
+      "Diluted in a carrier oil for a grounding body or massage oil",
+      "Scent for handmade soap, candles and bath salts",
+      "A few drops in our White Sage Hydrosol for a stronger room spray"
+    ],
+    "pairs_with": [
+      "white-sage-hydrosol",
+      "phenomenal-lavender-essential-oil"
+    ],
+    "try_this": "Put 3 drops on a cotton ball and tuck it into a closet or a drawer. Refresh it every week or two.",
+    "safety": "Rich in 1,8-cineole and camphor: avoid during pregnancy or breastfeeding, if you have epilepsy, and near the faces of children under 10."
+  },
+  {
+    "slug": "phenomenal-lavender-essential-oil",
+    "name": "Phenomenal Lavender Essential Oil",
+    "category": "essential_oil",
+    "size": "15 mL",
+    "page_size": "15 mL amber glass bottle",
+    "price_usd": 16,
+    "btc_discount_pct": 10,
+    "use_tags": [
+      "aromatherapy"
+    ],
+    "availability": "Expected available June 2027",
+    "botanical": "Lavandula \u00d7 intermedia 'Phenomenal'",
+    "photo": "/catalog/photos/phenomenal-lavender-hydrosol.jpg",
+    "photo_alt": "Lavandin flower spikes in bloom",
+    "photo_credit": "Consultaplantas",
+    "photo_license": "CC BY-SA 4.0",
+    "photo_source": "https://commons.wikimedia.org/wiki/File:Lavandula_x_intermedia_2c.JPG",
+    "art": "/catalog/art/phenomenal-lavender-hydrosol.jpg",
+    "description": "Steam-distilled from 'Phenomenal' lavender flower spikes. Sweet, floral and herbal, a little brighter and more camphor-forward than true lavender.",
+    "description_full": "Distilled from our own 'Phenomenal' lavandin flower spikes. 'Phenomenal' is a hardy lavandin, a natural cross of true lavender and spike lavender, that growers choose for its vigor and its high oil content. Its oil has the classic lavender bouquet, led by linalool and linalyl acetate, with a little more camphor than true English lavender, which makes it brighter and a touch more herbal. It is the most versatile oil we make: diffuse it at bedtime, add it to a body oil or bath, or scent your linens and homemade soap.",
+    "scent": "Sweet, floral and herbal, brighter than true lavender",
+    "distilled_from": "Fresh 'Phenomenal' lavandin flower spikes",
+    "key_aromatics": "Linalool and linalyl acetate, with some camphor (typical of lavandin)",
+    "uses": [
+      "A few drops in a diffuser at bedtime",
+      "Diluted in a carrier oil for a relaxing body or massage oil",
+      "A few drops in a warm bath, mixed into bath salts or carrier oil first",
+      "Scent for handmade soap, candles and linen sprays"
+    ],
+    "pairs_with": [
+      "phenomenal-lavender-hydrosol",
+      "white-sage-essential-oil"
+    ],
+    "try_this": "Mix 6 drops into a tablespoon of carrier oil and rub it into your feet or shoulders before bed.",
+    "safety": "Contains some camphor: keep away from the faces of babies and young children."
+  },
+  {
+    "slug": "spearmint-essential-oil",
+    "name": "Spearmint Essential Oil",
+    "category": "essential_oil",
+    "size": "15 mL",
+    "page_size": "15 mL amber glass bottle",
+    "price_usd": null,
+    "btc_discount_pct": 10,
+    "use_tags": [
+      "aromatherapy"
+    ],
+    "availability": "Expected available June 2027",
+    "botanical": "Mentha spicata",
+    "photo": "/catalog/photos/spearmint-hydrosol.jpg",
+    "photo_alt": "Bright green, crinkled spearmint leaves",
+    "photo_credit": "Jonathunder",
+    "photo_license": "CC BY-SA 3.0",
+    "photo_source": "https://commons.wikimedia.org/wiki/File:FreshMint.jpg",
+    "art": "/catalog/art/spearmint-hydrosol.jpg",
+    "description": "Steam-distilled from spearmint leaf. Sweet and minty, carvone forward, softer than peppermint.",
+    "description_full": "Distilled from our spearmint leaf and stem, this oil smells like fresh spearmint gum: sweet and minty, built on carvone with limonene in support. Spearmint holds very little menthol, so it is softer and less sharp than peppermint. It brightens a room in a diffuser, lifts a homemade soap or lip balm, and blends easily with lavender and lemongrass.",
+    "scent": "Sweet, fresh spearmint, softer than peppermint",
+    "distilled_from": "Fresh spearmint leaf and stem",
+    "key_aromatics": "Carvone-led, with limonene (typical of spearmint)",
+    "uses": [
+      "A few drops in a diffuser for a fresh, awake room",
+      "Scent for handmade soap and lip balm (use at low strength)",
+      "Diluted in a carrier oil for a cooling foot rub",
+      "A drop on a cloth in the car or at your desk"
+    ],
+    "pairs_with": [
+      "spearmint-hydrosol",
+      "phenomenal-lavender-essential-oil"
+    ],
+    "try_this": "Diffuse 2 drops of spearmint with 2 of lavender for a calm but clear-headed room.",
+    "safety": "Keep away from the faces of babies and young children. Can irritate sensitive skin, so dilute well."
+  },
+  {
+    "slug": "lemongrass-essential-oil",
+    "name": "Lemongrass Essential Oil",
+    "category": "essential_oil",
+    "size": "15 mL",
+    "page_size": "15 mL amber glass bottle",
+    "price_usd": null,
+    "btc_discount_pct": 10,
+    "use_tags": [
+      "aromatherapy"
+    ],
+    "availability": "Expected available June 2027",
+    "botanical": "Cymbopogon citratus",
+    "photo": "/catalog/photos/lemongrass-hydrosol.jpg",
+    "photo_alt": "Lemongrass stalks rising into long green leaf blades",
+    "photo_credit": "Mokkie",
+    "photo_license": "CC BY-SA 4.0",
+    "photo_source": "https://commons.wikimedia.org/wiki/File:Lemongrass_(Cymbopogon_citratus).jpg",
+    "art": "/catalog/art/lemongrass-hydrosol.jpg",
+    "description": "Steam-distilled from lemongrass leaf and stalk. Bright, grassy and lemony, rich in citral.",
+    "description_full": "Distilled from our lemongrass stalk and leaf, this oil is bright, grassy and strongly lemony. It is rich in citral, the same compound behind the sharp top note of lemon peel. It is a favorite for fresh-smelling homemade cleaners and soaps and for outdoor blends. Lemongrass is one of the stronger oils on skin, so it takes more dilution than the others: see the dilution box below.",
+    "scent": "Bright, grassy and strongly lemony",
+    "distilled_from": "Fresh lemongrass stalk and leaf",
+    "key_aromatics": "Citral-rich (typical of lemongrass)",
+    "uses": [
+      "A few drops in a diffuser for a bright, clean room",
+      "Scent for homemade cleaners and soap",
+      "Outdoor and patio blends",
+      "A drop or two in our Lemongrass Hydrosol for a stronger room spray"
+    ],
+    "pairs_with": [
+      "lemongrass-hydrosol",
+      "spearmint-essential-oil"
+    ],
+    "try_this": "Add 10 drops to a spray bottle of water and white vinegar for a bright kitchen cleaner. Shake before each use.",
+    "safety": "Can irritate or sensitize skin: on skin, use no more than 1 drop per 2 teaspoons of carrier oil. Patch-test first.",
+    "dilution": "strong"
   }
 ]
