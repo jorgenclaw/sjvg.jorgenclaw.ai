@@ -18,7 +18,8 @@ const SITE = 'https://sjvg.jorgenclaw.ai';
 const LLC = path.join(process.env.HOME, 'NanoClaw/groups/main/Jorgenclaw.ai_LLC');
 const MARKETING = path.join(LLC, 'San Joaquin Victory Gardens/hydrosol_and_oils_marketing');
 const FLYERS = path.join(LLC, 'Sovereignty by Design/flyers');
-const OUT = path.resolve(process.argv[2] || path.join(MARKETING, 'market-binder'));
+// The binder covers SJVG and Sovereignty by Design, so it lives at the LLC level.
+const OUT = path.resolve(process.argv[2] || path.join(LLC, 'market-binder'));
 
 const all = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'));
 const bySlug = Object.fromEntries(all.map(p => [p.slug, p]));
