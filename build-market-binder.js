@@ -4,7 +4,7 @@
 //   node build-market-binder.js [<out-dir>]
 //
 // Writes <out-dir>/sheets/*.html, pdf/*.pdf (one per sheet),
-// preview/*.png and SJVG-market-binder.pdf (every sheet, in binder order).
+// preview/*.png and jorgenclaw-ai-market-binder.pdf (every sheet, in binder order).
 // The binder ends with the four Sovereignty by Design flyers, printed from their
 // own HTML in the SbD flyers folder.
 // Needs google-chrome, qrencode, pdfunite, pdfinfo and pdftoppm on the PATH.
@@ -641,5 +641,5 @@ pages.forEach(([name, title, body], i) => {
   pdfs.push(pdf);
   console.log('built', file);
 });
-execFileSync('pdfunite', [...pdfs, path.join(OUT, 'SJVG-market-binder.pdf')]);
-console.log('wrote', path.join(OUT, 'SJVG-market-binder.pdf'));
+execFileSync('pdfunite', [...pdfs, path.join(OUT, 'jorgenclaw-ai-market-binder.pdf')]);
+console.log('wrote', path.join(OUT, 'jorgenclaw-ai-market-binder.pdf'));
