@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fresh Lavender Bunches — San Joaquin Victory Gardens</title>
+  <meta name="description" content="Fresh-cut lavender bunches from our Manteca garden, ready in June. Limited quantity. Sign up and we'll remind you when it's time.">
+  <meta property="og:title" content="Fresh lavender bunches, June 2027">
+  <meta property="og:description" content="50-stem bunches of fresh-cut lavender from Manteca. Limited quantity. Sign up for a reminder.">
+  <meta property="og:image" content="https://sjvg.jorgenclaw.ai/assets/card-products.jpg">
+  <meta property="og:url" content="https://sjvg.jorgenclaw.ai/lavender-bunches/">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .lb-hero img { width: 100%; max-width: 520px; display: block; margin: 0 auto 1.5rem; border-radius: 12px; }
+    .lb-points { max-width: 460px; margin: 1.5rem auto; padding-left: 1.4rem; line-height: 1.7; }
+    .lb-credit { text-align: center; font-size: 0.7rem; color: #777; }
+    .lb-credit a { color: #888; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/catalog/">Catalog</a>
+    </nav>
+
+    <header class="hero lb-hero">
+      <img src="/assets/card-products.jpg" alt="Fresh lavender bunches tied with ribbon">
+      <p class="lb-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Lavender_herb_bouquets_(54844470052).jpg" target="_blank" rel="noopener">AS Photography from Poland</a>, CC BY 4.0</p>
+      <h1>Fresh Lavender Bunches</h1>
+      <p class="hero-sub">Cut fresh from our Manteca garden in June. Limited quantity: when the harvest is gone, it's gone until next year.</p>
+    </header>
+
+    <ul class="lb-points">
+      <li><strong>50-stem bunches,</strong> sorted by color so every bunch is uniform, with good long stems.</li>
+      <li><strong>Ready in June 2027,</strong> at the peak of bloom.</li>
+      <li><strong>Delivery in Manteca and Tracy,</strong> or pick up locally.</li>
+    </ul>
+
+    <section class="consult-section">
+      <h2>Get a reminder when it's time</h2>
+      <p>Sign up and we'll let you know the moment fresh bunches are ready, before they sell out.</p>
+      <form id="signup-form" style="max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:0.75rem;text-align:left;">
+        <input name="email" type="email" required placeholder="Email (required)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <input name="name" type="text" placeholder="Name (optional)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <input name="phone" type="tel" placeholder="Phone (optional)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <input name="signal" type="text" placeholder="Signal username — e.g. @username.01 (optional)" style="padding:0.6rem 0.8rem;border-radius:6px;border:1px solid #333;background:#0d0d0d;color:#e8e8e8;font-size:0.9rem;">
+        <button type="submit" class="consult-cta" style="border:none;cursor:pointer;font-size:0.95rem;">Join the list</button>
+        <p style="font-size:0.75rem;color:#888;margin:0;text-align:center;">No spam. Just product availability, new offerings, and business updates.</p>
+      </form>
+      <div id="signup-result" style="display:none;padding:1rem 0;font-size:0.95rem;"></div>
+    </section>
+    <script>
+    document.getElementById('signup-form').addEventListener('submit',async function(e){
+      e.preventDefault();
+      var f=e.target,d=new FormData(f);
+      var body={email:d.get('email'),name:d.get('name'),phone:d.get('phone'),signal:d.get('signal'),source:'fresh_lavender_bunches'};
+      try{
+        var r=await fetch('https://email-collector.jorgenclaw.workers.dev/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        var j=await r.json();
+        var res=document.getElementById('signup-result');
+        f.style.display='none';res.style.display='block';
+        if(j.duplicate){res.textContent='Already on the list.';res.style.color='#b7791f';}
+        else if(j.ok){res.textContent='\u2713 You\u2019re on the list. We\u2019ll remind you in June.';res.style.color='#38a169';}
+        else{res.textContent='Something went wrong \u2014 try again.';res.style.color='#e53e3e';f.style.display='flex';}
+      }catch(err){
+        var res=document.getElementById('signup-result');
+        res.style.display='block';res.textContent='Something went wrong \u2014 try again.';res.style.color='#e53e3e';
+      }
+    });
+    </script>
+    </section>
+
+    <p style="text-align:center;margin:2rem 0;"><a href="/">← Back to Home</a></p>
+
+  </div>
+</body>
+</html>
