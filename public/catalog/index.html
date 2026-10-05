@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hydrosol Catalog — San Joaquin Victory Gardens</title>
-  <meta name="description" content="Steam-distilled hydrosols from the San Joaquin Valley. 4 oz. amber glass spray bottles, $16 each. Message us to order.">
+  <meta name="description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley. Hydrosols $16 per 4 oz. spray bottle; essential oils in 15 mL bottles. Message us to order.">
   <meta property="og:title" content="Hydrosol Catalog — San Joaquin Victory Gardens">
-  <meta property="og:description" content="Steam-distilled hydrosols from the San Joaquin Valley. 4 oz. amber glass spray bottles, $16 each.">
+  <meta property="og:description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sjvg.jorgenclaw.ai/catalog/">
   <link rel="stylesheet" href="style.css?v=2026-09-28">
@@ -28,7 +28,7 @@
     <!-- Hero -->
     <header class="hero">
       <h1>Hydrosol Catalog</h1>
-      <p class="hero-sub">Steam-distilled hydrosols from our San Joaquin Valley garden. 4 oz. amber glass spray bottles, $16 each.</p>
+      <p class="hero-sub">Steam-distilled hydrosols and essential oils from our San Joaquin Valley garden. Hydrosols in 4 oz. amber glass spray bottles, $16 each; essential oils in 15 mL amber glass bottles.</p>
     </header>
 
     <!-- Payment Terms Banner -->
@@ -47,7 +47,7 @@
           <span class="filter-label">Category</span>
           <div class="chip-group" id="category-chips">
             <button class="chip active" data-category="hydrosol">Hydrosol</button>
-            <button class="chip coming-soon" data-category="essential_oil">Essential Oil <span class="cs-tag">Coming soon</span></button>
+            <button class="chip" data-category="essential_oil">Essential Oil</button>
             <button class="chip coming-soon" data-category="candle">Candle <span class="cs-tag">Coming soon</span></button>
             <button class="chip coming-soon" data-category="honey">Honey <span class="cs-tag">Coming soon</span></button>
             <button class="chip coming-soon" data-category="propolis">Propolis <span class="cs-tag">Coming soon</span></button>
@@ -241,8 +241,8 @@
             <img src="${p.image}" alt="${p.name}" style="width:100%;height:auto;border-radius:8px;object-fit:contain;">
           </div>`}
           <div class="product-info">
-            <p class="packaging-line">Sold in a 4 oz. amber glass bottle with a pump-action spray atomizer.</p>
-            <p class="price">$${p.price_usd} · ${p.size}</p>
+            <p class="packaging-line">Sold in a ${p.page_size || p.size}.</p>
+            <p class="price">${p.price_usd != null ? '$' + p.price_usd : 'Price at release'} · ${p.size}</p>
             <p class="stock-info">${stockText}</p>
             ${inCart ? `<button class="add-to-cart-btn added" onclick="event.stopPropagation(); addToCart('${p.slug}')">In Cart (${inCart.qty})</button>` : p.availability === 'In stock' ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Add to Cart</button>` : `<button class="add-to-cart-btn" disabled style="opacity:0.5;cursor:not-allowed;">${p.availability}</button>`}
           </div>
