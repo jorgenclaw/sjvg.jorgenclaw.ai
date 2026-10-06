@@ -490,14 +490,14 @@ function oilSheet() {
 </section>`;
 }
 
-// Fresh-cut flowers, June only. Lavender $10/50 stems is Scott's price (2026-10-05). The basil
-// and mixed-bouquet prices are Quad's proposal from the same day; Scott can change them here.
+// Fresh-cut flowers (Scott's prices, 2026-10-05). Lavender is June only; African Blue Basil
+// is offered nearly year round and priced low to move, since Scott grows a lot of it.
 const FLOWERS = {
   signup: `${SITE}/lavender-bunches/`,
   when: 'June 2027',
   lavender: { price: 10, unit: '50-stem bunch', photo: '/catalog/photos/fresh-lavender-bunches.jpg',
               credit: 'AS Photography from Poland (CC BY 4.0)' },
-  basil: { price: 8, unit: '10-stem bunch' },
+  basil: { price: 6, unit: '10-stem bunch' },
   mixed: { price: 12 },
 };
 
@@ -507,10 +507,10 @@ function flowersSheet() {
   return `<section class="sheet">
   <header class="panel page-head">
     <img class="panel-art" src="${img(bySlug['phenomenal-lavender-hydrosol'].art)}" alt="">
-    <p class="kicker">San Joaquin Victory Gardens · Seasonal</p>
+    <p class="kicker">San Joaquin Victory Gardens · From the garden</p>
     <h1 class="page-title">Fresh-cut flowers</h1>
-    <p class="page-lede">Cut fresh from our Manteca garden. Ready in ${FLOWERS.when}, at the peak of bloom.</p>
-    <p class="fl-badge sans">Limited quantity · when the harvest is gone, it's gone until next year</p>
+    <p class="page-lede">Cut fresh from our Manteca garden. African Blue Basil is on offer nearly year round, because this plant loves to grow. Lavender comes once a year, in June.</p>
+    <p class="fl-badge sans">Lavender: limited quantity · when it's gone, it's gone until next year</p>
   </header>
 
   <div class="fl-two">
@@ -518,21 +518,21 @@ function flowersSheet() {
       <img src="${img(FLOWERS.lavender.photo)}" alt="">
       <p class="fl-name">Phenomenal Lavender</p>
       <p class="bot" style="margin-bottom:0.02in;">${esc(botanical(bySlug['phenomenal-lavender-hydrosol']))}</p>
-      <p class="fl-price">$${FLOWERS.lavender.price} <span>· ${FLOWERS.lavender.unit}</span></p>
+      <p class="fl-price">$${FLOWERS.lavender.price} <span>· ${FLOWERS.lavender.unit} · June only (from ${FLOWERS.when})</span></p>
       <p class="body">Long, uniform stems of deep purple lavandin. Sweet and floral, it fills a room fresh and dries beautifully for wreaths and sachets.</p>
     </div>
     <div class="fl-card">
       <img src="${img(basil.photo)}" alt="">
       <p class="fl-name">African Blue Basil</p>
       <p class="bot" style="margin-bottom:0.02in;">${esc(botanical(basil))}</p>
-      <p class="fl-price">$${FLOWERS.basil.price} <span>· ${FLOWERS.basil.unit}</span></p>
+      <p class="fl-price">$${FLOWERS.basil.price} <span>· ${FLOWERS.basil.unit} · nearly year round</span></p>
       <p class="body">A rare basil you won't find at the store: purple-veined leaves and lavender-purple flower spikes with a spicy, camphor-basil scent. A fragrant, airy filler for any vase.</p>
     </div>
   </div>
 
   <div class="fl-mix try">
     <div><p class="try-k sans">Mixed bouquet</p>
-      <p class="try-t">Phenomenal lavender and African Blue Basil together, gathered by hand.</p></div>
+      <p class="try-t">Phenomenal lavender and African Blue Basil together, gathered by hand. In lavender season (June).</p></div>
     <p class="fl-price" style="white-space:nowrap;">$${FLOWERS.mixed.price}</p>
   </div>
   <p class="body" style="margin-top:0.1in;"><b>Delivery in Manteca and Tracy</b>, or pick up locally. Pay in bitcoin and save ${pct}%.</p>
@@ -540,7 +540,7 @@ function flowersSheet() {
   <div class="fl-bottom">
     <div class="bigqr">${qr(FLOWERS.signup)}
       <div><p class="qr-t">Scan to sign up — we'll remind you when it's time</p>
-        <p class="body" style="margin-top:0.04in;">Our list hears first, before the harvest sells out.</p>
+        <p class="body" style="margin-top:0.04in;">We'll tell you when fresh basil is ready and when lavender season starts.</p>
         <p class="qr-u sans">${FLOWERS.signup.replace(/^https:\/\//, '')}</p></div></div>
     <p class="credits sans">Photos via Wikimedia Commons — Lavender: ${esc(FLOWERS.lavender.credit)} · African Blue Basil: ${esc(basil.photo_credit)} (${esc(basil.photo_license)}).</p>
   </div>

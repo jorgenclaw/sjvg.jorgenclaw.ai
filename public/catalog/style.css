@@ -299,3 +299,11 @@ body {
   .image-cards { grid-template-columns: repeat(2, 1fr); }
   .img-card img { height: 120px; }
 }
+
+/* Fresh-cut flowers banner (links to /lavender-bunches/) */
+.flowers-banner { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; padding: 0.75rem; border: 1px solid #333; border-radius: 12px;
+                  background: #141414; color: #ccc; text-decoration: none; font-size: 0.9rem; line-height: 1.45; transition: border-color 0.15s; }
+.flowers-banner:hover { border-color: #8a6fc8; text-decoration: none; }
+.flowers-banner img { width: 88px; height: 88px; object-fit: cover; border-radius: 8px; flex: none; }
+.flowers-banner strong { display: block; color: #e8e8e8; font-size: 1rem; margin-bottom: 0.15rem; }
+.flowers-cta { display: block; margin-top: 0.3rem; color: #9d82d8; font-weight: 600; }
