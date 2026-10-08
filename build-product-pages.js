@@ -68,6 +68,11 @@ function priceBlock(p) {
         <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
   const btc = (p.price_usd * (1 - (p.btc_discount_pct || 0) / 100)).toFixed(2);
   const inStock = p.availability === 'In stock';
+  if (!inStock && p.reserve) return `
+        <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
+        ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off) · Ready around ${esc(p.ready)}</p>` : ''}
+        <button class="pd-add" id="detail-add-btn">Reserve a bottle</button>
+        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's bottled. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
   return `
         <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
         ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off)</p>` : ''}

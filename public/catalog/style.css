@@ -322,3 +322,4 @@ body {
 .propolis-banner:hover { border-color: #d69e2e; }
 .propolis-banner .flowers-cta { color: #d69e2e; }
 .add-to-cart-btn.added:hover { color: #0d0d0d; }
+.card-note { font-size: 0.82rem; line-height: 1.4; color: #d69e2e; margin: 0.25rem 0 0.4rem; }

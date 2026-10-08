@@ -9,7 +9,7 @@
   <meta property="og:description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sjvg.jorgenclaw.ai/catalog/">
-  <link rel="stylesheet" href="style.css?v=2026-10-08">
+  <link rel="stylesheet" href="style.css?v=2026-10-08b">
 </head>
 <body>
   <div class="container">
@@ -52,7 +52,7 @@
       <img src="/catalog/photos/bee-propolis-tincture-steeping.jpg" alt="">
       <span class="flowers-text">
         <strong>New: Bee Propolis Tincture</strong>
-        Our first batch is steeping now and will be bottled around November 10. 1 fl oz amber dropper bottles.
+        Propolis from our own hives. Our first batch is steeping now and will be bottled around November 10. $16 for a 1 fl oz amber dropper bottle.
         <span class="flowers-cta">Reserve a bottle →</span>
       </span>
     </a>
@@ -69,7 +69,7 @@
             <button class="chip active" data-category="hydrosol">Hydrosol</button>
             <button class="chip" data-category="essential_oil">Essential Oil</button>
             <button class="chip coming-soon" data-category="candle">Candle <span class="cs-tag">Coming soon</span></button>
-            <button class="chip coming-soon" data-category="honey">Honey <span class="cs-tag">Coming soon</span></button>
+            <button class="chip" data-category="honey">Honey <span class="cs-tag new-tag">May 2027</span></button>
             <button class="chip" data-category="propolis">Propolis <span class="cs-tag new-tag">New</span></button>
             <button class="chip coming-soon" data-category="plant_lavender">Plant — Lavender <span class="cs-tag">Coming soon</span></button>
             <button class="chip coming-soon" data-category="plant_white_sage">Plant — White Sage <span class="cs-tag">Coming soon</span></button>
@@ -280,12 +280,13 @@
       const stockText = p.availability;
       
       html += `
-        <div class="product-card" onclick="window.location.href='/catalog/products/${p.slug}/'" style="cursor:pointer;">
+        <div class="product-card"${p.no_page ? '' : ` onclick="window.location.href='/catalog/products/${p.slug}/'" style="cursor:pointer;"`}>
           <h3 class="product-title">${p.name}</h3>
           <p class="product-botanical">${p.botanical.replace(/\s*\([^)]*\)\s*$/, '')}</p>
           ${cardMedia(p)}
           <div class="product-info">
             <p class="packaging-line">Sold in a ${p.page_size || p.size}.</p>
+            ${p.card_note ? `<p class="card-note">${p.card_note}</p>` : ''}
             <p class="price">${p.price_usd != null ? '$' + p.price_usd : 'Price at release'} · ${p.size}</p>
             <p class="stock-info">${stockText}</p>
             ${inCart ? `<button class="add-to-cart-btn added" onclick="event.stopPropagation(); addToCart('${p.slug}')">${p.reserve ? 'Reserved' : 'In Cart'} (${inCart.qty})</button>` : p.availability === 'In stock' ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Add to Cart</button>` : p.reserve ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Reserve — ready ${p.ready.replace(/, \d{4}$/, '')}</button>` : `<button class="add-to-cart-btn" disabled style="opacity:0.5;cursor:not-allowed;">${p.availability}</button>`}
@@ -340,7 +341,7 @@
       }
       const lineTotal = product.price_usd * item.qty;
       subtotal += lineTotal;
-      body += `${product.name} x${item.qty} — $${lineTotal.toFixed(2)}\n`;
+      body += `${product.name} x${item.qty} — $${lineTotal.toFixed(2)}${product.reserve && product.availability !== 'In stock' ? ` (reserve, ready around ${product.ready})` : ''}\n`;
     });
     body += `\nSubtotal: $${subtotal.toFixed(2)}\n`;
     body += `Bitcoin (10% off): $${(subtotal * 0.9).toFixed(2)}\n`;

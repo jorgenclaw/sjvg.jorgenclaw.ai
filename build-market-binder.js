@@ -34,7 +34,8 @@ const products = all.filter(p => p.category === 'hydrosol');
 const ordered = inStockFirst(products);
 const oils = inStockFirst(all.filter(p => p.category === 'essential_oil'));
 const isOil = p => p.category === 'essential_oil';
-const hive = all.filter(p => p.category === 'propolis');
+// Beehive products: priced on the price page; propolis also gets its own sheet.
+const hive = all.filter(p => ['propolis', 'honey'].includes(p.category));
 // Not distilled at volume yet: listed as one line on the price page until its lab analysis is back.
 const COMING_OIL_LINE = { name: 'African Blue Basil Essential Oil', when: 'Coming June 2027, after lab testing' };
 
@@ -363,7 +364,7 @@ function propolisSheet(p) {
       <h1 class="name">${esc(p.name)}</h1>
       <p class="bot">${esc(p.botanical)}</p>
       <p class="lede">${esc(p.description)}</p>
-      <p class="grown">Made by us in small batches in Manteca, California.</p>
+      <p class="grown">From our own beehives, made by us in small batches in Manteca, California.</p>
     </div>
     <figure class="photo">
       ${soon ? `<span class="coming sans">${esc(comingText(p))}</span>` : ''}
@@ -381,8 +382,9 @@ function propolisSheet(p) {
 
   <div class="mid">
     <div>
-      <h2 class="h2">Ways to use it</h2>
-      <ul class="uses">${p.uses.map(u => `<li>${esc(u)}</li>`).join('')}</ul>
+      <h2 class="h2">How to use it</h2>
+      <p class="body" style="margin-bottom:0.06in;">Under the tongue, in warm water or tea, stirred into honey, as a gargle, or dabbed on minor scrapes.</p>
+      <table class="dil">${p.dosage.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>
     </div>
     <div class="label-box">
       <h2 class="h2">Look for this label</h2>
@@ -393,8 +395,6 @@ function propolisSheet(p) {
 
   <div class="bottom">
     <div>
-      <h2 class="h2">How much to use</h2>
-      <table class="dil">${p.dosage.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>
       <p class="safety">${esc(p.safety)}</p>
       <p class="credit sans" style="margin-top:0.06in;">${esc(p.disclaimer)}</p>
     </div>
@@ -630,7 +630,6 @@ function pricesSheet() {
       <tr><th>Hydrosol</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(ordered)}
     </table>
-    <p class="body" style="margin-top:0.08in;">Ask about 8 oz. refills.</p>
   </div>
 
   ${hive.length ? `<div class="section">
@@ -639,7 +638,7 @@ function pricesSheet() {
       <tr><th>Product</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(hive)}
     </table>
-    <p class="body" style="margin-top:0.08in;">Reserve a bottle now; we'll let you know when it's ready.</p>
+    <p class="body" style="margin-top:0.08in;">From our own hives. Reserve propolis tincture now; honey comes in May, after our April harvest. Honey ships within California only.</p>
   </div>` : ''}
 
   <div class="section">
@@ -747,7 +746,7 @@ const pages = [
   ...ordered.map(p => [p.slug, p.name, productSheet(p)]),
   ['using-essential-oils', 'Using essential oils safely', oilSheet()],
   ...oils.map(p => [p.slug, p.name, productSheet(p)]),
-  ...hive.map(p => [p.slug, p.name, propolisSheet(p)]),
+  ...hive.filter(p => p.category === 'propolis').map(p => [p.slug, p.name, propolisSheet(p)]),
   ['sovereignty-by-design', 'Sovereignty by Design', sbdSheet()],
   ...SBD_FLYERS.map(f => [`sbd-${f.replace(/-v\d+$/, '')}`, null, path.join(FLYERS, f + '.html')]),
 ];
