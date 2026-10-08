@@ -603,23 +603,59 @@
     "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
   },
   {
-    "slug": "honey",
+    "slug": "urban-wildflower-honey",
     "category": "honey",
-    "name": "Honey from Our Hives",
+    "name": "Urban Wildflower Honey",
     "botanical": "Apis mellifera",
-    "description": "Honey from our own beehives in Manteca. We harvest in April and expect jars to be ready in May. Honey ships within California only.",
+    "description": "Honey from our own beehives in central Manteca. Our bees are never fed sugar syrup, so every drop is 100% bee-foraged nectar from the city's gardens, street trees and blooms.",
+    "description_full": "Our hives sit in the middle of Manteca, and our bees forage the town around them: backyard gardens, fruit trees, street trees, flowering hedges, parks and the odd vacant lot in bloom. That's why we call it urban wildflower honey. No single crop dominates, so the flavor follows whatever is flowering in town that spring. Many beekeepers feed their colonies sugar syrup to build them up, and bees will store some of that syrup in the comb alongside their honey. We never feed ours sugar syrup, so everything in the jar is nectar our bees gathered and made into honey themselves. We harvest in April and jar it by weight in one-pound glass jars.",
     "availability": "Expected available May 2027",
-    "price_usd": null,
+    "price_usd": 17,
     "btc_discount_pct": 10,
-    "size": "Jar size TBA",
-    "page_size": "jar (size to be announced)",
-    "no_page": true,
+    "size": "1 lb",
+    "page_size": "1 lb glass jar with a plastic screw-top lid",
+    "image": "/catalog/labels/urban-wildflower-honey.jpg",
+    "image_alt": "Sample Urban Wildflower Honey label",
+    "bottle_pending": "Sample label. The final label will change when we add our required California Cottage Food information.",
     "photo": "/catalog/photos/honey-honeybee-on-basil.jpg",
     "photo_alt": "A honeybee working the flowers of our African Blue Basil",
     "photo_caption": "One of our honeybees on our African Blue Basil",
+    "art": "/catalog/art/urban-wildflower-honey.jpg",
+    "art_credit": "Bee engraving by H. Summons, Wellcome Collection",
+    "art_license": "CC BY 4.0",
+    "art_source": "https://commons.wikimedia.org/wiki/File:Apiculture;_bees,_combs_and_swarms._Engraving_by_H._Summons._Wellcome_V0025727.jpg",
+    "card_note": "Honey ships within California only. Local pickup and delivery in the Manteca area.",
     "use_tags": [
       "culinary"
     ],
-    "card_note": "Honey ships within California only. Local pickup and delivery in the Manteca area."
+    "glance": [
+      [
+        "Honey",
+        "Urban wildflower, central Manteca"
+      ],
+      [
+        "Bees fed",
+        "Never sugar syrup: 100% bee-foraged"
+      ],
+      [
+        "Harvest",
+        "April; jars ready May 2027"
+      ],
+      [
+        "Jar",
+        "1 lb glass, plastic screw-top lid"
+      ]
+    ],
+    "uses": [
+      "Stirred into tea or warm water",
+      "On toast, biscuits, oatmeal and yogurt",
+      "In salad dressings, glazes and marinades",
+      "Baking, in place of some of the sugar",
+      "With a few drops of our Bee Propolis Tincture"
+    ],
+    "try_this": "Stir 5\u201310 drops of our Bee Propolis Tincture into a spoonful of this honey. The honey softens the propolis's bitter bite.",
+    "technical_note": "Spring harvest from our own hives in central Manteca, extracted and strained, then jarred by weight. Honey naturally crystallizes over time: that's a sign of real honey, not spoilage. To make it runny again, set the jar in a bowl of warm (not boiling) water and stir.",
+    "safety": "Do not feed honey to infants under 1 year old.",
+    "shipping_note": "Honey ships within California only."
   }
 ]

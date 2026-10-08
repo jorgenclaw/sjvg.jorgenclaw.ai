@@ -16,7 +16,7 @@ const CSS_VERSION = '2026-10-08';
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const PAGE_CATEGORIES = ['hydrosol', 'essential_oil', 'propolis'];
+const PAGE_CATEGORIES = ['hydrosol', 'essential_oil', 'propolis', 'honey'];
 // Propolis isn't distilled, so it lists its own "at a glance" tiles in `glance` instead.
 const hasPageFields = p => PAGE_CATEGORIES.includes(p.category) &&
   (p.glance ? ['uses', 'art'] : ['scent', 'distilled_from', 'key_aromatics', 'uses', 'art']).every(k => p[k]);
@@ -45,6 +45,13 @@ KIND.propolis = {
   whatIs: ['What is propolis?', 'Propolis, sometimes called bee glue, is the sticky resin honeybees collect from tree buds and bark and mix with beeswax. They use it to seal gaps and coat the inside of the hive, where it helps keep the colony clean. A tincture pulls those resins into alcohol so you can take propolis by the drop.'],
 };
 
+KIND.honey = {
+  about: 'About this honey',
+  ingredients: 'Honey. Nothing added: our bees are never fed sugar syrup.',
+  care: 'Keep the lid tight and store at room temperature, away from the stove. Do not refrigerate: it speeds up crystallizing. Do not feed honey to infants under 1 year old.',
+  whatIs: ['Why we don\'t call it organic', "To label honey organic, a beekeeper has to be able to show that the flowers the bees visited were organically grown. Honeybees fly a few miles in every direction from the hive, over yards, parks and farms nobody can certify, and in town that's impossible to promise. So we don't call ours organic. We tell you exactly what it is instead: honey from our own hives, from bees that are never fed sugar syrup."],
+};
+
 // Same table as the market binder's oil sheets (build-market-binder.js); keep them in step.
 // Drops assume about 20 drops per mL. 1 tablespoon = 15 mL, so 3 drops = 1%.
 // Lemongrass ("strong") is citral-rich and kept under the 0.7% skin maximum.
@@ -68,6 +75,7 @@ function priceBlock(p) {
         <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
   const btc = (p.price_usd * (1 - (p.btc_discount_pct || 0) / 100)).toFixed(2);
   const inStock = p.availability === 'In stock';
+  const ship = p.shipping_note ? ` ${esc(p.shipping_note)}` : '';
   if (!inStock && p.reserve) return `
         <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
         ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off) · Ready around ${esc(p.ready)}</p>` : ''}
@@ -79,7 +87,7 @@ function priceBlock(p) {
         ${inStock
           ? `<button class="pd-add" id="detail-add-btn">Add to Cart</button>`
           : `<button class="pd-add" disabled>${esc(p.availability)}</button>`}
-        <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
+        <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.${ship}</p>`;
 }
 
 function pairsBlock(p) {
@@ -101,7 +109,7 @@ function pairsBlock(p) {
 
 // The hero's picture column: our bottle photo first, the plant (or work-in-progress) photo smaller below it.
 function heroMedia(p) {
-  const portrait = p.category === 'propolis';
+  const portrait = p.category === 'propolis';  // the steeping jar is a tall photo
   const credit = p.photo_credit
     ? `<b>The plant</b>Photo: <a href="${esc(p.photo_source)}" target="_blank" rel="noopener">${esc(p.photo_credit)}</a>, ${esc(p.photo_license)}`
     : `<b>${esc(p.photo_caption || '')}</b>`;
@@ -117,7 +125,7 @@ function heroMedia(p) {
       </figure>`;
   const main = p.bottle_photo
     ? `<img class="pd-main" src="${esc(p.bottle_photo)}" alt="${esc(p.bottle_alt)}">`
-    : `<div class="pd-pending${p.bottle_pending ? '' : ' reserve'}">
+    : `<div class="pd-pending${p.category === 'hydrosol' ? '' : ' reserve'}">
           <img src="${esc(p.image)}" alt="${esc(p.image_alt || p.name + ' label')}">
           <p>${esc(p.bottle_pending || `Bottle photo coming when the first batch is bottled, around ${p.ready}.`)}</p>
         </div>`;

@@ -20,7 +20,11 @@ const LLC = path.join(process.env.HOME, 'NanoClaw/groups/main/Jorgenclaw.ai_LLC'
 const SJVG_DIR = path.join(LLC, 'San-Joaquin-Victory-Gardens');
 const MARKETING = path.join(SJVG_DIR, 'hydrosol_and_oils_marketing');
 // The propolis label is built by propolis-tincture/build.mjs; the binder shows its preview image.
-const PROPOLIS_LABEL = path.join(SJVG_DIR, 'propolis-tincture/preview/bee-propolis-tincture-label.png');
+// Beehive-product labels are built in their own folders; the binder shows their preview images.
+const HIVE_LABELS = {
+  'bee-propolis-tincture': path.join(SJVG_DIR, 'propolis-tincture/preview/bee-propolis-tincture-label.png'),
+  'urban-wildflower-honey': path.join(SJVG_DIR, 'honey/preview/urban-wildflower-honey-label.png'),
+};
 const FLYERS = path.join(LLC, 'Sovereignty-by-Design/flyers');
 // The binder covers SJVG and Sovereignty by Design, so it lives at the LLC level.
 const OUT = path.resolve(process.argv[2] || path.join(LLC, 'market-binder'));
@@ -353,8 +357,9 @@ function productSheet(p) {
 </section>`;
 }
 
-// Bee Propolis Tincture: same layout as a product sheet, with its own tiles, dosage and cautions.
-function propolisSheet(p) {
+// Beehive products (propolis tincture, honey): same layout as a product sheet, with their own tiles.
+// Propolis shows its dosage and cautions; honey shows its uses and why it isn't called organic.
+function hiveSheet(p) {
   const soon = p.availability !== 'In stock';
   return `<section class="sheet">
   <header class="panel hero">
@@ -364,7 +369,7 @@ function propolisSheet(p) {
       <h1 class="name">${esc(p.name)}</h1>
       <p class="bot">${esc(p.botanical)}</p>
       <p class="lede">${esc(p.description)}</p>
-      <p class="grown">From our own beehives, made by us in small batches in Manteca, California.</p>
+      <p class="grown">${p.category === 'honey' ? 'From our own beehives in central Manteca, California.' : 'From our own beehives, made by us in small batches in Manteca, California.'}</p>
     </div>
     <figure class="photo">
       ${soon ? `<span class="coming sans">${esc(comingText(p))}</span>` : ''}
@@ -377,26 +382,29 @@ function propolisSheet(p) {
     <div class="tile"><span class="tile-k sans">${esc(k)}</span><span class="tile-v">${esc(v)}</span></div>`).join('')}
   </section>
 
-  <h2 class="h2">About this tincture</h2>
+  <h2 class="h2">About this ${p.category === 'honey' ? 'honey' : 'tincture'}</h2>
   <p class="about">${esc(p.description_full)}</p>
 
   <div class="mid">
     <div>
-      <h2 class="h2">How to use it</h2>
+      ${p.dosage ? `<h2 class="h2">How to use it</h2>
       <p class="body" style="margin-bottom:0.06in;">Under the tongue, in warm water or tea, stirred into honey, as a gargle, or dabbed on minor scrapes.</p>
-      <table class="dil">${p.dosage.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>
+      <table class="dil">${p.dosage.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>` : `<h2 class="h2">Ways to use it</h2>
+      <ul class="uses">${p.uses.map(u => `<li>${esc(u)}</li>`).join('')}</ul>`}
     </div>
     <div class="label-box">
       <h2 class="h2">Look for this label</h2>
-      <img class="label-img" style="aspect-ratio:auto" src="file://${PROPOLIS_LABEL}" alt="${esc(p.name)} label">
-      <p class="cap">1 fl oz (30 mL) amber glass dropper bottle</p>
+      <img class="label-img" style="aspect-ratio:auto" src="file://${HIVE_LABELS[p.slug]}" alt="${esc(p.name)} label">
+      <p class="cap">${esc(p.bottle_pending ? 'Sample label: the final label adds our California Cottage Food information' : `${p.page_size}`)}</p>
     </div>
   </div>
 
   <div class="bottom">
     <div>
-      <p class="safety">${esc(p.safety)}</p>
-      <p class="credit sans" style="margin-top:0.06in;">${esc(p.disclaimer)}</p>
+      ${p.dosage ? `<p class="safety">${esc(p.safety)}</p>
+      <p class="credit sans" style="margin-top:0.06in;">${esc(p.disclaimer)}</p>` : `<h2 class="h2">Why we don't call it organic</h2>
+      <p class="body">To call honey organic, a beekeeper must show the flowers the bees visited were organically grown. Bees fly miles over yards and parks nobody can certify, so we don't make that claim. We tell you exactly what it is: honey from our own hives, never fed sugar syrup.</p>
+      <p class="safety"><b>${esc(p.safety)}</b> ${esc(p.shipping_note || '')}</p>`}
     </div>
     ${p.try_this ? `<div class="try"><p class="try-k sans">Try this</p><p class="try-t">${esc(p.try_this)}</p></div>` : ''}
   </div>
@@ -638,7 +646,7 @@ function pricesSheet() {
       <tr><th>Product</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(hive)}
     </table>
-    <p class="body" style="margin-top:0.08in;">From our own hives. Reserve propolis tincture now; honey comes in May, after our April harvest. Honey ships within California only.</p>
+    <p class="body" style="margin-top:0.08in;">From our own hives. Reserve propolis tincture now; honey comes in May, after our April harvest, and ships within California only.</p>
   </div>` : ''}
 
   <div class="section">
@@ -746,7 +754,7 @@ const pages = [
   ...ordered.map(p => [p.slug, p.name, productSheet(p)]),
   ['using-essential-oils', 'Using essential oils safely', oilSheet()],
   ...oils.map(p => [p.slug, p.name, productSheet(p)]),
-  ...hive.filter(p => p.category === 'propolis').map(p => [p.slug, p.name, propolisSheet(p)]),
+  ...hive.map(p => [p.slug, p.name, hiveSheet(p)]),
   ['sovereignty-by-design', 'Sovereignty by Design', sbdSheet()],
   ...SBD_FLYERS.map(f => [`sbd-${f.replace(/-v\d+$/, '')}`, null, path.join(FLYERS, f + '.html')]),
 ];
