@@ -101,3 +101,27 @@
   .pd-glance { grid-template-columns: 1fr; }
   .pd-pairs { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
 }
+
+/* Hero media (2026-10-08): our bottle photo, tall, then the plant photo smaller underneath.
+   Products without a bottle photo yet show their label and a note in the bottle's place. */
+.pd-media { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+.pd-main { display: block; width: 100%; max-width: 360px; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 10px;
+           box-shadow: 0 10px 30px rgba(43, 43, 31, 0.25); }
+.pd-pending { width: 100%; max-width: 360px; aspect-ratio: 2 / 3; display: flex; flex-direction: column; justify-content: center; gap: 1.1rem;
+              padding: 1.25rem; border: 1px dashed #c9bd94; border-radius: 10px; background: rgba(243, 238, 221, 0.85); }
+.pd-pending img { width: 100%; height: auto; display: block; border-radius: 3px; box-shadow: 0 4px 14px rgba(43, 43, 31, 0.25); }
+.pd-pending p { font-style: italic; font-size: 0.95rem; line-height: 1.5; color: #6b6b4f; text-align: center; }
+.pd-second { width: 100%; max-width: 360px; display: flex; gap: 0.8rem; align-items: center; }
+.pd-second img { flex: none; width: 40%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 14px rgba(43, 43, 31, 0.2); }
+.pd-second img.portrait { width: 30%; aspect-ratio: 3 / 4; }
+.pd-second figcaption, .pd-media > figcaption { font: 0.72rem/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #6b6b4f; }
+.pd-second figcaption a, .pd-media > figcaption a { color: inherit; }
+.pd-second figcaption b { display: block; font: italic 600 0.9rem/1.3 Georgia, 'Times New Roman', serif; color: #3a3a2c; margin-bottom: 0.15rem; }
+.pd-details .pd-disclaimer { font-size: 0.8rem; color: #888; }
+.pd-pending.reserve { aspect-ratio: auto; }
+.pd-details ul { list-style: none; padding: 0 0 0.6rem; }
+.pd-details li { color: #bbb; line-height: 1.6; font-size: 0.95rem; padding: 0.1rem 0; }
+@media (max-width: 860px) {
+  .pd-media { order: -1; }
+  .pd-pending { aspect-ratio: auto; }
+}

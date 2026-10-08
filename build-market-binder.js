@@ -16,8 +16,12 @@ const PUBLIC = path.join(__dirname, 'public');
 const SITE = 'https://sjvg.jorgenclaw.ai';
 // The bottle labels' print sheets (batch-<label>.html) live in the marketing folder.
 const LLC = path.join(process.env.HOME, 'NanoClaw/groups/main/Jorgenclaw.ai_LLC');
-const MARKETING = path.join(LLC, 'San Joaquin Victory Gardens/hydrosol_and_oils_marketing');
-const FLYERS = path.join(LLC, 'Sovereignty by Design/flyers');
+// The SJVG folder was renamed with hyphens on 2026-10-08.
+const SJVG_DIR = path.join(LLC, 'San-Joaquin-Victory-Gardens');
+const MARKETING = path.join(SJVG_DIR, 'hydrosol_and_oils_marketing');
+// The propolis label is built by propolis-tincture/build.mjs; the binder shows its preview image.
+const PROPOLIS_LABEL = path.join(SJVG_DIR, 'propolis-tincture/preview/bee-propolis-tincture-label.png');
+const FLYERS = path.join(LLC, 'Sovereignty-by-Design/flyers');
 // The binder covers SJVG and Sovereignty by Design, so it lives at the LLC level.
 const OUT = path.resolve(process.argv[2] || path.join(LLC, 'market-binder'));
 
@@ -30,6 +34,7 @@ const products = all.filter(p => p.category === 'hydrosol');
 const ordered = inStockFirst(products);
 const oils = inStockFirst(all.filter(p => p.category === 'essential_oil'));
 const isOil = p => p.category === 'essential_oil';
+const hive = all.filter(p => p.category === 'propolis');
 // Not distilled at volume yet: listed as one line on the price page until its lab analysis is back.
 const COMING_OIL_LINE = { name: 'African Blue Basil Essential Oil', when: 'Coming June 2027, after lab testing' };
 
@@ -347,6 +352,58 @@ function productSheet(p) {
 </section>`;
 }
 
+// Bee Propolis Tincture: same layout as a product sheet, with its own tiles, dosage and cautions.
+function propolisSheet(p) {
+  const soon = p.availability !== 'In stock';
+  return `<section class="sheet">
+  <header class="panel hero">
+    <img class="panel-art" src="${img(p.art)}" alt="">
+    <div>
+      <p class="kicker">San Joaquin Victory Gardens</p>
+      <h1 class="name">${esc(p.name)}</h1>
+      <p class="bot">${esc(p.botanical)}</p>
+      <p class="lede">${esc(p.description)}</p>
+      <p class="grown">Made by us in small batches in Manteca, California.</p>
+    </div>
+    <figure class="photo">
+      ${soon ? `<span class="coming sans">${esc(comingText(p))}</span>` : ''}
+      <img src="${img(p.photo)}" alt="${esc(p.photo_alt)}">
+      <figcaption class="credit sans">${esc(p.photo_caption)} · Background: ${esc(p.art_credit)}, ${esc(p.art_license)}</figcaption>
+    </figure>
+  </header>
+
+  <section class="glance">${p.glance.map(([k, v]) => `
+    <div class="tile"><span class="tile-k sans">${esc(k)}</span><span class="tile-v">${esc(v)}</span></div>`).join('')}
+  </section>
+
+  <h2 class="h2">About this tincture</h2>
+  <p class="about">${esc(p.description_full)}</p>
+
+  <div class="mid">
+    <div>
+      <h2 class="h2">Ways to use it</h2>
+      <ul class="uses">${p.uses.map(u => `<li>${esc(u)}</li>`).join('')}</ul>
+    </div>
+    <div class="label-box">
+      <h2 class="h2">Look for this label</h2>
+      <img class="label-img" style="aspect-ratio:auto" src="file://${PROPOLIS_LABEL}" alt="${esc(p.name)} label">
+      <p class="cap">1 fl oz (30 mL) amber glass dropper bottle</p>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div>
+      <h2 class="h2">How much to use</h2>
+      <table class="dil">${p.dosage.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>
+      <p class="safety">${esc(p.safety)}</p>
+      <p class="credit sans" style="margin-top:0.06in;">${esc(p.disclaimer)}</p>
+    </div>
+    ${p.try_this ? `<div class="try"><p class="try-k sans">Try this</p><p class="try-t">${esc(p.try_this)}</p></div>` : ''}
+  </div>
+  ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
+</section>`;
+}
+
 const coverTile = p => `
     <div class="g"><img src="${img(p.photo)}" alt="">
       <p class="g-n">${esc(shortName(p))}</p>
@@ -576,6 +633,15 @@ function pricesSheet() {
     <p class="body" style="margin-top:0.08in;">Ask about 8 oz. refills.</p>
   </div>
 
+  ${hive.length ? `<div class="section">
+    <h2 class="h2">From the hive</h2>
+    <table class="prices">
+      <tr><th>Product</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
+      ${priceRows(hive)}
+    </table>
+    <p class="body" style="margin-top:0.08in;">Reserve a bottle now; we'll let you know when it's ready.</p>
+  </div>` : ''}
+
   <div class="section">
     <h2 class="h2">Essential oils</h2>
     <table class="prices">
@@ -681,6 +747,7 @@ const pages = [
   ...ordered.map(p => [p.slug, p.name, productSheet(p)]),
   ['using-essential-oils', 'Using essential oils safely', oilSheet()],
   ...oils.map(p => [p.slug, p.name, productSheet(p)]),
+  ...hive.map(p => [p.slug, p.name, propolisSheet(p)]),
   ['sovereignty-by-design', 'Sovereignty by Design', sbdSheet()],
   ...SBD_FLYERS.map(f => [`sbd-${f.replace(/-v\d+$/, '')}`, null, path.join(FLYERS, f + '.html')]),
 ];

@@ -307,3 +307,18 @@ body {
 .flowers-banner img { width: 88px; height: 88px; object-fit: cover; border-radius: 8px; flex: none; }
 .flowers-banner strong { display: block; color: #e8e8e8; font-size: 1rem; margin-bottom: 0.15rem; }
 .flowers-cta { display: block; margin-top: 0.3rem; color: #9d82d8; font-weight: 600; }
+
+/* Product cards (2026-10-08): our own bottle photo, tall, with the plant photo as a small round inset.
+   Products without a bottle photo yet show their label on cream with a note in the same space. */
+.product-media { position: relative; width: 100%; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 8px; background: #1a1a1a; }
+.product-media .card-main { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 45%; }
+.card-inset { position: absolute; right: 8px; bottom: 8px; width: 34%; aspect-ratio: 1; border-radius: 50%; object-fit: cover;
+              border: 3px solid #fdfbf3; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45); }
+.product-media.pending { display: flex; flex-direction: column; align-items: center; padding: 18% 0.9rem 0;
+                         background: #fdfbf3; border: 1px dashed #c9bd94; }
+.card-label { width: 100%; height: auto; display: block; border-radius: 3px; box-shadow: 0 3px 10px rgba(43, 43, 31, 0.25); }
+.pending-note { margin-top: 0.8rem; font: italic 0.85rem/1.4 Georgia, 'Times New Roman', serif; color: #6b6b4f; text-align: center; }
+.cs-tag.new-tag { color: #d69e2e; font-weight: 600; }
+.propolis-banner:hover { border-color: #d69e2e; }
+.propolis-banner .flowers-cta { color: #d69e2e; }
+.add-to-cart-btn.added:hover { color: #0d0d0d; }

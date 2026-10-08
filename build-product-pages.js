@@ -11,13 +11,15 @@ const path = require('path');
 const PUBLIC = path.join(__dirname, 'public');
 const products = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'));
 const bySlug = Object.fromEntries(products.map(p => [p.slug, p]));
-const CSS_VERSION = '2026-09-29';
+const CSS_VERSION = '2026-10-08';
 
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const PAGE_CATEGORIES = ['hydrosol', 'essential_oil'];
-const hasPageFields = p => PAGE_CATEGORIES.includes(p.category) && ['scent', 'distilled_from', 'key_aromatics', 'uses', 'art'].every(k => p[k]);
+const PAGE_CATEGORIES = ['hydrosol', 'essential_oil', 'propolis'];
+// Propolis isn't distilled, so it lists its own "at a glance" tiles in `glance` instead.
+const hasPageFields = p => PAGE_CATEGORIES.includes(p.category) &&
+  (p.glance ? ['uses', 'art'] : ['scent', 'distilled_from', 'key_aromatics', 'uses', 'art']).every(k => p[k]);
 const detailHref = p => p.detail_html || `/catalog/products/${p.slug}/`;
 
 // The parts of the page that differ between a hydrosol and an essential oil.
@@ -36,6 +38,13 @@ const KIND = {
   },
 };
 
+KIND.propolis = {
+  about: 'About this tincture',
+  ingredients: 'Bee propolis, grain alcohol, distilled water. Nothing else.',
+  care: 'Shake well before each use. Keep the cap on, and keep the bottle somewhere cool and dark. The alcohol preserves it, so it keeps for years. Flammable: keep away from flame. Keep out of reach of children.',
+  whatIs: ['What is propolis?', 'Propolis, sometimes called bee glue, is the sticky resin honeybees collect from tree buds and bark and mix with beeswax. They use it to seal gaps and coat the inside of the hive, where it helps keep the colony clean. A tincture pulls those resins into alcohol so you can take propolis by the drop.'],
+};
+
 // Same table as the market binder's oil sheets (build-market-binder.js); keep them in step.
 // Drops assume about 20 drops per mL. 1 tablespoon = 15 mL, so 3 drops = 1%.
 // Lemongrass ("strong") is citral-rich and kept under the 0.7% skin maximum.
@@ -48,6 +57,11 @@ const DILUTION = {
 };
 
 function priceBlock(p) {
+  if (p.price_usd == null && p.reserve) return `
+        <p class="pd-price">Price at release <span class="pd-size">· ${esc(p.size)}</span></p>
+        <p class="pd-btc">Ready around ${esc(p.ready)}</p>
+        <button class="pd-add" id="detail-add-btn">Reserve a bottle</button>
+        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's bottled. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
   if (p.price_usd == null) return `
         <p class="pd-price">Price at release <span class="pd-size">· ${esc(p.size)}</span></p>
         <button class="pd-add" disabled>${esc(p.availability)}</button>
@@ -80,6 +94,38 @@ function pairsBlock(p) {
     </section>`;
 }
 
+// The hero's picture column: our bottle photo first, the plant (or work-in-progress) photo smaller below it.
+function heroMedia(p) {
+  const portrait = p.category === 'propolis';
+  const credit = p.photo_credit
+    ? `<b>The plant</b>Photo: <a href="${esc(p.photo_source)}" target="_blank" rel="noopener">${esc(p.photo_credit)}</a>, ${esc(p.photo_license)}`
+    : `<b>${esc(p.photo_caption || '')}</b>`;
+  const second = `
+        <figure class="pd-second">
+          <img${portrait ? ' class="portrait"' : ''} src="${esc(p.photo)}" alt="${esc(p.photo_alt)}">
+          <figcaption>${credit}</figcaption>
+        </figure>`;
+  if (!p.bottle_photo && !p.bottle_pending && !p.reserve) return `
+      <figure class="pd-photo">
+        <img src="${esc(p.photo)}" alt="${esc(p.photo_alt)}">
+        <figcaption>Photo: <a href="${esc(p.photo_source)}" target="_blank" rel="noopener">${esc(p.photo_credit)}</a>, ${esc(p.photo_license)}</figcaption>
+      </figure>`;
+  const main = p.bottle_photo
+    ? `<img class="pd-main" src="${esc(p.bottle_photo)}" alt="${esc(p.bottle_alt)}">`
+    : `<div class="pd-pending${p.bottle_pending ? '' : ' reserve'}">
+          <img src="${esc(p.image)}" alt="${esc(p.image_alt || p.name + ' label')}">
+          <p>${esc(p.bottle_pending || `Bottle photo coming when the first batch is bottled, around ${p.ready}.`)}</p>
+        </div>`;
+  return `
+      <div class="pd-media">
+        ${main}${second}${p.art_credit ? `
+        <figcaption>Background: <a href="${esc(p.art_source)}" target="_blank" rel="noopener">${esc(p.art_credit)}</a>, ${esc(p.art_license)}</figcaption>` : ''}
+      </div>`;
+}
+
+const glanceTiles = p => p.glance || [['Scent', p.scent], ['Distilled from', p.distilled_from],
+  ['Aromatic character', p.key_aromatics], ['Bottle', p.page_size || p.size]];
+
 function page(p) {
   const kind = KIND[p.category];
   const botanical = p.botanical.replace(/\s*\([^)]*\)\s*$/, '');
@@ -93,7 +139,7 @@ function page(p) {
   <meta name="description" content="${esc(metaDesc)}">
   <meta property="og:title" content="${esc(p.name)}">
   <meta property="og:description" content="${esc(p.description)}">
-  <meta property="og:image" content="https://sjvg.jorgenclaw.ai${esc(p.photo)}">
+  <meta property="og:image" content="https://sjvg.jorgenclaw.ai${esc(p.bottle_photo || p.photo)}">
   <link rel="stylesheet" href="/catalog/style.css?v=${CSS_VERSION}">
   <link rel="stylesheet" href="/catalog/product.css?v=${CSS_VERSION}">
 </head>
@@ -117,17 +163,11 @@ function page(p) {
         <p class="pd-lede">${esc(p.description)}</p>
         ${priceBlock(p)}
       </div>
-      <figure class="pd-photo">
-        <img src="${esc(p.photo)}" alt="${esc(p.photo_alt)}">
-        <figcaption>Photo: <a href="${esc(p.photo_source)}" target="_blank" rel="noopener">${esc(p.photo_credit)}</a>, ${esc(p.photo_license)}</figcaption>
-      </figure>
+${heroMedia(p)}
     </header>
 
     <section class="pd-glance" aria-label="At a glance">
-      <div class="pd-tile"><span class="pd-tile-k">Scent</span><span class="pd-tile-v">${esc(p.scent)}</span></div>
-      <div class="pd-tile"><span class="pd-tile-k">Distilled from</span><span class="pd-tile-v">${esc(p.distilled_from)}</span></div>
-      <div class="pd-tile"><span class="pd-tile-k">Aromatic character</span><span class="pd-tile-v">${esc(p.key_aromatics)}</span></div>
-      <div class="pd-tile"><span class="pd-tile-k">Bottle</span><span class="pd-tile-v">${esc(p.page_size || p.size)}</span></div>
+      ${glanceTiles(p).map(([k, v]) => `<div class="pd-tile"><span class="pd-tile-k">${esc(k)}</span><span class="pd-tile-v">${esc(v)}</span></div>`).join('\n      ')}
     </section>
 
     <section class="pd-section">
@@ -149,7 +189,13 @@ function page(p) {
         <ul>${DILUTION[p.dilution || 'standard'].map(([k, v]) => `<li><strong>${k}:</strong> ${esc(v)}</li>`).join('')}</ul>
         <p><strong>Never use it undiluted on skin.</strong> ${esc(p.safety || '')}</p>
       </details>
-      ` : ''}${p.technical_note ? `<details${p.category === 'essential_oil' ? '' : ' open'}>
+      ` : ''}${p.dosage ? `<details open>
+        <summary>How much to use</summary>
+        <ul>${p.dosage.map(([k, v]) => `<li><strong>${esc(k)}:</strong> ${esc(v)}</li>`).join('')}</ul>
+        <p>${esc(p.safety || '')}</p>
+        ${p.disclaimer ? `<p class="pd-disclaimer">${esc(p.disclaimer)}</p>` : ''}
+      </details>
+      ` : ''}${p.technical_note ? `<details${p.category === 'hydrosol' ? ' open' : ''}>
         <summary>Technical note</summary>
         <p>${esc(p.technical_note)}</p>
       </details>
@@ -187,7 +233,7 @@ ${pairsBlock(p)}
   if (btn) {
     const show = () => {
       const item = cart.find(i => i.slug === slug);
-      if (item) { btn.textContent = 'In Cart (' + item.qty + ')'; btn.classList.add('added'); }
+      if (item) { btn.textContent = '${p.reserve ? 'Reserved' : 'In Cart'} (' + item.qty + ')'; btn.classList.add('added'); }
     };
     show();
     btn.addEventListener('click', () => {

@@ -38,7 +38,8 @@
     ],
     "art": "/catalog/art/phenomenal-lavender-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "Mist your pillow 2\u20133 times before bed."
+    "try_this": "Mist your pillow 2\u20133 times before bed.",
+    "bottle_pending": "Bottle photo coming in 2027, after our next distillation of this plant."
   },
   {
     "slug": "meyer-lemon-hydrosol",
@@ -79,7 +80,9 @@
     ],
     "art": "/catalog/art/meyer-lemon-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "After washing your face, mist 2\u20133 sprays and pat it in before your moisturizer. A soft citrus start to the morning."
+    "try_this": "After washing your face, mist 2\u20133 sprays and pat it in before your moisturizer. A soft citrus start to the morning.",
+    "bottle_photo": "/catalog/bottles/meyer-lemon-hydrosol.jpg",
+    "bottle_alt": "Our Meyer Lemon Hydrosol in its 4 oz. amber glass spray bottle"
   },
   {
     "slug": "spearmint-hydrosol",
@@ -121,7 +124,9 @@
     ],
     "art": "/catalog/art/spearmint-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "Keep a bottle in the fridge in summer. Mist your face and neck when you come in from the heat."
+    "try_this": "Keep a bottle in the fridge in summer. Mist your face and neck when you come in from the heat.",
+    "bottle_photo": "/catalog/bottles/spearmint-hydrosol.jpg",
+    "bottle_alt": "Our Spearmint Hydrosol in its 4 oz. amber glass spray bottle"
   },
   {
     "slug": "rosemary-hydrosol",
@@ -162,7 +167,9 @@
     ],
     "art": "/catalog/art/rosemary-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "Part your hair, mist your scalp, and massage for a minute. A great refresh between wash days."
+    "try_this": "Part your hair, mist your scalp, and massage for a minute. A great refresh between wash days.",
+    "bottle_photo": "/catalog/bottles/rosemary-hydrosol.jpg",
+    "bottle_alt": "Our Rosemary Hydrosol in its 4 oz. amber glass spray bottle"
   },
   {
     "slug": "valencia-orange-hydrosol",
@@ -204,7 +211,9 @@
     ],
     "art": "/catalog/art/valencia-orange-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "A few sprays in the entryway or kitchen before guests arrive make the house smell cheerful."
+    "try_this": "A few sprays in the entryway or kitchen before guests arrive make the house smell cheerful.",
+    "bottle_photo": "/catalog/bottles/valencia-orange-hydrosol.jpg",
+    "bottle_alt": "Our Valencia Orange Hydrosol in its 4 oz. amber glass spray bottle"
   },
   {
     "slug": "oregano-hydrosol",
@@ -245,7 +254,9 @@
     ],
     "art": "/catalog/art/oregano-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "After brushing, gargle a capful for 30 seconds, then spit it out."
+    "try_this": "After brushing, gargle a capful for 30 seconds, then spit it out.",
+    "bottle_photo": "/catalog/bottles/oregano-hydrosol.jpg",
+    "bottle_alt": "Our Oregano Hydrosol in its 4 oz. amber glass spray bottle"
   },
   {
     "slug": "lemongrass-hydrosol",
@@ -287,7 +298,9 @@
     ],
     "art": "/catalog/art/lemongrass-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "For an outdoor blend, add a few drops of citronella essential oil to the bottle. Shake, then mist the patio and your outdoor furniture before you sit outside."
+    "try_this": "For an outdoor blend, add a few drops of citronella essential oil to the bottle. Shake, then mist the patio and your outdoor furniture before you sit outside.",
+    "bottle_photo": "/catalog/bottles/lemongrass-hydrosol.jpg",
+    "bottle_alt": "Our Lemongrass Hydrosol in its 4 oz. amber glass spray bottle"
   },
   {
     "slug": "white-sage-hydrosol",
@@ -327,7 +340,9 @@
     ],
     "art": "/catalog/art/white-sage-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "Mist the corners of a room when you want the space to feel clear and calm. The feel of sage without the smoke."
+    "try_this": "Mist the corners of a room when you want the space to feel clear and calm. The feel of sage without the smoke.",
+    "bottle_photo": "/catalog/bottles/white-sage-hydrosol.jpg",
+    "bottle_alt": "Our White Sage Hydrosol in its 4 oz. amber glass spray bottle"
   },
   {
     "slug": "african-blue-basil-hydrosol",
@@ -367,7 +382,8 @@
     ],
     "art": "/catalog/art/african-blue-basil-hydrosol.jpg",
     "page_size": "4 oz. amber glass bottle with a pump-action spray atomizer",
-    "try_this": "Use it as a kitchen and bathroom cleaning spray with a bold herbal scent."
+    "try_this": "Use it as a kitchen and bathroom cleaning spray with a bold herbal scent.",
+    "bottle_pending": "Bottle photo coming in 2027, after our next distillation of this plant."
   },
   {
     "slug": "white-sage-essential-oil",
@@ -517,5 +533,68 @@
     "try_this": "Add 10 drops to a spray bottle of water and white vinegar for a bright kitchen cleaner. Shake before each use.",
     "safety": "Can irritate or sensitize skin: on skin, use no more than 1 drop per 2 teaspoons of carrier oil. Patch-test first.",
     "dilution": "strong"
+  },
+  {
+    "slug": "bee-propolis-tincture",
+    "category": "propolis",
+    "name": "Bee Propolis Tincture",
+    "botanical": "Apis mellifera",
+    "description": "Raw bee propolis steeped in grain alcohol for at least four weeks: a dark amber, resinous tincture, 15% propolis by weight to volume at about 72% alcohol.",
+    "description_full": "Propolis, often called bee glue, is the resin honeybees gather from tree buds and bark and work together with beeswax to seal and protect their hive. Our tincture draws those resins out with high-proof grain alcohol: the raw propolis is frozen, cracked into rice-sized flakes, and steeped for at least four weeks, shaken every day, then strained twice, through cloth and then paper. What comes out is a dark amber tincture with a bitter, piney, balsamic taste that briefly numbs the tongue. People around the world have kept propolis in the cupboard for centuries, most often reaching for it during cold-and-flu season and for a scratchy throat. Each bottle comes with a glass dropper.",
+    "technical_note": "First batch started October 8, 2026: raw propolis frozen, cracked into flakes and steeped at 15 g per 100 mL in grain alcohol diluted with distilled water to about 72% alcohol by volume. Shaken daily for at least four weeks, then strained through cheesecloth and a paper filter. As with any natural product, expect some variation in color and taste from batch to batch.",
+    "size": "1 fl oz",
+    "page_size": "1 fl oz (30 mL) amber glass dropper bottle",
+    "price_usd": null,
+    "btc_discount_pct": 10,
+    "availability": "Expected available November 10, 2026",
+    "reserve": true,
+    "ready": "November 10, 2026",
+    "image": "/catalog/labels/bee-propolis-tincture.jpg",
+    "image_alt": "The Bee Propolis Tincture bottle label",
+    "photo": "/catalog/photos/bee-propolis-tincture-steeping.jpg",
+    "photo_alt": "A quart jar of propolis tincture steeping, with a blue tape label reading 10/8 Propolis Tincture 15% weight:volume",
+    "photo_caption": "Our first batch, steeping since October 8, 2026",
+    "art": "/catalog/art/bee-propolis-tincture.jpg",
+    "art_credit": "Honeycomb engraving by H. Summons, Wellcome Collection",
+    "art_license": "CC BY 4.0",
+    "art_source": "https://commons.wikimedia.org/wiki/File:Apiculture;_bees,_combs_and_swarms._Engraving_by_H._Summons._Wellcome_V0025727.jpg",
+    "use_tags": [],
+    "glance": [
+      [
+        "Strength",
+        "15% propolis, weight to volume"
+      ],
+      [
+        "Alcohol",
+        "About 72% by volume"
+      ],
+      [
+        "Made",
+        "Steeped four weeks or more, shaken daily, strained twice"
+      ],
+      [
+        "Bottle",
+        "1 fl oz (30 mL) amber glass dropper bottle"
+      ]
+    ],
+    "uses": [
+      "10\u201330 drops under the tongue; hold for 30\u201360 seconds, then swallow",
+      "A few drops in warm water or herbal tea",
+      "Stirred into a spoonful of raw honey",
+      "Diluted in warm water as a gargle"
+    ],
+    "try_this": "Propolis is bitter and briefly numbs the tongue. Most people like it best stirred into a spoonful of honey.",
+    "dosage": [
+      [
+        "Adults",
+        "10\u201330 drops, once or twice a day"
+      ],
+      [
+        "First time",
+        "Start with a few drops to check for a reaction"
+      ]
+    ],
+    "safety": "Do not use if you are allergic to bees, bee stings, honey or pollen. Contains about 72% alcohol: not for children, or for anyone avoiding alcohol. Ask a doctor before use if you are pregnant, nursing, or take medication, especially blood thinners. Flammable: keep away from flame.",
+    "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
   }
 ]

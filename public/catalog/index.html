@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Catalog — San Joaquin Victory Gardens</title>
-  <meta name="description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley. Hydrosols $16 per 4 oz. spray bottle; essential oils in 15 mL bottles. Message us to order.">
+  <meta name="description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley, and our new bee propolis tincture. Hydrosols $16 per 4 oz. spray bottle; essential oils in 15 mL bottles. Message us to order.">
   <meta property="og:title" content="Catalog — San Joaquin Victory Gardens">
   <meta property="og:description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sjvg.jorgenclaw.ai/catalog/">
-  <link rel="stylesheet" href="style.css?v=2026-09-28">
+  <link rel="stylesheet" href="style.css?v=2026-10-08">
 </head>
 <body>
   <div class="container">
@@ -28,7 +28,7 @@
     <!-- Hero -->
     <header class="hero">
       <h1>Catalog</h1>
-      <p class="hero-sub">Steam-distilled hydrosols and essential oils from our San Joaquin Valley garden. Hydrosols in 4 oz. amber glass spray bottles, $16 each; essential oils in 15 mL amber glass bottles.</p>
+      <p class="hero-sub">Steam-distilled hydrosols and essential oils from our San Joaquin Valley garden. Hydrosols in 4 oz. amber glass spray bottles, $16 each; essential oils in 15 mL amber glass bottles; and new this fall, bee propolis tincture.</p>
     </header>
 
     <!-- Payment Terms Banner -->
@@ -47,6 +47,16 @@
       </span>
     </a>
 
+    <!-- New product: propolis tincture, reservable before it's bottled -->
+    <a class="flowers-banner propolis-banner" href="/catalog/products/bee-propolis-tincture/">
+      <img src="/catalog/photos/bee-propolis-tincture-steeping.jpg" alt="">
+      <span class="flowers-text">
+        <strong>New: Bee Propolis Tincture</strong>
+        Our first batch is steeping now and will be bottled around November 10. 1 fl oz amber dropper bottles.
+        <span class="flowers-cta">Reserve a bottle →</span>
+      </span>
+    </a>
+
     <!-- Search & Filters -->
     <section class="filters-section">
       <input type="text" id="search-input" placeholder="Search products..." autocomplete="off">
@@ -60,7 +70,7 @@
             <button class="chip" data-category="essential_oil">Essential Oil</button>
             <button class="chip coming-soon" data-category="candle">Candle <span class="cs-tag">Coming soon</span></button>
             <button class="chip coming-soon" data-category="honey">Honey <span class="cs-tag">Coming soon</span></button>
-            <button class="chip coming-soon" data-category="propolis">Propolis <span class="cs-tag">Coming soon</span></button>
+            <button class="chip" data-category="propolis">Propolis <span class="cs-tag new-tag">New</span></button>
             <button class="chip coming-soon" data-category="plant_lavender">Plant — Lavender <span class="cs-tag">Coming soon</span></button>
             <button class="chip coming-soon" data-category="plant_white_sage">Plant — White Sage <span class="cs-tag">Coming soon</span></button>
             <button class="chip coming-soon" data-category="walking_onion">Walking Onion <span class="cs-tag">Coming soon</span></button>
@@ -167,7 +177,8 @@
     cart.forEach(item => {
       const product = products.find(p => p.slug === item.slug);
       if (!product) return;
-      const lineTotal = product.price_usd * item.qty;
+      const priced = product.price_usd != null;
+      const lineTotal = priced ? product.price_usd * item.qty : 0;
       subtotal += lineTotal;
       
       html += `
@@ -179,14 +190,16 @@
             <button onclick="changeQty('${item.slug}', 1)">+</button>
             <button class="cart-remove" onclick="removeFromCart('${item.slug}')">✕</button>
           </div>
-          <span class="cart-item-total">$${lineTotal.toFixed(2)}</span>
+          <span class="cart-item-total">${priced ? '$' + lineTotal.toFixed(2) : 'Reserved'}</span>
         </div>
       `;
     });
     
     cartItems.innerHTML = html;
-    document.getElementById('cart-subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('cart-btc').textContent = `$${(subtotal * 0.9).toFixed(2)}`;
+    // A cart holding only reservations has nothing to total yet.
+    const anyPriced = cart.some(item => (products.find(p => p.slug === item.slug) || {}).price_usd != null);
+    document.getElementById('cart-subtotal').textContent = anyPriced ? `$${subtotal.toFixed(2)}` : '—';
+    document.getElementById('cart-btc').textContent = anyPriced ? `$${(subtotal * 0.9).toFixed(2)}` : '—';
   }
 
   function addToCart(slug) {
@@ -221,6 +234,34 @@
     updateCartUI();
   }
 
+  // Hydrosols lead with our own bottle photo; the plant photo sits in a small round inset.
+  // Products without a bottle photo yet show their label in its place, with a note.
+  function cardMedia(p) {
+    const credit = p.photo_credit
+      ? `<p class="photo-credit">${p.bottle_photo || p.bottle_pending ? 'Plant photo' : 'Photo'}: <a href="${p.photo_source}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${p.photo_credit}</a>, ${p.photo_license}</p>`
+      : (p.photo_caption ? `<p class="photo-credit">${p.photo_caption}</p>` : '');
+    const inset = p.photo ? `<img class="card-inset" src="${p.photo}" alt="${p.photo_alt}" loading="lazy">` : '';
+    if (p.bottle_photo) return `
+          <div class="product-media">
+            <img class="card-main" src="${p.bottle_photo}" alt="${p.bottle_alt}" loading="lazy">
+            ${inset}
+          </div>${credit}`;
+    if (p.bottle_pending || p.reserve) return `
+          <div class="product-media pending">
+            <img class="card-label" src="${p.image}" alt="${p.image_alt || p.name + ' label'}" loading="lazy">
+            <p class="pending-note">${p.bottle_pending || 'Bottle photo coming when the first batch is bottled.'}</p>
+            ${inset}
+          </div>${credit}`;
+    if (p.photo) return `
+          <div class="product-photo">
+            <img src="${p.photo}" alt="${p.photo_alt}" loading="lazy">
+          </div>${credit}`;
+    return `
+          <div class="product-label">
+            <img src="${p.image}" alt="${p.name}" style="width:100%;height:auto;border-radius:8px;object-fit:contain;">
+          </div>`;
+  }
+
   function renderProducts() {
     const grid = document.getElementById('product-grid');
     let filtered = products.filter(p => {
@@ -242,19 +283,12 @@
         <div class="product-card" onclick="window.location.href='/catalog/products/${p.slug}/'" style="cursor:pointer;">
           <h3 class="product-title">${p.name}</h3>
           <p class="product-botanical">${p.botanical.replace(/\s*\([^)]*\)\s*$/, '')}</p>
-          ${p.photo ? `
-          <div class="product-photo">
-            <img src="${p.photo}" alt="${p.photo_alt}" loading="lazy">
-          </div>
-          <p class="photo-credit">Photo: <a href="${p.photo_source}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${p.photo_credit}</a>, ${p.photo_license}</p>` : `
-          <div class="product-label">
-            <img src="${p.image}" alt="${p.name}" style="width:100%;height:auto;border-radius:8px;object-fit:contain;">
-          </div>`}
+          ${cardMedia(p)}
           <div class="product-info">
             <p class="packaging-line">Sold in a ${p.page_size || p.size}.</p>
             <p class="price">${p.price_usd != null ? '$' + p.price_usd : 'Price at release'} · ${p.size}</p>
             <p class="stock-info">${stockText}</p>
-            ${inCart ? `<button class="add-to-cart-btn added" onclick="event.stopPropagation(); addToCart('${p.slug}')">In Cart (${inCart.qty})</button>` : p.availability === 'In stock' ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Add to Cart</button>` : `<button class="add-to-cart-btn" disabled style="opacity:0.5;cursor:not-allowed;">${p.availability}</button>`}
+            ${inCart ? `<button class="add-to-cart-btn added" onclick="event.stopPropagation(); addToCart('${p.slug}')">${p.reserve ? 'Reserved' : 'In Cart'} (${inCart.qty})</button>` : p.availability === 'In stock' ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Add to Cart</button>` : p.reserve ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Reserve — ready ${p.ready.replace(/, \d{4}$/, '')}</button>` : `<button class="add-to-cart-btn" disabled style="opacity:0.5;cursor:not-allowed;">${p.availability}</button>`}
           </div>
         </div>
       `;
@@ -300,6 +334,10 @@
     cart.forEach(item => {
       const product = products.find(p => p.slug === item.slug);
       if (!product) return;
+      if (product.price_usd == null) {
+        body += `${product.name} x${item.qty} — reserve (ready around ${product.ready}, price at release)\n`;
+        return;
+      }
       const lineTotal = product.price_usd * item.qty;
       subtotal += lineTotal;
       body += `${product.name} x${item.qty} — $${lineTotal.toFixed(2)}\n`;
