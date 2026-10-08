@@ -30,6 +30,8 @@ const FLYERS = path.join(LLC, 'Sovereignty-by-Design/flyers');
 const OUT = path.resolve(process.argv[2] || path.join(LLC, 'market-binder'));
 
 const all = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'));
+// Shipping boxes and prices: the same file the catalog page reads.
+const SHIPPING = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/shipping.json'), 'utf8'));
 const bySlug = Object.fromEntries(all.map(p => [p.slug, p]));
 // In-stock first (catalog order), then what's coming.
 const inStockFirst = list => [...list.filter(p => p.availability === 'In stock'),
@@ -187,6 +189,8 @@ body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink);
 .page-title { font-size: 28pt; font-weight: 700; margin-top: 0.06in; }
 .page-lede { font-size: 12pt; font-style: italic; line-height: 1.5; color: var(--soft); margin-top: 0.1in; max-width: 6.2in; }
 .section { margin-top: 0.26in; }
+.tight .section { margin-top: 0.15in; }
+.tight .page-head { padding: 0.26in 0.4in 0.22in; }
 .body { font-size: 10.5pt; line-height: 1.55; color: var(--soft); }
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.2in; margin-top: 0.1in; }
 .step-n { width: 0.34in; height: 0.34in; border-radius: 50%; border: 1.5px solid var(--amber); color: var(--amber);
@@ -198,7 +202,7 @@ table.cmp { width: 100%; border-collapse: collapse; margin-top: 0.1in; font-size
 .cmp td:first-child { font-weight: 700; width: 1.3in; }
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in; }
 table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
-.prices td, .prices th { padding: 0.075in 0.08in; border-bottom: 1px solid var(--line); font-size: 10.5pt; text-align: left; }
+.prices td, .prices th { padding: 0.05in 0.08in; border-bottom: 1px solid var(--line); font-size: 10.5pt; text-align: left; }
 .prices th { font-size: 7.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); font-weight: 400; }
 .prices td.num, .prices th.num { text-align: right; white-space: nowrap; }
 .prices .soon td { color: #8a8a70; }
@@ -213,6 +217,14 @@ table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
 .pay-a { font-size: 5.5pt; color: var(--olive); word-break: break-all; line-height: 1.3; }
 .contact { font-size: 11pt; line-height: 1.8; }
 .contact b { display: inline-block; width: 0.8in; font-weight: 700; }
+.ship-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.18in; margin-top: 0.1in; }
+.ship-card { border: 1px solid var(--line); border-radius: 10px; padding: 0.16in; display: flex; flex-direction: column; gap: 0.04in; }
+.ship-box { height: 0.9in; width: auto; align-self: flex-start; margin-bottom: 0.06in; }
+.ship-home { height: 0.9in; font-size: 44pt; line-height: 0.9in; color: var(--amber); margin-bottom: 0.06in; }
+.ship-n { font-size: 13pt; font-weight: 700; }
+.ship-n span { font-size: 8.5pt; font-weight: 400; color: var(--olive); }
+.ship-p { font-size: 16pt; font-weight: 700; color: var(--amber); }
+.ship-how { margin-top: auto; padding-top: 0.06in; font-size: 8pt; color: var(--olive); }
 .bigqr { display: flex; gap: 0.2in; align-items: center; }
 .bigqr svg { width: 1.05in; height: 1.05in; flex: none; }
 
@@ -625,7 +637,7 @@ function priceRows(list) {
 }
 
 function pricesSheet() {
-  return `<section class="sheet">
+  return `<section class="sheet tight">
   <header class="panel page-head">
     <img class="panel-art" src="${img(bySlug['valencia-orange-hydrosol'].art)}" alt="">
     <p class="kicker">San Joaquin Victory Gardens</p>
@@ -639,6 +651,7 @@ function pricesSheet() {
       <tr><th>Hydrosol</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(ordered)}
     </table>
+    <p class="body" style="margin-top:0.08in;">Shipping: $${SHIPPING.boxes[0].price} for 1–2 bottles, $${SHIPPING.boxes[1].price} for up to 6. Free pickup or local delivery. See the Shipping page.</p>
   </div>
 
   ${hive.length ? `<div class="section">
@@ -647,7 +660,7 @@ function pricesSheet() {
       <tr><th>Product</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(hive)}
     </table>
-    <p class="body" style="margin-top:0.08in;">From our own hives. Reserve propolis tincture now; honey comes in May, after our April harvest, and ships within California only.</p>
+    <p class="body" style="margin-top:0.08in;">From our own hives. Reserve now: no payment until it's ready. Honey ships within California only.</p>
   </div>` : ''}
 
   <div class="section">
@@ -690,7 +703,7 @@ function orderSheet() {
       <h2 class="h2">Order anytime</h2>
       <div class="bigqr">${qr(catalog)}
         <div><p class="body">Buy here at the table today, or order later from our online catalog.
-          Local pickup or hand delivery in the Manteca, CA area.</p>
+          Pick up or get local delivery in the Manteca area, or have it shipped (see Shipping, next page).</p>
           <p class="qr-t" style="margin-top:0.06in;">Scan for the online catalog</p><p class="qr-u sans">${CATALOG_ADDR}</p></div></div>
     </div>
     <div>
@@ -706,6 +719,62 @@ function orderSheet() {
         See the back of this binder, or just ask.</p></div>
     ${footer('sjvg.jorgenclaw.ai')}
   </div>
+</section>`;
+}
+
+// A kraft shipping box with the bottles it holds, drawn bigger for the large size (same drawing as the catalog).
+function boxSvg(kind) {
+  const w = kind === 'large' ? 92 : 70, h = kind === 'large' ? 58 : 50, d = 18, n = kind === 'large' ? 6 : 2;
+  let bottles = '';
+  for (let i = 0; i < n; i++) {
+    const x = 14 + i * 13 + (kind === 'large' ? 0 : 18);
+    bottles += `<rect x="${x}" y="${d + h - 30}" width="9" height="26" rx="2" fill="#6b3d12"/><rect x="${x + 2.5}" y="${d + h - 36}" width="4" height="7" fill="#222"/><rect x="${x + 1}" y="${d + h - 22}" width="7" height="9" fill="#fbf7ec"/>`;
+  }
+  return `<svg viewBox="0 0 ${w + d + 4} ${h + d + 4}" class="ship-box">
+    <polygon points="2,${d} ${d + 2},2 ${w + d + 2},2 ${w + 2},${d}" fill="#d9b98a" stroke="#8a6a3a"/>
+    <polygon points="${w + 2},${d} ${w + d + 2},2 ${w + d + 2},${h + 2} ${w + 2},${h + d}" fill="#b8925c" stroke="#8a6a3a"/>
+    <rect x="2" y="${d}" width="${w}" height="${h}" fill="#c9a46e" stroke="#8a6a3a"/>
+    <rect x="${w / 2 - 6}" y="${d}" width="12" height="${h}" fill="#d9c4a0" opacity="0.6"/>${bottles}</svg>`;
+}
+
+function shippingSheet() {
+  const [small, large] = SHIPPING.boxes;
+  const card = (title, price, lines, art, how) => `<div class="ship-card">${art}
+      <p class="ship-n">${title}</p><p class="ship-p">${price}</p><p class="body">${lines.join('<br>')}</p>${how ? `<p class="ship-how sans">${how}</p>` : ''}</div>`;
+  return `<section class="sheet">
+  <header class="panel page-head">
+    <img class="panel-art" src="${img(bySlug['meyer-lemon-hydrosol'].art)}" alt="">
+    <p class="kicker">San Joaquin Victory Gardens</p>
+    <h1 class="page-title">Shipping</h1>
+    <p class="page-lede">Take it home today, get it delivered around town, or have it shipped. Shipping is a flat price by box size.</p>
+  </header>
+
+  <div class="section">
+    <h2 class="h2">Your options</h2>
+    <div class="ship-cards">
+      ${card(SHIPPING.local.name, 'Free', [`Anything in this binder, ${SHIPPING.local.where}.`, 'Text us to set a time.'], '<p class="ship-home">⌂</p>')}
+      ${card(`${small.name} <span>${small.size}</span>`, `$${small.price} flat`, small.holds, boxSvg('small'), `${SHIPPING.carrier}, ${SHIPPING.days}`)}
+      ${card(`${large.name} <span>${large.size}</span>`, `$${large.price} flat`, large.holds, boxSvg('large'), `${SHIPPING.carrier}, ${SHIPPING.days}`)}
+    </div>
+  </div>
+
+  <div class="section two">
+    <div>
+      <h2 class="h2">How we pack glass</h2>
+      <ul class="uses">
+        <li>Caps tightened, sprayers taped down</li>
+        <li>Every bottle and jar sealed in its own bag</li>
+        <li>Two layers of honeycomb paper around each one</li>
+        <li>Paper padding all around, so nothing moves</li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="h2">Good to know</h2>
+      <ul class="uses">${SHIPPING.good_to_know.filter(t => !/sealed in its own bag/.test(t)).map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+    </div>
+  </div>
+
+  <div style="margin-top:auto;">${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}</div>
 </section>`;
 }
 
@@ -751,6 +820,7 @@ const pages = [
   ['fresh-cut-flowers', 'Fresh-cut flowers', flowersSheet()],
   ['prices', 'Prices', pricesSheet()],
   ['how-to-order', 'How to order & pay', orderSheet()],
+  ['shipping', 'Shipping', shippingSheet()],
   ['what-is-a-hydrosol', 'What is a hydrosol?', hydrosolSheet()],
   ...ordered.map(p => [p.slug, p.name, productSheet(p)]),
   ['using-essential-oils', 'Using essential oils safely', oilSheet()],
@@ -787,3 +857,23 @@ pages.forEach(([name, title, body], i) => {
 });
 execFileSync('pdfunite', [...pdfs, path.join(OUT, 'jorgenclaw-ai-market-binder.pdf')]);
 console.log('wrote', path.join(OUT, 'jorgenclaw-ai-market-binder.pdf'));
+
+// Overflow check: a sheet clips anything past its bottom edge instead of adding a page, so the
+// one-page check above can't see it. Measure each generated sheet and fail loudly if content spills.
+(async () => {
+  const { chromium } = require(require.resolve('playwright-core', { paths: [path.join(process.env.HOME, 'NanoClaw')] }));
+  const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome' });
+  const page = await browser.newPage({ viewport: { width: 816, height: 1056 } });
+  const bad = [];
+  for (const f of fs.readdirSync(path.join(OUT, 'sheets')).filter(f => f.endsWith('.html')).sort()) {
+    await page.goto('file://' + path.join(OUT, 'sheets', f));
+    const over = await page.evaluate(() => [...document.querySelectorAll('.sheet')].map(s => {
+      const bottom = s.getBoundingClientRect().bottom;
+      return Math.max(0, ...[...s.querySelectorAll('*')].map(e => e.getBoundingClientRect().bottom - bottom));
+    }));
+    if (Math.max(...over) > 1) bad.push(`${f} (${Math.round(Math.max(...over))}px past the bottom)`);
+  }
+  await browser.close();
+  if (bad.length) { console.error('Content runs off the page:\n  ' + bad.join('\n  ')); process.exit(1); }
+  console.log('overflow check: every sheet fits');
+})();

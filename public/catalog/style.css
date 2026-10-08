@@ -323,3 +323,25 @@ body {
 .propolis-banner .flowers-cta { color: #d69e2e; }
 .add-to-cart-btn.added:hover { color: #0d0d0d; }
 .card-note { font-size: 0.82rem; line-height: 1.4; color: #d69e2e; margin: 0.25rem 0 0.4rem; }
+
+/* Shipping options (2026-10-08) */
+.shipping-section { margin: 3rem 0 1rem; }
+.shipping-section h2 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.shipping-section h3 { font-size: 1.05rem; margin: 1.5rem 0 0.6rem; color: #e8e8e8; }
+.ship-lede { color: #aaa; max-width: 62ch; margin-bottom: 1.2rem; }
+.ship-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.ship-card { border: 1px solid #333; border-radius: 12px; padding: 1.1rem; background: #141414; display: flex; flex-direction: column; gap: 0.35rem; }
+.ship-card .box-svg { height: 84px; width: auto; align-self: flex-start; margin-bottom: 0.3rem; }
+.ship-icon { height: 84px; display: flex; align-items: center; font-size: 3.2rem; color: #d69e2e; margin-bottom: 0.3rem; }
+.ship-name { font-weight: 700; color: #f0f0f0; font-size: 1.05rem; }
+.ship-name span { font-weight: 400; color: #888; font-size: 0.85rem; margin-left: 0.3rem; }
+.ship-price { font-size: 1.4rem; font-weight: 700; color: #d69e2e; }
+.ship-holds { color: #ccc; font-size: 0.92rem; line-height: 1.5; }
+.ship-how { color: #888; font-size: 0.8rem; margin-top: auto; padding-top: 0.4rem; }
+.ship-notes { padding-left: 1.2rem; color: #bbb; line-height: 1.7; font-size: 0.93rem; }
+.payment-banner a { color: #d69e2e; }
+.cart-delivery { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 1rem 0 0.4rem; color: #ddd; font-size: 0.95rem; }
+.cart-delivery a { color: #d69e2e; }
+.cart-ship .cart-item-name { color: #bbb; }
+.cart-ship-note { color: #d69e2e; font-size: 0.85rem; margin: 0.2rem 0; }
+@media (max-width: 768px) { .ship-cards { grid-template-columns: 1fr; } }

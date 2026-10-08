@@ -125,3 +125,4 @@
   .pd-media { order: -1; }
   .pd-pending { aspect-ratio: auto; }
 }
+.pd-fine a { color: inherit; text-decoration: underline; }

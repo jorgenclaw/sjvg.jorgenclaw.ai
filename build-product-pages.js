@@ -11,7 +11,7 @@ const path = require('path');
 const PUBLIC = path.join(__dirname, 'public');
 const products = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'));
 const bySlug = Object.fromEntries(products.map(p => [p.slug, p]));
-const CSS_VERSION = '2026-10-08';
+const CSS_VERSION = '2026-10-08d';
 
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -63,31 +63,41 @@ const DILUTION = {
            ['Diffuser', '2–3 drops in the water']],
 };
 
+// How the product gets to you, from data/shipping.json. Hydrosols and honey can ship; oils and propolis can't yet.
+const SHIPPING = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/shipping.json'), 'utf8'));
+function fineText(p) {
+  const [small, large] = SHIPPING.boxes;
+  const pay = 'Cash, Zelle, or bitcoin.';
+  const link = ' <a href="/catalog/#shipping">Shipping options</a>.';
+  if (p.category === 'hydrosol') return `Pick up or get local delivery in the Manteca area, or ship it by USPS: $${small.price} for 1–2 bottles, $${large.price} for up to 6.${link} ${pay}`;
+  if (p.category === 'honey') return `Pick up or get local delivery in the Manteca area, or ship it by USPS to California addresses only: $${small.price} for 1 jar, $${large.price} for 2.${link} ${pay}`;
+  return `Pickup or local delivery in the Manteca area only for now: it's flammable, so it can't go by regular mail yet. ${pay}`;
+}
+
 function priceBlock(p) {
-  const ship = p.shipping_note ? ` ${esc(p.shipping_note)}` : '';
   if (p.price_usd == null && p.reserve) return `
         <p class="pd-price">Price at release <span class="pd-size">· ${esc(p.size)}</span></p>
         <p class="pd-btc">Ready around ${esc(p.ready)}</p>
         <button class="pd-add" id="detail-add-btn">${esc(p.reserve_label || 'Reserve a bottle')}</button>
-        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's ready. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.${ship}</p>`;
+        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's ready. ${fineText(p)}</p>`;
   if (p.price_usd == null) return `
         <p class="pd-price">Price at release <span class="pd-size">· ${esc(p.size)}</span></p>
         <button class="pd-add" disabled>${esc(p.availability)}</button>
-        <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
+        <p class="pd-fine">${fineText(p)}</p>`;
   const btc = (p.price_usd * (1 - (p.btc_discount_pct || 0) / 100)).toFixed(2);
   const inStock = p.availability === 'In stock';
   if (!inStock && p.reserve) return `
         <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
         ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off) · Ready around ${esc(p.ready)}</p>` : ''}
         <button class="pd-add" id="detail-add-btn">${esc(p.reserve_label || 'Reserve a bottle')}</button>
-        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's ready. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.${ship}</p>`;
+        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's ready. ${fineText(p)}</p>`;
   return `
         <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
         ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off)</p>` : ''}
         ${inStock
           ? `<button class="pd-add" id="detail-add-btn">Add to Cart</button>`
           : `<button class="pd-add" disabled>${esc(p.availability)}</button>`}
-        <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.${ship}</p>`;
+        <p class="pd-fine">${fineText(p)}</p>`;
 }
 
 function pairsBlock(p) {
