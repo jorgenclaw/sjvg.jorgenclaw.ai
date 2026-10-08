@@ -54,7 +54,8 @@ const shortName = p => p.name.replace(/ (Hydrosol|Essential Oil)$/, '');
 // Renders one label from the bottle print sheet, exactly as printed, to OUT/labels/<label>.png.
 // Label cell on the sheet is 3.79 x 1.894 in; drawn at 4x for a crisp print.
 function renderLabel(p) {
-  const name = path.basename(p.image, '.png');
+  // Site label images are named hydrosol-<label>.jpg; the print sheet is batch-<label>.html.
+  const name = path.basename(p.image).replace(/^hydrosol-/, '').replace(/\.(png|jpg)$/, '');
   const src = path.join(MARKETING, `batch-${name}.html`);
   const png = path.join(OUT, 'labels', `${name}.png`);
   const tmp = path.join(OUT, 'labels', `.${name}.html`);
