@@ -329,20 +329,18 @@ const coverCss = () => `
 .cv-sbd-grid div { border-top: 2px solid #d69e2e; padding-top: 0.05in; font-size: 8.5pt; line-height: 1.3; }
 .cv-sbd-grid b { display: block; color: #fff; }
 .cv-sbd-grid span { color: #d69e2e; font-weight: 600; }
-.cv-shelf5 figure { width: 1.08in; }
-.cv-shelf figcaption i { display: block; font-style: normal; font: 6.5pt 'Helvetica Neue', Arial, sans-serif; color: var(--amber); letter-spacing: 0.04em; margin-top: 0.01in; }
-.cv-oils2 { grid-template-columns: repeat(2, 2.4in); justify-content: center; gap: 0.3in; }
-.cv-band { margin-top: 0.2in; position: relative; }
-.cv-band img { width: 100%; height: 1.75in; object-fit: cover; object-position: 50% 40%; border-radius: 10px; display: block; }
-.cv-band p { position: absolute; right: 0.12in; bottom: 0.08in; font-size: 7pt; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
-.cv-lgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.1in; }
-.cv-lgrid img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.25); }
-.cv-lnote { align-self: center; font-style: italic; font-size: 8.5pt; color: var(--olive); line-height: 1.35; padding: 0 0.05in; }
-.cv-hl2 { display: flex; align-items: center; gap: 0.12in; }
-.cv-hl2 img { width: 1.75in; flex: none; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.25); }
-.cv-hl2 .cv-hd { font-size: 8.5pt; line-height: 1.45; }
-.cv-hl2 .cv-hd b { display: block; font: 700 10.5pt Georgia, serif; color: var(--ink); }
-.cv-hl2 + .cv-hl2 img { }
+.cv-bg { position: relative; isolation: isolate; }
+.cv-bg-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.11;
+             filter: grayscale(1) sepia(0.45) contrast(0.85) brightness(1.25); }
+.cv-lgrid { display: grid; grid-template-columns: repeat(3, 2.1in); justify-content: center; gap: 0.14in 0.16in; }
+.cv-lgrid figure { position: relative; }
+.cv-lgrid img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.28); }
+.cv-soon { position: absolute; bottom: -0.07in; right: -0.05in; z-index: 1; background: var(--cream); border: 1.2px solid var(--amber); color: var(--amber);
+           border-radius: 999px; padding: 0.02in 0.08in; font-size: 6.5pt; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
+.cv-hivel { display: flex; justify-content: center; align-items: flex-end; gap: 0.35in; margin-bottom: 0.14in; }
+.cv-hivel img { height: 1.0in; width: auto; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.28); }
+.cv-hivel figcaption { font: 7.5pt 'Helvetica Neue', Arial, sans-serif; color: var(--olive); margin-top: 0.05in; text-align: center; }
+.cv-hivel figcaption b { display: block; font: 700 9.5pt Georgia, serif; color: var(--ink); }
 
 `;
 
@@ -494,8 +492,7 @@ const SBD_FONTS = { franklin: path.join(LLC, 'business-card-font-libre-franklin.
 const OIL_LABEL = { 'white-sage-essential-oil': 'White Sage', 'phenomenal-lavender-essential-oil': 'Phenomenal Lavender',
                     'spearmint-essential-oil': 'Spearmint', 'lemongrass-essential-oil': 'Lemongrass' };
 const status = p => p.availability === 'In stock' ? 'Available now' : comingText(p);
-// variant: 'live' (the cover in use), or the two drafts Scott asked for on 2026-10-08:
-// 'photos' (in-stock oils shown by their bottle photos) and 'labels' (every product shown by its label).
+// variant: 'live' (the cover in use) or 'labels' (draft A4: every product shown by its label, on a lavender plate).
 function coverSheet(variant = 'live') {
   const shelf = ordered.filter(p => p.bottle_photo);
   const hiveItems = [['bee-propolis-tincture', 'Ready Nov 10'], ['urban-wildflower-honey', 'Coming May 2027']].map(([s, w]) => [bySlug[s], w]);
@@ -514,37 +511,20 @@ function coverSheet(variant = 'live') {
         <div><p class="cv-hn">${esc(p.name)}</p><p class="cv-hd sans">${esc(when)} · $${p.price_usd} · reserve now</p></div></div>`).join('')}</div>`;
   const oilFig = p => `<figure><img src="${img(p.image)}" alt=""><figcaption><b>${esc(OIL_LABEL[p.slug] || shortName(p))}</b>${esc(p.stock_note ? 'Last bottle · June 2027' : status(p))}</figcaption></figure>`;
 
-  if (variant === 'photos') {
-    const inStock = [...shelf, ...oils.filter(p => p.bottle_photo)];
-    const comingOils = oils.filter(p => !p.bottle_photo);
-    return `<section class="sheet cover">
-  ${head}
-  <p class="cv-k">In stock now <span>· hydrosols $${ordered[0].price_usd}, 4 oz. spray · essential oils, 15 mL</span></p>
-  <div class="cv-shelf cv-shelf5">${inStock.map(p => `<figure><img src="${img(p.bottle_photo)}" alt=""><figcaption>${esc(isOil(p) ? (OIL_LABEL[p.slug] || shortName(p)) : shortName(p))}<i>${isOil(p) ? `Essential oil · $${p.price_usd}${p.stock_note ? ' · last bottle' : ''}` : 'Hydrosol'}</i></figcaption></figure>`).join('')}</div>
-  <p class="cv-k">Coming June 2027 <span>· essential oils</span></p>
-  <div class="cv-oils cv-oils2">${comingOils.map(oilFig).join('')}</div>
-  ${ship}
-  <div class="cv-bottom">
-    <p class="cv-k" style="margin-top:0;">Coming from our hives</p>
-    ${hiveCards}
-    ${sbd}
-    ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
-  </div>
-</section>`;
-  }
-
+  // Draft A4 (Scott, 2026-10-08): labels for every product, on a faded lavender plate that fills the page.
   if (variant === 'labels') {
-    return `<section class="sheet cover">
+    const lbl = p => p.category === 'hydrosol' ? `file://${renderLabel(p)}` : img(p.image);
+    return `<section class="sheet cover cv-bg">
+  <img class="cv-bg-art" src="${img(bySlug['phenomenal-lavender-hydrosol'].art)}" alt="">
   ${head}
-  <div class="cv-band"><img src="${img('/catalog/photos/honey-honeybee-on-basil.jpg')}" alt=""><p class="sans">One of our honeybees on our African Blue Basil, Manteca</p></div>
   <p class="cv-k">Our hydrosols <span>· 4 oz. amber glass spray · $${ordered[0].price_usd}</span></p>
-  <div class="cv-lgrid">${shelf.map(p => `<img src="file://${renderLabel(p)}" alt="">`).join('')}<p class="cv-lnote">Phenomenal Lavender and African Blue Basil hydrosols return in 2027.</p></div>
+  <div class="cv-lgrid">${ordered.map(p => `<figure>${p.availability === 'In stock' ? '' : '<span class="cv-soon sans">Coming 2027</span>'}<img src="${lbl(p)}" alt=""></figure>`).join('')}</div>
   <p class="cv-k">Our essential oils <span>· 15 mL amber glass</span></p>
   <div class="cv-oils">${oils.map(oilFig).join('')}</div>
   ${ship}
   <div class="cv-bottom">
-    <p class="cv-k" style="margin-top:0;">Coming from our hives</p>
-    <div class="cv-hive">${hiveItems.map(([p, when]) => `<div class="cv-hl2"><img src="${img(p.image)}" alt=""><p class="cv-hd sans"><b>${esc(p.name)}</b>${esc(when)} · $${p.price_usd} · reserve now</p></div>`).join('')}</div>
+    <p class="cv-k" style="margin-top:0;">Our beehive products</p>
+    <div class="cv-hivel">${hiveItems.map(([p, when]) => `<figure><img src="${img(p.image)}" alt=""><figcaption><b>${esc(p.name)}</b>${esc(when)} · $${p.price_usd} · reserve now</figcaption></figure>`).join('')}</div>
     ${sbd}
     ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
   </div>
@@ -563,7 +543,7 @@ function coverSheet(variant = 'live') {
   ${ship}
 
   <div class="cv-bottom">
-    <p class="cv-k" style="margin-top:0;">Coming from our hives</p>
+    <p class="cv-k" style="margin-top:0;">Our beehive products</p>
     ${hiveCards}
     ${sbd}
     ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
@@ -772,7 +752,7 @@ function pricesSheet() {
   </div>
 
   ${hive.length ? `<div class="section">
-    <h2 class="h2">From the hive</h2>
+    <h2 class="h2">Our beehive products</h2>
     <table class="prices">
       <tr><th>Product</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(hive)}
@@ -881,7 +861,7 @@ function shippingSheet() {
       <ul class="uses">
         <li>Caps tightened, sprayers taped down</li>
         <li>Every bottle and jar sealed in its own bag</li>
-        <li>Two layers of honeycomb paper around each one</li>
+        <li>Two layers of honeycomb paper or bubble wrap around each one</li>
         <li>Paper padding all around, so nothing moves</li>
       </ul>
     </div>
@@ -933,7 +913,7 @@ if (COVER_DRAFTS) {
   const dir = path.join(LLC, 'market-binder/cover-drafts');
   const cdrome = (url, pdf) => execFileSync('google-chrome', ['--headless=new', '--disable-gpu', '--no-sandbox',
     '--allow-file-access-from-files', '--no-pdf-header-footer', '--virtual-time-budget=5000', `--print-to-pdf=${pdf}`, url], { stdio: 'ignore' });
-  for (const [v, name] of [['photos', 'cover-a2-oil-photos'], ['labels', 'cover-a3-labels-only']]) {
+  for (const [v, name] of [['labels', 'cover-a4-labels']]) {
     const html = path.join(dir, name + '.html');
     fs.writeFileSync(html, doc('Cover draft', coverSheet(v)));
     cdrome('file://' + html, path.join(dir, name + '.pdf'));
@@ -944,7 +924,7 @@ if (COVER_DRAFTS) {
     const { chromium } = require(require.resolve('playwright-core', { paths: [path.join(process.env.HOME, 'NanoClaw')] }));
     const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome' });
     const page = await browser.newPage({ viewport: { width: 816, height: 1056 } });
-    for (const name of ['cover-a2-oil-photos', 'cover-a3-labels-only']) {
+    for (const name of ['cover-a4-labels']) {
       await page.goto('file://' + path.join(dir, name + '.html'));
       const over = await page.evaluate(() => { const s = document.querySelector('.sheet'); const b = s.getBoundingClientRect().bottom;
         return Math.max(0, ...[...s.querySelectorAll('*')].map(e => e.getBoundingClientRect().bottom - b)); });
