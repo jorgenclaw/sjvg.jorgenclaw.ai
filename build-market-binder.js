@@ -330,8 +330,20 @@ const coverCss = () => `
 .cv-sbd-grid b { display: block; color: #fff; }
 .cv-sbd-grid span { color: #d69e2e; font-weight: 600; }
 .cv-bg { position: relative; isolation: isolate; }
-.cv-bg-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.11;
-             filter: grayscale(1) sepia(0.45) contrast(0.85) brightness(1.25); }
+.cv-bg-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0;
+             z-index: -2; opacity: 0.62; filter: saturate(0.85) contrast(0.92) brightness(1.08); }
+/* The colored plate (as on the business card) shows strongest at the top, where the flower spikes are and no labels
+   sit; lower down a cream veil calms it so the labels stay easy to read. */
+.cv-bg-veil { position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(251,247,236,0) 0%, rgba(251,247,236,0.05) 20%, rgba(251,247,236,0.66) 30%, rgba(251,247,236,0.72) 100%); }
+.cv-bg-head { min-height: 2.2in; }
+.cv-bg-head .cv-head { background: radial-gradient(ellipse 60% 70% at center, rgba(251,247,236,0.95) 55%, rgba(251,247,236,0) 100%); padding: 0.1in 0 0.16in; }
+.cv-bg .cv-lgrid { grid-template-columns: repeat(3, 1.85in); gap: 0.12in 0.16in; }
+.cv-bg .cv-k { margin: 0.14in 0 0.07in; width: fit-content; display: block; background: rgba(251,247,236,0.9); padding: 0.02in 0.08in; border-radius: 4px; }
+.cv-bg .cv-oils { padding: 0 0.3in; }
+.cv-bg .cv-hivel img { height: 0.8in; }
+.cv-bg .cv-ship { background: rgba(251,247,236,0.85); }
+.cv-bg .cv-ship { margin: 0.12in 0 0.1in; }
 .cv-lgrid { display: grid; grid-template-columns: repeat(3, 2.1in); justify-content: center; gap: 0.14in 0.16in; }
 .cv-lgrid figure { position: relative; }
 .cv-lgrid img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.28); }
@@ -515,8 +527,9 @@ function coverSheet(variant = 'live') {
   if (variant === 'labels') {
     const lbl = p => p.category === 'hydrosol' ? `file://${renderLabel(p)}` : img(p.image);
     return `<section class="sheet cover cv-bg">
-  <img class="cv-bg-art" src="${img(bySlug['phenomenal-lavender-hydrosol'].art)}" alt="">
-  ${head}
+  <img class="cv-bg-art" src="file://${path.join(SJVG_DIR, 'brand/lavender.jpg')}" alt="">
+  <div class="cv-bg-veil"></div>
+  <div class="cv-bg-head">${head}</div>
   <p class="cv-k">Our hydrosols <span>· 4 oz. amber glass spray · $${ordered[0].price_usd}</span></p>
   <div class="cv-lgrid">${ordered.map(p => `<figure>${p.availability === 'In stock' ? '' : '<span class="cv-soon sans">Coming 2027</span>'}<img src="${lbl(p)}" alt=""></figure>`).join('')}</div>
   <p class="cv-k">Our essential oils <span>· 15 mL amber glass</span></p>
