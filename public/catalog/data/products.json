@@ -13,7 +13,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "Expected available June 2027",
-    "image": "/catalog/labels/lavender.png",
+    "image": "/catalog/labels/hydrosol-lavender.jpg",
     "photo": "/catalog/photos/phenomenal-lavender-hydrosol.jpg",
     "photo_alt": "Lavandin flower spikes in bloom",
     "photo_credit": "Consultaplantas",
@@ -55,7 +55,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "In stock",
-    "image": "/catalog/labels/meyer-lemon.png",
+    "image": "/catalog/labels/hydrosol-meyer-lemon.jpg",
     "photo": "/catalog/photos/meyer-lemon-hydrosol.jpg",
     "photo_alt": "Ripe Meyer lemon hanging on the branch",
     "photo_credit": "Debra Roby",
@@ -98,7 +98,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "In stock",
-    "image": "/catalog/labels/spearmint.png",
+    "image": "/catalog/labels/hydrosol-spearmint.jpg",
     "photo": "/catalog/photos/spearmint-hydrosol.jpg",
     "photo_alt": "Bright green, crinkled spearmint leaves",
     "photo_credit": "Jonathunder",
@@ -142,7 +142,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "In stock",
-    "image": "/catalog/labels/rosemary.png",
+    "image": "/catalog/labels/hydrosol-rosemary.jpg",
     "photo": "/catalog/photos/rosemary-hydrosol.jpg",
     "photo_alt": "Rosemary stems with needle-like leaves and blue flowers",
     "photo_credit": "Forest & Kim Starr",
@@ -185,7 +185,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "In stock",
-    "image": "/catalog/labels/valencia-orange.png",
+    "image": "/catalog/labels/hydrosol-valencia-orange.jpg",
     "photo": "/catalog/photos/valencia-orange-hydrosol.jpg",
     "photo_alt": "A pile of ripe Valencia oranges",
     "photo_credit": "Forest & Kim Starr",
@@ -229,7 +229,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "In stock",
-    "image": "/catalog/labels/oregano.png",
+    "image": "/catalog/labels/hydrosol-oregano.jpg",
     "photo": "/catalog/photos/oregano-hydrosol-2.jpg",
     "photo_alt": "Oregano flower clusters with small oval leaves",
     "photo_credit": "AnRo0002",
@@ -272,7 +272,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "In stock",
-    "image": "/catalog/labels/lemongrass.png",
+    "image": "/catalog/labels/hydrosol-lemongrass.jpg",
     "photo": "/catalog/photos/lemongrass-hydrosol.jpg",
     "photo_alt": "Lemongrass stalks rising into long green leaf blades",
     "photo_credit": "Mokkie",
@@ -316,7 +316,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "In stock",
-    "image": "/catalog/labels/white-sage.png",
+    "image": "/catalog/labels/hydrosol-white-sage.jpg",
     "photo": "/catalog/photos/white-sage-hydrosol.jpg",
     "photo_alt": "Silvery-white leaves of California white sage",
     "photo_credit": "HLWolfe",
@@ -358,7 +358,7 @@
     "price_usd": 16,
     "btc_discount_pct": 10,
     "availability": "Expected available March 2027",
-    "image": "/catalog/labels/african-blue-basil.png",
+    "image": "/catalog/labels/hydrosol-african-blue-basil.jpg",
     "photo": "/catalog/photos/african-blue-basil-hydrosol-2.jpg",
     "photo_alt": "African blue basil in full bloom, covered in lavender-purple flower spikes",
     "photo_credit": "Raffi Kojian",
@@ -420,7 +420,10 @@
       "phenomenal-lavender-essential-oil"
     ],
     "try_this": "Put 3 drops on a cotton ball and tuck it into a closet or a drawer. Refresh it every week or two.",
-    "safety": "Rich in 1,8-cineole and camphor: avoid during pregnancy or breastfeeding, if you have epilepsy, and near the faces of children under 10."
+    "safety": "Rich in 1,8-cineole and camphor: avoid during pregnancy or breastfeeding, if you have epilepsy, and near the faces of children under 10.",
+    "image": "/catalog/labels/oil-california-white-sage.jpg",
+    "image_alt": "White Sage Essential Oil label",
+    "bottle_pending": "Bottle photo coming soon."
   },
   {
     "slug": "phenomenal-lavender-essential-oil",
@@ -457,7 +460,10 @@
       "white-sage-essential-oil"
     ],
     "try_this": "Mix 6 drops into a tablespoon of carrier oil and rub it into your feet or shoulders before bed.",
-    "safety": "Contains some camphor: keep away from the faces of babies and young children."
+    "safety": "Contains some camphor: keep away from the faces of babies and young children.",
+    "image": "/catalog/labels/oil-lavender-phenomenal.jpg",
+    "image_alt": "Phenomenal Lavender Essential Oil label",
+    "bottle_pending": "Bottle photo coming soon."
   },
   {
     "slug": "spearmint-essential-oil",
@@ -494,7 +500,10 @@
       "phenomenal-lavender-essential-oil"
     ],
     "try_this": "Diffuse 2 drops of spearmint with 2 of lavender for a calm but clear-headed room.",
-    "safety": "Keep away from the faces of babies and young children. Can irritate sensitive skin, so dilute well."
+    "safety": "Keep away from the faces of babies and young children. Can irritate sensitive skin, so dilute well.",
+    "image": "/catalog/labels/oil-spearmint.jpg",
+    "image_alt": "Spearmint Essential Oil label",
+    "bottle_pending": "Bottle photo coming soon."
   },
   {
     "slug": "lemongrass-essential-oil",
@@ -532,7 +541,10 @@
     ],
     "try_this": "Add 10 drops to a spray bottle of water and white vinegar for a bright kitchen cleaner. Shake before each use.",
     "safety": "Can irritate or sensitize skin: on skin, use no more than 1 drop per 2 teaspoons of carrier oil. Patch-test first.",
-    "dilution": "strong"
+    "dilution": "strong",
+    "image": "/catalog/labels/oil-lemongrass.jpg",
+    "image_alt": "Lemongrass Essential Oil label",
+    "bottle_pending": "Bottle photo coming soon."
   },
   {
     "slug": "bee-propolis-tincture",
@@ -607,14 +619,14 @@
     "category": "honey",
     "name": "Urban Wildflower Honey",
     "botanical": "Apis mellifera",
-    "description": "Honey from our own beehives in central Manteca. Our bees are never fed sugar syrup, so every drop is 100% bee-foraged nectar from the city's gardens, street trees and blooms.",
-    "description_full": "Our hives sit in the middle of Manteca, and our bees forage the town around them: backyard gardens, fruit trees, street trees, flowering hedges, parks and the odd vacant lot in bloom. That's why we call it urban wildflower honey. No single crop dominates, so the flavor follows whatever is flowering in town that spring. Many beekeepers feed their colonies sugar syrup to build them up, and bees will store some of that syrup in the comb alongside their honey. We never feed ours sugar syrup, so everything in the jar is nectar our bees gathered and made into honey themselves. We harvest in April and jar it by weight in one-pound glass jars.",
+    "description": "Honey from our own beehives in central Manteca. Our bees are never fed sugar syrup, so every drop is 100% bee-foraged nectar from the gardens, street trees and blooms within about two miles of the hive.",
+    "description_full": "Our hives sit in the middle of Manteca, and our bees forage the town around them: backyard gardens, fruit trees, street trees, flowering hedges, parks and the odd vacant lot in bloom. Honeybees do nearly all their foraging within about two miles of the hive, so ours work a circle that takes in the heart of the city. That's why we call it urban wildflower honey. No single crop dominates, so the flavor follows whatever is flowering in town that spring. Many beekeepers feed their colonies sugar syrup to build them up, and bees will store some of that syrup in the comb alongside their honey. We never feed ours sugar syrup, so everything in the jar is nectar our bees gathered and made into honey themselves. We harvest in April and jar it by weight in one-pound glass jars.",
     "availability": "Expected available May 2027",
     "price_usd": 17,
     "btc_discount_pct": 10,
     "size": "1 lb",
     "page_size": "1 lb glass jar with a plastic screw-top lid",
-    "image": "/catalog/labels/urban-wildflower-honey.jpg",
+    "image": "/catalog/labels/urban-wildflower-honey-v2.jpg",
     "image_alt": "Sample Urban Wildflower Honey label",
     "bottle_pending": "Sample label. The final label will change when we add our required California Cottage Food information.",
     "photo": "/catalog/photos/honey-honeybee-on-basil.jpg",
@@ -630,8 +642,8 @@
     ],
     "glance": [
       [
-        "Honey",
-        "Urban wildflower, central Manteca"
+        "Forage",
+        "Within about 2 miles of our hives in central Manteca"
       ],
       [
         "Bees fed",
@@ -656,6 +668,9 @@
     "try_this": "Stir 5\u201310 drops of our Bee Propolis Tincture into a spoonful of this honey. The honey softens the propolis's bitter bite.",
     "technical_note": "Spring harvest from our own hives in central Manteca, extracted and strained, then jarred by weight. Honey naturally crystallizes over time: that's a sign of real honey, not spoilage. To make it runny again, set the jar in a bowl of warm (not boiling) water and stir.",
     "safety": "Do not feed honey to infants under 1 year old.",
-    "shipping_note": "Honey ships within California only."
+    "shipping_note": "Honey ships within California only.",
+    "reserve": true,
+    "ready": "May 2027",
+    "reserve_label": "Reserve a jar"
   }
 ]

@@ -6,7 +6,7 @@
   <title>Urban Wildflower Honey — San Joaquin Victory Gardens</title>
   <meta name="description" content="Our hives sit in the middle of Manteca, and our bees forage the town around them: backyard gardens, fruit trees, street trees, flowering hedges, parks and…">
   <meta property="og:title" content="Urban Wildflower Honey">
-  <meta property="og:description" content="Honey from our own beehives in central Manteca. Our bees are never fed sugar syrup, so every drop is 100% bee-foraged nectar from the city's gardens, street trees and blooms.">
+  <meta property="og:description" content="Honey from our own beehives in central Manteca. Our bees are never fed sugar syrup, so every drop is 100% bee-foraged nectar from the gardens, street trees and blooms within about two miles of the hive.">
   <meta property="og:image" content="https://sjvg.jorgenclaw.ai/catalog/photos/honey-honeybee-on-basil.jpg">
   <link rel="stylesheet" href="/catalog/style.css?v=2026-10-08">
   <link rel="stylesheet" href="/catalog/product.css?v=2026-10-08">
@@ -28,17 +28,17 @@
         <p class="pd-brand">San Joaquin Victory Gardens</p>
         <h1 class="pd-name">Urban Wildflower Honey</h1>
         <p class="pd-botanical">Apis mellifera</p>
-        <p class="pd-lede">Honey from our own beehives in central Manteca. Our bees are never fed sugar syrup, so every drop is 100% bee-foraged nectar from the city's gardens, street trees and blooms.</p>
+        <p class="pd-lede">Honey from our own beehives in central Manteca. Our bees are never fed sugar syrup, so every drop is 100% bee-foraged nectar from the gardens, street trees and blooms within about two miles of the hive.</p>
         
         <p class="pd-price">$17 <span class="pd-size">· 1 lb</span></p>
-        <p class="pd-btc">$15.30 when you pay in bitcoin (10% off)</p>
-        <button class="pd-add" disabled>Expected available May 2027</button>
-        <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin. Honey ships within California only.</p>
+        <p class="pd-btc">$15.30 when you pay in bitcoin (10% off) · Ready around May 2027</p>
+        <button class="pd-add" id="detail-add-btn">Reserve a jar</button>
+        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's ready. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin. Honey ships within California only.</p>
       </div>
 
       <div class="pd-media">
         <div class="pd-pending reserve">
-          <img src="/catalog/labels/urban-wildflower-honey.jpg" alt="Sample Urban Wildflower Honey label">
+          <img src="/catalog/labels/urban-wildflower-honey-v2.jpg" alt="Sample Urban Wildflower Honey label">
           <p>Sample label. The final label will change when we add our required California Cottage Food information.</p>
         </div>
         <figure class="pd-second">
@@ -50,7 +50,7 @@
     </header>
 
     <section class="pd-glance" aria-label="At a glance">
-      <div class="pd-tile"><span class="pd-tile-k">Honey</span><span class="pd-tile-v">Urban wildflower, central Manteca</span></div>
+      <div class="pd-tile"><span class="pd-tile-k">Forage</span><span class="pd-tile-v">Within about 2 miles of our hives in central Manteca</span></div>
       <div class="pd-tile"><span class="pd-tile-k">Bees fed</span><span class="pd-tile-v">Never sugar syrup: 100% bee-foraged</span></div>
       <div class="pd-tile"><span class="pd-tile-k">Harvest</span><span class="pd-tile-v">April; jars ready May 2027</span></div>
       <div class="pd-tile"><span class="pd-tile-k">Jar</span><span class="pd-tile-v">1 lb glass, plastic screw-top lid</span></div>
@@ -70,7 +70,7 @@
 
     <section class="pd-section">
       <h2 class="pd-h2">About this honey</h2>
-      <p class="pd-body">Our hives sit in the middle of Manteca, and our bees forage the town around them: backyard gardens, fruit trees, street trees, flowering hedges, parks and the odd vacant lot in bloom. That's why we call it urban wildflower honey. No single crop dominates, so the flavor follows whatever is flowering in town that spring. Many beekeepers feed their colonies sugar syrup to build them up, and bees will store some of that syrup in the comb alongside their honey. We never feed ours sugar syrup, so everything in the jar is nectar our bees gathered and made into honey themselves. We harvest in April and jar it by weight in one-pound glass jars.</p>
+      <p class="pd-body">Our hives sit in the middle of Manteca, and our bees forage the town around them: backyard gardens, fruit trees, street trees, flowering hedges, parks and the odd vacant lot in bloom. Honeybees do nearly all their foraging within about two miles of the hive, so ours work a circle that takes in the heart of the city. That's why we call it urban wildflower honey. No single crop dominates, so the flavor follows whatever is flowering in town that spring. Many beekeepers feed their colonies sugar syrup to build them up, and bees will store some of that syrup in the comb alongside their honey. We never feed ours sugar syrup, so everything in the jar is nectar our bees gathered and made into honey themselves. We harvest in April and jar it by weight in one-pound glass jars.</p>
     </section>
 
     <section class="pd-section pd-details">
@@ -112,7 +112,7 @@
   if (btn) {
     const show = () => {
       const item = cart.find(i => i.slug === slug);
-      if (item) { btn.textContent = 'In Cart (' + item.qty + ')'; btn.classList.add('added'); }
+      if (item) { btn.textContent = 'Reserved (' + item.qty + ')'; btn.classList.add('added'); }
     };
     show();
     btn.addEventListener('click', () => {

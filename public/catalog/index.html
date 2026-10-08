@@ -9,7 +9,7 @@
   <meta property="og:description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sjvg.jorgenclaw.ai/catalog/">
-  <link rel="stylesheet" href="style.css?v=2026-10-08b">
+  <link rel="stylesheet" href="style.css?v=2026-10-08c">
 </head>
 <body>
   <div class="container">
@@ -66,7 +66,8 @@
         <div class="filter-group">
           <span class="filter-label">Category</span>
           <div class="chip-group" id="category-chips">
-            <button class="chip active" data-category="hydrosol">Hydrosol</button>
+            <button class="chip active" data-category="all">All products</button>
+            <button class="chip" data-category="hydrosol">Hydrosol</button>
             <button class="chip" data-category="essential_oil">Essential Oil</button>
             <button class="chip coming-soon" data-category="candle">Candle <span class="cs-tag">Coming soon</span></button>
             <button class="chip" data-category="honey">Honey <span class="cs-tag new-tag">May 2027</span></button>
@@ -131,7 +132,7 @@
   let cart = JSON.parse(localStorage.getItem('sjvg-cart') || '[]')
     .map(item => item.slug === 'prostrate-rosemary-hydrosol' ? { ...item, slug: 'rosemary-hydrosol' } : item)
     .map(item => item.slug === 'yerba-buena-hydrosol' ? { ...item, slug: 'spearmint-hydrosol' } : item);
-  let activeCategory = 'hydrosol';
+  let activeCategory = 'all';
   let activeUses = [];
   let searchQuery = '';
 
@@ -265,7 +266,7 @@
   function renderProducts() {
     const grid = document.getElementById('product-grid');
     let filtered = products.filter(p => {
-      if (p.category !== activeCategory) return false;
+      if (activeCategory !== 'all' && p.category !== activeCategory) return false;
       if (activeUses.length > 0 && !activeUses.some(u => p.use_tags.includes(u))) return false;
       if (searchQuery) {
         const q = searchQuery.toLowerCase();

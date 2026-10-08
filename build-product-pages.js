@@ -64,23 +64,23 @@ const DILUTION = {
 };
 
 function priceBlock(p) {
+  const ship = p.shipping_note ? ` ${esc(p.shipping_note)}` : '';
   if (p.price_usd == null && p.reserve) return `
         <p class="pd-price">Price at release <span class="pd-size">· ${esc(p.size)}</span></p>
         <p class="pd-btc">Ready around ${esc(p.ready)}</p>
-        <button class="pd-add" id="detail-add-btn">Reserve a bottle</button>
-        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's bottled. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
+        <button class="pd-add" id="detail-add-btn">${esc(p.reserve_label || 'Reserve a bottle')}</button>
+        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's ready. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.${ship}</p>`;
   if (p.price_usd == null) return `
         <p class="pd-price">Price at release <span class="pd-size">· ${esc(p.size)}</span></p>
         <button class="pd-add" disabled>${esc(p.availability)}</button>
         <p class="pd-fine">Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
   const btc = (p.price_usd * (1 - (p.btc_discount_pct || 0) / 100)).toFixed(2);
   const inStock = p.availability === 'In stock';
-  const ship = p.shipping_note ? ` ${esc(p.shipping_note)}` : '';
   if (!inStock && p.reserve) return `
         <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
         ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off) · Ready around ${esc(p.ready)}</p>` : ''}
-        <button class="pd-add" id="detail-add-btn">Reserve a bottle</button>
-        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's bottled. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.</p>`;
+        <button class="pd-add" id="detail-add-btn">${esc(p.reserve_label || 'Reserve a bottle')}</button>
+        <p class="pd-fine">No payment now: reserve one, and we'll text you when it's ready. Local pickup or hand delivery, Manteca, CA area. Cash, Zelle, or bitcoin.${ship}</p>`;
   return `
         <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
         ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off)</p>` : ''}
