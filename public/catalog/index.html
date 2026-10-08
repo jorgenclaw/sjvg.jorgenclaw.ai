@@ -393,6 +393,7 @@
           <div class="product-info">
             <p class="packaging-line">Sold in a ${p.page_size || p.size}.</p>
             ${p.card_note ? `<p class="card-note">${p.card_note}</p>` : ''}
+            ${p.stock_note ? `<p class="card-note">${p.stock_note}</p>` : ''}
             <p class="price">${p.price_usd != null ? '$' + p.price_usd : 'Price at release'} · ${p.size}</p>
             <p class="stock-info">${stockText}</p>
             ${inCart ? `<button class="add-to-cart-btn added" onclick="event.stopPropagation(); addToCart('${p.slug}')">${p.reserve ? 'Reserved' : 'In Cart'} (${inCart.qty})</button>` : p.availability === 'In stock' ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Add to Cart</button>` : p.reserve ? `<button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.slug}')">Reserve — ready ${p.ready.replace(/, \d{4}$/, '')}</button>` : `<button class="add-to-cart-btn" disabled style="opacity:0.5;cursor:not-allowed;">${p.availability}</button>`}

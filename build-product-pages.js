@@ -94,6 +94,7 @@ function priceBlock(p) {
   return `
         <p class="pd-price">$${p.price_usd} <span class="pd-size">· ${esc(p.size)}</span></p>
         ${p.btc_discount_pct ? `<p class="pd-btc">$${btc} when you pay in bitcoin (${p.btc_discount_pct}% off)</p>` : ''}
+        ${p.stock_note ? `<p class="pd-btc"><b>${esc(p.stock_note)}</b></p>` : ''}
         ${inStock
           ? `<button class="pd-add" id="detail-add-btn">Add to Cart</button>`
           : `<button class="pd-add" disabled>${esc(p.availability)}</button>`}

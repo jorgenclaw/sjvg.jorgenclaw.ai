@@ -27,7 +27,9 @@ const HIVE_LABELS = {
 };
 const FLYERS = path.join(LLC, 'Sovereignty-by-Design/flyers');
 // The binder covers SJVG and Sovereignty by Design, so it lives at the LLC level.
-const OUT = path.resolve(process.argv[2] || path.join(LLC, 'market-binder'));
+const OUT_ARG = process.argv.slice(2).find(a => !a.startsWith('--'));
+const OUT = path.resolve(OUT_ARG || path.join(LLC, 'market-binder'));
+const COVER_DRAFTS = process.argv.includes('--cover-drafts');
 
 const all = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/products.json'), 'utf8'));
 // Shipping boxes and prices: the same file the catalog page reads.
@@ -125,6 +127,10 @@ body { font-family: Georgia, 'Times New Roman', serif; color: var(--ink);
 .bot { font-style: italic; color: var(--olive); font-size: 12pt; margin-bottom: 0.14in; }
 .lede { font-style: italic; font-size: 11.5pt; line-height: 1.5; color: #3a3a2c; }
 .photo { margin: 0; position: relative; }
+.bottle-fig { position: relative; height: 2.75in; display: flex; justify-content: center; }
+.photo .bottle-fig img.bottle-main { height: 100%; width: auto; aspect-ratio: 2 / 3; }
+.photo .bottle-fig img.bottle-inset { position: absolute; right: 0.15in; bottom: 0.1in; width: 1.05in; height: 1.05in; aspect-ratio: 1;
+  border-radius: 50%; border: 3px solid #fff; box-shadow: 0 3px 10px rgba(43,43,31,.3); }
 .photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block;
              box-shadow: 0 2px 10px rgba(60, 50, 20, 0.18); }
 .credit { font-size: 6.5pt; color: #8a8a70; margin-top: 0.05in; }
@@ -323,6 +329,21 @@ const coverCss = () => `
 .cv-sbd-grid div { border-top: 2px solid #d69e2e; padding-top: 0.05in; font-size: 8.5pt; line-height: 1.3; }
 .cv-sbd-grid b { display: block; color: #fff; }
 .cv-sbd-grid span { color: #d69e2e; font-weight: 600; }
+.cv-shelf5 figure { width: 1.08in; }
+.cv-shelf figcaption i { display: block; font-style: normal; font: 6.5pt 'Helvetica Neue', Arial, sans-serif; color: var(--amber); letter-spacing: 0.04em; margin-top: 0.01in; }
+.cv-oils2 { grid-template-columns: repeat(2, 2.4in); justify-content: center; gap: 0.3in; }
+.cv-band { margin-top: 0.2in; position: relative; }
+.cv-band img { width: 100%; height: 1.75in; object-fit: cover; object-position: 50% 40%; border-radius: 10px; display: block; }
+.cv-band p { position: absolute; right: 0.12in; bottom: 0.08in; font-size: 7pt; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+.cv-lgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.1in; }
+.cv-lgrid img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.25); }
+.cv-lnote { align-self: center; font-style: italic; font-size: 8.5pt; color: var(--olive); line-height: 1.35; padding: 0 0.05in; }
+.cv-hl2 { display: flex; align-items: center; gap: 0.12in; }
+.cv-hl2 img { width: 1.75in; flex: none; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.25); }
+.cv-hl2 .cv-hd { font-size: 8.5pt; line-height: 1.45; }
+.cv-hl2 .cv-hd b { display: block; font: 700 10.5pt Georgia, serif; color: var(--ink); }
+.cv-hl2 + .cv-hl2 img { }
+
 `;
 
 function footer(right, center = '') {
@@ -362,9 +383,11 @@ function productSheet(p) {
       <p class="grown">Grown on our SJVG garden and farmed lands in Manteca, California, and steam-distilled by us.</p>
     </div>
     <figure class="photo">
-      ${soon ? `<span class="coming sans">${esc(comingText(p))}</span>` : ''}
-      <img src="${img(p.photo)}" alt="${esc(p.photo_alt)}">
-      <figcaption class="credit sans">Photo: ${esc(p.photo_credit)}, ${esc(p.photo_license)}, via Wikimedia Commons</figcaption>
+      ${soon ? `<span class="coming sans">${esc(comingText(p))}</span>` : p.stock_note ? `<span class="coming sans">Last bottle · next harvest June 2027</span>` : ''}
+      ${p.bottle_photo ? `<div class="bottle-fig"><img class="bottle-main" src="${img(p.bottle_photo)}" alt=""><img class="bottle-inset" src="${img(p.photo)}" alt=""></div>
+      <figcaption class="credit sans">Our bottle. Plant photo: ${esc(p.photo_credit)}, ${esc(p.photo_license)}, via Wikimedia Commons</figcaption>`
+      : `<img src="${img(p.photo)}" alt="${esc(p.photo_alt)}">
+      <figcaption class="credit sans">Photo: ${esc(p.photo_credit)}, ${esc(p.photo_license)}, via Wikimedia Commons</figcaption>`}
     </figure>
   </header>
 
@@ -471,33 +494,78 @@ const SBD_FONTS = { franklin: path.join(LLC, 'business-card-font-libre-franklin.
 const OIL_LABEL = { 'white-sage-essential-oil': 'White Sage', 'phenomenal-lavender-essential-oil': 'Phenomenal Lavender',
                     'spearmint-essential-oil': 'Spearmint', 'lemongrass-essential-oil': 'Lemongrass' };
 const status = p => p.availability === 'In stock' ? 'Available now' : comingText(p);
-function coverSheet() {
+// variant: 'live' (the cover in use), or the two drafts Scott asked for on 2026-10-08:
+// 'photos' (in-stock oils shown by their bottle photos) and 'labels' (every product shown by its label).
+function coverSheet(variant = 'live') {
   const shelf = ordered.filter(p => p.bottle_photo);
   const hiveItems = [['bee-propolis-tincture', 'Ready Nov 10'], ['urban-wildflower-honey', 'Coming May 2027']].map(([s, w]) => [bySlug[s], w]);
-  return `<section class="sheet cover">
-  <header class="cv-head">
+  const head = `<header class="cv-head">
     <p class="kicker">Grown, distilled and gathered in Manteca, California</p>
     <h1 class="cv-title">San Joaquin Victory Gardens</h1>
     <p class="cv-sub">Essential oil and hydrosol distillery, live plant sales, and beehive products.</p>
-  </header>
+  </header>`;
+  const ship = `<p class="cv-ship sans">Take it home, get local delivery, or ship it for a flat $${SHIPPING.boxes[0].price} or $${SHIPPING.boxes[1].price}. Bitcoin saves ${ordered[0].btc_discount_pct}% on everything, shipping included.</p>`;
+  const sbd = `<div class="cv-sbd">
+      <p class="cv-sbd-h">Also in this binder: Sovereignty <span>by</span> Design</p>
+      <p class="cv-sbd-sub">Privacy setup, done in person at your kitchen table.</p>
+      <div class="cv-sbd-grid">${SBD.map(([, n, , price]) => `<div><b>${esc(n)}</b><span>${esc(price)}</span></div>`).join('')}</div>
+    </div>`;
+  const hiveCards = `<div class="cv-hive">${hiveItems.map(([p, when]) => `<div class="cv-hc"><img src="${img(p.photo)}" alt=""><img class="cv-hl" src="${img(p.image)}" alt="">
+        <div><p class="cv-hn">${esc(p.name)}</p><p class="cv-hd sans">${esc(when)} · $${p.price_usd} · reserve now</p></div></div>`).join('')}</div>`;
+  const oilFig = p => `<figure><img src="${img(p.image)}" alt=""><figcaption><b>${esc(OIL_LABEL[p.slug] || shortName(p))}</b>${esc(p.stock_note ? 'Last bottle · June 2027' : status(p))}</figcaption></figure>`;
+
+  if (variant === 'photos') {
+    const inStock = [...shelf, ...oils.filter(p => p.bottle_photo)];
+    const comingOils = oils.filter(p => !p.bottle_photo);
+    return `<section class="sheet cover">
+  ${head}
+  <p class="cv-k">In stock now <span>· hydrosols $${ordered[0].price_usd}, 4 oz. spray · essential oils, 15 mL</span></p>
+  <div class="cv-shelf cv-shelf5">${inStock.map(p => `<figure><img src="${img(p.bottle_photo)}" alt=""><figcaption>${esc(isOil(p) ? (OIL_LABEL[p.slug] || shortName(p)) : shortName(p))}<i>${isOil(p) ? `Essential oil · $${p.price_usd}${p.stock_note ? ' · last bottle' : ''}` : 'Hydrosol'}</i></figcaption></figure>`).join('')}</div>
+  <p class="cv-k">Coming June 2027 <span>· essential oils</span></p>
+  <div class="cv-oils cv-oils2">${comingOils.map(oilFig).join('')}</div>
+  ${ship}
+  <div class="cv-bottom">
+    <p class="cv-k" style="margin-top:0;">Coming from our hives</p>
+    ${hiveCards}
+    ${sbd}
+    ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
+  </div>
+</section>`;
+  }
+
+  if (variant === 'labels') {
+    return `<section class="sheet cover">
+  ${head}
+  <div class="cv-band"><img src="${img('/catalog/photos/honey-honeybee-on-basil.jpg')}" alt=""><p class="sans">One of our honeybees on our African Blue Basil, Manteca</p></div>
+  <p class="cv-k">Our hydrosols <span>· 4 oz. amber glass spray · $${ordered[0].price_usd}</span></p>
+  <div class="cv-lgrid">${shelf.map(p => `<img src="file://${renderLabel(p)}" alt="">`).join('')}<p class="cv-lnote">Phenomenal Lavender and African Blue Basil hydrosols return in 2027.</p></div>
+  <p class="cv-k">Our essential oils <span>· 15 mL amber glass</span></p>
+  <div class="cv-oils">${oils.map(oilFig).join('')}</div>
+  ${ship}
+  <div class="cv-bottom">
+    <p class="cv-k" style="margin-top:0;">Coming from our hives</p>
+    <div class="cv-hive">${hiveItems.map(([p, when]) => `<div class="cv-hl2"><img src="${img(p.image)}" alt=""><p class="cv-hd sans"><b>${esc(p.name)}</b>${esc(when)} · $${p.price_usd} · reserve now</p></div>`).join('')}</div>
+    ${sbd}
+    ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
+  </div>
+</section>`;
+  }
+
+  return `<section class="sheet cover">
+  ${head}
 
   <p class="cv-k">Our hydrosols <span>· 4 oz. amber glass spray · $${ordered[0].price_usd}</span></p>
   <div class="cv-shelf">${shelf.map(p => `<figure><img src="${img(p.bottle_photo)}" alt=""><figcaption>${esc(shortName(p))}</figcaption></figure>`).join('')}</div>
 
   <p class="cv-k">Our essential oils <span>· 15 mL amber glass</span></p>
-  <div class="cv-oils">${oils.map(p => `<figure><img src="${img(p.image)}" alt=""><figcaption><b>${esc(OIL_LABEL[p.slug] || shortName(p))}</b>${esc(status(p))}</figcaption></figure>`).join('')}</div>
+  <div class="cv-oils">${oils.map(oilFig).join('')}</div>
 
-  <p class="cv-ship sans">Take it home, get local delivery, or ship it for a flat $${SHIPPING.boxes[0].price} or $${SHIPPING.boxes[1].price}. Bitcoin saves ${ordered[0].btc_discount_pct}% on everything, shipping included.</p>
+  ${ship}
 
   <div class="cv-bottom">
     <p class="cv-k" style="margin-top:0;">Coming from our hives</p>
-    <div class="cv-hive">${hiveItems.map(([p, when]) => `<div class="cv-hc"><img src="${img(p.photo)}" alt=""><img class="cv-hl" src="${img(p.image)}" alt="">
-        <div><p class="cv-hn">${esc(p.name)}</p><p class="cv-hd sans">${esc(when)} · $${p.price_usd} · reserve now</p></div></div>`).join('')}</div>
-    <div class="cv-sbd">
-      <p class="cv-sbd-h">Also in this binder: Sovereignty <span>by</span> Design</p>
-      <p class="cv-sbd-sub">Privacy setup, done in person at your kitchen table.</p>
-      <div class="cv-sbd-grid">${SBD.map(([, n, , price]) => `<div><b>${esc(n)}</b><span>${esc(price)}</span></div>`).join('')}</div>
-    </div>
+    ${hiveCards}
+    ${sbd}
     ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
   </div>
 </section>`;
@@ -678,7 +746,8 @@ function priceRows(list) {
   return list.map(p => {
     const soon = p.availability !== 'In stock';
     const priced = p.price_usd != null;
-    return `<tr class="${soon ? 'soon' : ''}"><td>${esc(p.name)}${soon ? `<span class="soon-when sans">${esc(comingText(p))}</span>` : ''}</td><td>${esc(p.size)}</td>
+    const note = soon ? comingText(p) : p.stock_note ? p.stock_note.replace(/\. Next harvest: /, ' · next harvest ').replace(/\.$/, '') : '';
+    return `<tr class="${soon ? 'soon' : ''}"><td>${esc(p.name)}${note ? `<span class="soon-when sans">${esc(note)}</span>` : ''}</td><td>${esc(p.size)}</td>
       <td class="num">${priced ? `$${p.price_usd}` : 'Price at release'}</td>
       <td class="num">${priced ? `$${btcPrice(p)}` : ''}</td></tr>`;
   }).join('');
@@ -858,6 +927,32 @@ function sbdSheet() {
   <footer class="sbd-foot"><div><b>Book a walkthrough</b><span>${CONTACT.email}</span><span>${CONTACT.phone}</span></div>
     <div class="sbd-qr">${qr(SBD_SITE)}<p>Scan for details<br>&amp; booking</p></div></footer>
 </section>`;
+}
+
+if (COVER_DRAFTS) {
+  const dir = path.join(LLC, 'market-binder/cover-drafts');
+  const cdrome = (url, pdf) => execFileSync('google-chrome', ['--headless=new', '--disable-gpu', '--no-sandbox',
+    '--allow-file-access-from-files', '--no-pdf-header-footer', '--virtual-time-budget=5000', `--print-to-pdf=${pdf}`, url], { stdio: 'ignore' });
+  for (const [v, name] of [['photos', 'cover-a2-oil-photos'], ['labels', 'cover-a3-labels-only']]) {
+    const html = path.join(dir, name + '.html');
+    fs.writeFileSync(html, doc('Cover draft', coverSheet(v)));
+    cdrome('file://' + html, path.join(dir, name + '.pdf'));
+    execFileSync('pdftoppm', ['-png', '-r', '80', '-singlefile', path.join(dir, name + '.pdf'), path.join(dir, name)]);
+    console.log('built', name);
+  }
+  (async () => {
+    const { chromium } = require(require.resolve('playwright-core', { paths: [path.join(process.env.HOME, 'NanoClaw')] }));
+    const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome' });
+    const page = await browser.newPage({ viewport: { width: 816, height: 1056 } });
+    for (const name of ['cover-a2-oil-photos', 'cover-a3-labels-only']) {
+      await page.goto('file://' + path.join(dir, name + '.html'));
+      const over = await page.evaluate(() => { const s = document.querySelector('.sheet'); const b = s.getBoundingClientRect().bottom;
+        return Math.max(0, ...[...s.querySelectorAll('*')].map(e => e.getBoundingClientRect().bottom - b)); });
+      console.log(name, over > 1 ? `runs ${Math.round(over)}px off the page` : 'fits');
+    }
+    await browser.close();
+  })();
+  return;
 }
 
 // Sheet numbers shift when products are added, so clear the old ones out first.
