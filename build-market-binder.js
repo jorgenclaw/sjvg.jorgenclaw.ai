@@ -330,19 +330,16 @@ const coverCss = () => `
 .cv-sbd-grid b { display: block; color: #fff; }
 .cv-sbd-grid span { color: #d69e2e; font-weight: 600; }
 .cv-bg { position: relative; isolation: isolate; }
-.cv-bg-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0;
-             z-index: -2; opacity: 0.62; filter: saturate(0.85) contrast(0.92) brightness(1.08); }
-/* The colored plate (as on the business card) shows strongest at the top, where the flower spikes are and no labels
-   sit; lower down a cream veil calms it so the labels stay easy to read. */
-.cv-bg-veil { position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, rgba(251,247,236,0) 0%, rgba(251,247,236,0.05) 20%, rgba(251,247,236,0.66) 30%, rgba(251,247,236,0.72) 100%); }
+.cv-bg-flat { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
 .cv-bg-head { min-height: 2.2in; }
-.cv-bg-head .cv-head { background: radial-gradient(ellipse 60% 70% at center, rgba(251,247,236,0.95) 55%, rgba(251,247,236,0) 100%); padding: 0.1in 0 0.16in; }
+.cv-bg-head .cv-head { padding: 0.1in 0 0.16in; }
 .cv-bg .cv-lgrid { grid-template-columns: repeat(3, 1.85in); gap: 0.12in 0.16in; }
-.cv-bg .cv-k { margin: 0.14in 0 0.07in; width: fit-content; display: block; background: rgba(251,247,236,0.9); padding: 0.02in 0.08in; border-radius: 4px; }
+.cv-bg .cv-k { margin: 0.14in 0 0.07in; width: fit-content; display: block; background: #fbf7ec; padding: 0.02in 0.08in; border-radius: 4px; }
 .cv-bg .cv-oils { padding: 0 0.3in; }
 .cv-bg .cv-hivel img { height: 0.8in; }
-.cv-bg .cv-ship { background: rgba(251,247,236,0.85); }
+.cv-bg .cv-ship { background: #fbf7ec; padding: 0.03in 0.1in; border-radius: 4px; }
+.cv-bg img { box-shadow: none !important; }
+.cv-bg .cv-lgrid img, .cv-bg .cv-oils img, .cv-bg .cv-hivel img { border: 0.75pt solid #b8ad8c; }
 .cv-bg .cv-ship { margin: 0.12in 0 0.1in; }
 .cv-lgrid { display: grid; grid-template-columns: repeat(3, 2.1in); justify-content: center; gap: 0.14in 0.16in; }
 .cv-lgrid figure { position: relative; }
@@ -504,6 +501,30 @@ const SBD_FONTS = { franklin: path.join(LLC, 'business-card-font-libre-franklin.
 const OIL_LABEL = { 'white-sage-essential-oil': 'White Sage', 'phenomenal-lavender-essential-oil': 'Phenomenal Lavender',
                     'spearmint-essential-oil': 'Spearmint', 'lemongrass-essential-oil': 'Lemongrass' };
 const status = p => p.availability === 'In stock' ? 'Available now' : comingText(p);
+
+// Draft A4's background, baked into ONE flat image: the colorized lavender plate (as on the business card), its fade,
+// the cream wash over the label area, and the soft backing behind the title. PDF viewers draw CSS opacity, filters and
+// gradients differently (Ghostscript dropped the wash; some garbled the text), so the PDF gets only a plain picture.
+function coverBackground() {
+  const out = path.join(OUT, 'labels', 'cover-a4-background.jpg');
+  const html = path.join(OUT, 'labels', '.cover-a4-background.html');
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  fs.writeFileSync(html, `<!DOCTYPE html><html><head><style>
+    * { margin: 0; } html, body { width: 8.5in; height: 11in; overflow: hidden; background: #fbf7ec; }
+    .art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0;
+           opacity: 0.62; filter: saturate(0.85) contrast(0.92) brightness(1.08); }
+    .veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(251,247,236,0) 0%, rgba(251,247,236,0.05) 20%,
+            rgba(251,247,236,0.66) 30%, rgba(251,247,236,0.72) 100%); }
+    .title { position: absolute; left: 0.2in; right: 0.2in; top: 0.1in; height: 2.0in;
+             background: radial-gradient(ellipse 50% 50% at 50% 45%, rgba(251,247,236,0.95) 60%, rgba(251,247,236,0) 100%); }
+  </style></head><body><img class="art" src="file://${path.join(SJVG_DIR, 'brand/lavender.jpg')}"><div class="veil"></div><div class="title"></div></body></html>`);
+  const png = out.replace(/\.jpg$/, '.png');
+  execFileSync('google-chrome', ['--headless=new', '--disable-gpu', '--no-sandbox', '--allow-file-access-from-files', '--hide-scrollbars',
+    '--force-device-scale-factor=2.5', '--window-size=816,1056', '--virtual-time-budget=3000', `--screenshot=${png}`, 'file://' + html], { stdio: 'ignore' });
+  execFileSync('convert', [png, '-quality', '88', out]);
+  fs.unlinkSync(png); fs.unlinkSync(html);
+  return out;
+}
 // variant: 'live' (the cover in use) or 'labels' (draft A4: every product shown by its label, on a lavender plate).
 function coverSheet(variant = 'live') {
   const shelf = ordered.filter(p => p.bottle_photo);
@@ -527,8 +548,7 @@ function coverSheet(variant = 'live') {
   if (variant === 'labels') {
     const lbl = p => p.category === 'hydrosol' ? `file://${renderLabel(p)}` : img(p.image);
     return `<section class="sheet cover cv-bg">
-  <img class="cv-bg-art" src="file://${path.join(SJVG_DIR, 'brand/lavender.jpg')}" alt="">
-  <div class="cv-bg-veil"></div>
+  <img class="cv-bg-flat" src="file://${coverBackground()}" alt="">
   <div class="cv-bg-head">${head}</div>
   <p class="cv-k">Our hydrosols <span>· 4 oz. amber glass spray · $${ordered[0].price_usd}</span></p>
   <div class="cv-lgrid">${ordered.map(p => `<figure>${p.availability === 'In stock' ? '' : '<span class="cv-soon sans">Coming 2027</span>'}<img src="${lbl(p)}" alt=""></figure>`).join('')}</div>
@@ -930,7 +950,9 @@ if (COVER_DRAFTS) {
     const html = path.join(dir, name + '.html');
     fs.writeFileSync(html, doc('Cover draft', coverSheet(v)));
     cdrome('file://' + html, path.join(dir, name + '.pdf'));
-    execFileSync('pdftoppm', ['-png', '-r', '80', '-singlefile', path.join(dir, name + '.pdf'), path.join(dir, name)]);
+    execFileSync('pdftoppm', ['-png', '-r', '300', '-singlefile', path.join(dir, name + '.pdf'), path.join(dir, name)]);
+    execFileSync('pdftoppm', ['-png', '-r', '100', '-singlefile', path.join(dir, name + '.pdf'), path.join(dir, name + '-preview')]);
+    // The HTML is only the printing source: a browser lays it out to its window, so it never matches the page. Keep the PDF and PNGs.
     console.log('built', name);
   }
   (async () => {
@@ -942,6 +964,7 @@ if (COVER_DRAFTS) {
       const over = await page.evaluate(() => { const s = document.querySelector('.sheet'); const b = s.getBoundingClientRect().bottom;
         return Math.max(0, ...[...s.querySelectorAll('*')].map(e => e.getBoundingClientRect().bottom - b)); });
       console.log(name, over > 1 ? `runs ${Math.round(over)}px off the page` : 'fits');
+      fs.unlinkSync(path.join(dir, name + '.html'));
     }
     await browser.close();
   })();
