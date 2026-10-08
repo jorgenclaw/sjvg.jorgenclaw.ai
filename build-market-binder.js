@@ -978,7 +978,8 @@ if (COVER_DRAFTS) {
 for (const d of ['sheets', 'pdf', 'preview']) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
 for (const d of ['sheets', 'pdf', 'preview', 'labels']) fs.mkdirSync(path.join(OUT, d), { recursive: true });
 const pages = [
-  ['cover', 'Cover', coverSheet()],
+  // Option 2, chosen by Scott 2026-10-08: the live layout on the colorized lavender plate.
+  ['cover', 'Cover', coverSheet('plate')],
   ['fresh-cut-flowers', 'Fresh-cut flowers', flowersSheet()],
   ['prices', 'Prices', pricesSheet()],
   ['how-to-order', 'How to order & pay', orderSheet()],
