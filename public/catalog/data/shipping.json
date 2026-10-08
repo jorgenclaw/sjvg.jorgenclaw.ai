@@ -1,20 +1,43 @@
 {
-  "_note": "Shipping options shown on the catalog, product pages and market binder. Decided by Scott 2026-10-08: Pirate Ship labels, glass only, two Uline box sizes, flat $12 / $16. Details: groups/main/Jorgenclaw.ai_LLC/San-Joaquin-Victory-Gardens/shipping/sjvg-shipping-playbook.md",
-  "carrier": "USPS Ground Advantage",
-  "days": "2–5 business days",
-  "local": { "name": "Pickup or local delivery", "price": 0, "where": "Manteca area" },
+  "_note": "Shipping options shown on the catalog, product pages and market binder. Decided by Scott 2026-10-08: Pirate Ship labels, glass only, two Uline box sizes, flat $12 / $16. Details: groups/main/Jorgenclaw.ai_LLC/San-Joaquin-Victory-Gardens/shipping/sjvg-shipping-playbook.md Updated later 2026-10-08: USPS or UPS; essential oils and propolis ship too (ground, marked for flammable liquids); the bitcoin discount covers shipping.",
+  "carrier": "USPS or UPS ground",
+  "days": "usually 2–5 business days",
+  "local": {
+    "name": "Pickup or local delivery",
+    "price": 0,
+    "where": "Manteca area"
+  },
   "boxes": [
-    { "id": "small", "name": "Small box", "price": 12, "size": "9 × 6 × 5 in",
-      "holds": ["1–2 hydrosols", "or 1 jar of honey"] },
-    { "id": "large", "name": "Large box", "price": 16, "size": "9 × 8 × 6 in",
-      "holds": ["Up to 6 hydrosols", "or 2 jars of honey", "or 1 jar of honey + up to 4 hydrosols"] }
+    {
+      "id": "small",
+      "name": "Small box",
+      "price": 12,
+      "size": "9 × 6 × 5 in",
+      "holds": [
+        "1–2 hydrosols",
+        "or 1 jar of honey",
+        "or up to 4 small bottles (oils, propolis)"
+      ]
+    },
+    {
+      "id": "large",
+      "name": "Large box",
+      "price": 16,
+      "size": "9 × 8 × 6 in",
+      "holds": [
+        "Up to 6 hydrosols",
+        "or 2 jars of honey",
+        "or 1 jar of honey + up to 4 hydrosols",
+        "Small bottles count as half a hydrosol"
+      ]
+    }
   ],
   "good_to_know": [
     "Every bottle and jar is sealed in its own bag and wrapped in honeycomb paper.",
-    "You get a USPS tracking number when your box ships.",
+    "We ship by USPS or UPS, whichever suits the box, and send you the tracking number.",
+    "Essential oils and Bee Propolis Tincture travel by ground only, packed and marked for flammable liquids.",
     "Bigger orders ship in more than one box. We'll text you the total first.",
     "Honey ships to California addresses only.",
-    "Essential oils and Bee Propolis Tincture are pickup or local delivery only for now: they're flammable, and mailing them takes special handling.",
-    "The bitcoin discount applies to products. Shipping is a flat fee."
+    "Pay in bitcoin and save 10% on everything, shipping included."
   ]
 }

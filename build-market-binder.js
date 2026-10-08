@@ -288,8 +288,42 @@ table.dil { width: 100%; border-collapse: collapse; font-size: 9pt; text-align: 
 
 function doc(title, body) {
   return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>${esc(title)}</title>
-<style>${CSS}</style></head><body>${body}</body></html>`;
+<style>${CSS}${body.includes('sheet cover') ? coverCss() : ''}</style></head><body>${body}</body></html>`;
 }
+const coverCss = () => `
+/* Cover */
+@font-face { font-family: 'Franklin'; src: url('file://${SBD_FONTS.franklin}'); font-weight: 100 900; }
+@font-face { font-family: 'Sans3'; src: url('file://${SBD_FONTS.sans3}'); font-weight: 200 900; }
+.cv-head { text-align: center; padding-top: 0.05in; }
+.cv-title { font-size: 36pt; font-weight: 700; line-height: 1.05; margin: 0.08in 0 0.08in; }
+.cv-sub { font-style: italic; font-size: 13pt; color: var(--soft); }
+.cv-k { margin: 0.22in 0 0.09in; font-size: 8.5pt; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); }
+.cv-k span { letter-spacing: 0.06em; text-transform: none; color: var(--olive); font-style: italic; font-size: 9pt; }
+.cv-shelf { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.1in 0.16in; padding: 0 0.5in; }
+.cv-shelf figure { width: 1.2in; }
+.cv-shelf img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 7px; display: block; box-shadow: 0 3px 10px rgba(43,43,31,.2); }
+.cv-shelf figcaption { font-size: 8pt; text-align: center; color: var(--soft); margin-top: 0.04in; }
+.cv-oils { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.12in; }
+.cv-oils img { width: 100%; display: block; border-radius: 3px; box-shadow: 0 2px 8px rgba(43,43,31,.25); }
+.cv-oils figcaption { font-size: 7.5pt; text-align: center; color: var(--amber); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.05in; font-family: 'Helvetica Neue', Arial, sans-serif; }
+.cv-oils figcaption b { display: block; font: 700 9.5pt Georgia, serif; color: var(--ink); text-transform: none; letter-spacing: 0; }
+.cv-ship { text-align: center; font-size: 9pt; color: var(--olive); margin: 0.18in 0 0.12in; }
+.cv-bottom { margin-top: auto; }
+.cv-hive { display: grid; grid-template-columns: 1fr 1fr; gap: 0.16in; margin-bottom: 0.14in; }
+.cv-hc { display: flex; align-items: center; gap: 0.1in; border: 1px solid var(--line); border-radius: 9px; padding: 0.08in; background: var(--cream); }
+.cv-hc img { width: 0.62in; height: 0.62in; object-fit: cover; border-radius: 6px; flex: none; }
+.cv-hc img.cv-hl { width: 1.05in; height: auto; border-radius: 2px; box-shadow: 0 1px 4px rgba(43,43,31,.25); }
+.cv-hn { font-weight: 700; font-size: 10.5pt; }
+.cv-hd { font-size: 7.5pt; color: var(--olive); margin-top: 0.02in; }
+.cv-sbd { background: #1a2332; color: #e8edf5; border-radius: 10px; padding: 0.15in 0.22in; font-family: 'Sans3', sans-serif; margin-bottom: 0.12in; }
+.cv-sbd-h { font-family: 'Franklin', sans-serif; font-weight: 800; font-size: 13pt; color: #fff; }
+.cv-sbd-h span { color: #d69e2e; }
+.cv-sbd-sub { font-size: 8.5pt; color: #b8c2d3; margin-top: 0.02in; }
+.cv-sbd-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.1in; margin-top: 0.09in; }
+.cv-sbd-grid div { border-top: 2px solid #d69e2e; padding-top: 0.05in; font-size: 8.5pt; line-height: 1.3; }
+.cv-sbd-grid b { display: block; color: #fff; }
+.cv-sbd-grid span { color: #d69e2e; font-weight: 600; }
+`;
 
 function footer(right, center = '') {
   return `<div class="foot"><span>San Joaquin Victory Gardens · Manteca, California</span><span class="foot-c">${center}</span><span class="foot-r">${right}</span></div>`;
@@ -430,26 +464,40 @@ const coverTile = p => `
       <p class="g-n">${esc(shortName(p))}</p>
       <p class="g-s sans">${p.availability === 'In stock' ? 'Available now' : esc(comingText(p))}</p></div>`;
 
+// Cover (2026-10-08, Scott chose draft A from market-binder/cover-drafts, then changed it): hydrosol bottle
+// photos lead, the essential oils follow (labels stand in until there are bottle photos), the beehive products
+// sit small above the Sovereignty by Design band because they aren't on sale yet.
+const SBD_FONTS = { franklin: path.join(LLC, 'business-card-font-libre-franklin.woff2'), sans3: path.join(LLC, 'business-card-font-source-sans-3.woff2') };
+const OIL_LABEL = { 'white-sage-essential-oil': 'White Sage', 'phenomenal-lavender-essential-oil': 'Phenomenal Lavender',
+                    'spearmint-essential-oil': 'Spearmint', 'lemongrass-essential-oil': 'Lemongrass' };
+const status = p => p.availability === 'In stock' ? 'Available now' : comingText(p);
 function coverSheet() {
-  const credits = ordered.map(p => `${shortName(p)}: ${p.photo_credit} (${p.photo_license})`).join(' · ');
-  return `<section class="sheet">
-  <header class="panel cover-top">
-    <img class="panel-art" src="${img(bySlug['phenomenal-lavender-hydrosol'].art)}" alt="">
-    <p class="kicker">Grown and steam-distilled in Manteca, California</p>
-    <h1 class="cover-title">San Joaquin<br>Victory Gardens</h1>
-    <p class="cover-sub">Essential oil distillery, beehive products, and more from our garden in Manteca, California.</p>
-    <p class="rule-orn">❦</p>
+  const shelf = ordered.filter(p => p.bottle_photo);
+  const hiveItems = [['bee-propolis-tincture', 'Ready Nov 10'], ['urban-wildflower-honey', 'Coming May 2027']].map(([s, w]) => [bySlug[s], w]);
+  return `<section class="sheet cover">
+  <header class="cv-head">
+    <p class="kicker">Grown, distilled and gathered in Manteca, California</p>
+    <h1 class="cv-title">San Joaquin Victory Gardens</h1>
+    <p class="cv-sub">Essential oil and hydrosol distillery, live plant sales, and beehive products.</p>
   </header>
-  <p class="kicker cover-k">Our essential oils</p>
-  <div class="grid4">${oils.map(coverTile).join('')}
-  </div>
-  <p class="kicker cover-k">Our hydrosols</p>
-  <div class="grid5">${ordered.map(coverTile).join('')}
-  </div>
-  <p class="cover-line" style="margin-top:0.2in;">Essential oils in 15 mL amber glass bottles · Hydrosols in 4 oz. amber glass spray bottles<br>Pure and steam-distilled, nothing added</p>
-  <p class="also">Also in this binder: <b>Sovereignty by Design</b>, privacy setup for your home network, phone, bitcoin and computer.</p>
-  <div style="margin-top:auto;">
-    <p class="credits sans">Plant photos via Wikimedia Commons — ${esc(credits)}.</p>
+
+  <p class="cv-k">Our hydrosols <span>· 4 oz. amber glass spray · $${ordered[0].price_usd}</span></p>
+  <div class="cv-shelf">${shelf.map(p => `<figure><img src="${img(p.bottle_photo)}" alt=""><figcaption>${esc(shortName(p))}</figcaption></figure>`).join('')}</div>
+
+  <p class="cv-k">Our essential oils <span>· 15 mL amber glass</span></p>
+  <div class="cv-oils">${oils.map(p => `<figure><img src="${img(p.image)}" alt=""><figcaption><b>${esc(OIL_LABEL[p.slug] || shortName(p))}</b>${esc(status(p))}</figcaption></figure>`).join('')}</div>
+
+  <p class="cv-ship sans">Take it home, get local delivery, or ship it for a flat $${SHIPPING.boxes[0].price} or $${SHIPPING.boxes[1].price}. Bitcoin saves ${ordered[0].btc_discount_pct}% on everything, shipping included.</p>
+
+  <div class="cv-bottom">
+    <p class="cv-k" style="margin-top:0;">Coming from our hives</p>
+    <div class="cv-hive">${hiveItems.map(([p, when]) => `<div class="cv-hc"><img src="${img(p.photo)}" alt=""><img class="cv-hl" src="${img(p.image)}" alt="">
+        <div><p class="cv-hn">${esc(p.name)}</p><p class="cv-hd sans">${esc(when)} · $${p.price_usd} · reserve now</p></div></div>`).join('')}</div>
+    <div class="cv-sbd">
+      <p class="cv-sbd-h">Also in this binder: Sovereignty <span>by</span> Design</p>
+      <p class="cv-sbd-sub">Privacy setup, done in person at your kitchen table.</p>
+      <div class="cv-sbd-grid">${SBD.map(([, n, , price]) => `<div><b>${esc(n)}</b><span>${esc(price)}</span></div>`).join('')}</div>
+    </div>
     ${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}
   </div>
 </section>`;
@@ -685,7 +733,7 @@ function orderSheet() {
     <img class="panel-art" src="${img(bySlug['lemongrass-hydrosol'].art)}" alt="">
     <p class="kicker">San Joaquin Victory Gardens</p>
     <h1 class="page-title">How to order &amp; pay</h1>
-    <p class="page-lede">Cash and Zelle pay the listed price. Pay in bitcoin and save ${pct}%.</p>
+    <p class="page-lede">Cash and Zelle pay the listed price. Pay in bitcoin and save ${pct}% on everything, shipping included.</p>
   </header>
 
   <div class="section">

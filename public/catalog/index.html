@@ -9,7 +9,7 @@
   <meta property="og:description" content="Steam-distilled hydrosols and essential oils from the San Joaquin Valley.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sjvg.jorgenclaw.ai/catalog/">
-  <link rel="stylesheet" href="style.css?v=2026-10-08d">
+  <link rel="stylesheet" href="style.css?v=2026-10-08e">
 </head>
 <body>
   <div class="container">
@@ -34,8 +34,8 @@
     <!-- Payment Terms Banner -->
     <div class="payment-banner">
       <strong>Pick up or get local delivery in the Manteca area, or have it shipped.</strong>
-      Hydrosols ship anywhere in the US for a flat $12 (1–2 bottles) or $16 (up to 6). <a href="#shipping">Shipping options →</a><br>
-      Cash or Zelle accepted at listed price. <strong>Pay in Bitcoin and save 10%.</strong>
+      Shipping is a flat $12 or $16 by box size. <a href="#shipping">Shipping options →</a><br>
+      Cash or Zelle accepted at listed price. <strong>Pay in bitcoin and save 10% on everything, shipping included.</strong>
     </div>
 
     <!-- Fresh-cut flowers: seasonal, so a banner rather than product cards -->
@@ -103,7 +103,7 @@
         <span id="cart-subtotal"></span>
       </div>
       <div class="cart-total-line">
-        <span>Bitcoin (10% off products)</span>
+        <span>Bitcoin (10% off everything)</span>
         <span id="cart-btc"></span>
       </div>
       <button class="send-order-btn" id="send-order-btn">Send Order with Your Name and Other Questions via SMS</button>
@@ -211,8 +211,10 @@
     document.getElementById('ship-notes').innerHTML = shipping.good_to_know.map(t => `<li>${t}</li>`).join('');
   }
 
-  // Which box an order needs: hydrosols (h) and honey jars (j) that are ready to ship.
-  function boxFor(h, j) {
+  // Which box an order needs: hydrosols (h), honey jars (j) and small bottles (s: 15 mL oils, 1 oz propolis)
+  // that are ready to ship. A small bottle takes about half a hydrosol's room.
+  function boxFor(h, j, s = 0) {
+    h = h + Math.ceil(s / 2);
     if (!h && !j) return null;
     const [small, large] = shipping.boxes;
     if (j === 0) return h <= 2 ? small : h <= 6 ? large : 'multi';
@@ -230,20 +232,21 @@
   // Shipping for the current cart: { fee, text, notes }
   function shippingQuote() {
     if (delivery !== 'ship' || !shipping) return { fee: 0, text: `${shipping ? shipping.local.name : 'Pickup or local delivery'} (${shipping ? shipping.local.where : 'Manteca area'}): free`, notes: [] };
-    let h = 0, j = 0; const local = [], later = [];
+    let h = 0, j = 0, s = 0; const local = [], later = [];
     cart.forEach(item => {
       const p = products.find(x => x.slug === item.slug);
       if (!p) return;
       if (p.availability !== 'In stock') { later.push(p.name); return; }
       if (p.category === 'hydrosol') h += item.qty;
       else if (p.category === 'honey') j += item.qty;
+      else if (p.category === 'essential_oil' || p.category === 'propolis') s += item.qty;
       else local.push(p.name);
     });
     const notes = [];
     if (local.length) notes.push(`${local.join(', ')}: pickup or local delivery only for now.`);
     if (later.length) notes.push(`${later.join(', ')}: reserved; we'll arrange delivery when it's ready.`);
     if (cart.some(i => (products.find(x => x.slug === i.slug) || {}).category === 'honey')) notes.push('Honey ships to California addresses only.');
-    const box = boxFor(h, j);
+    const box = boxFor(h, j, s);
     if (!box) return { fee: 0, text: 'Shipping: nothing to ship yet', notes };
     if (box === 'multi') return { fee: 0, text: 'Shipping: more than one box; we\'ll text you the total', notes };
     return { fee: box.price, text: `Shipping: ${box.name.toLowerCase()}, ${shipping.carrier}`, notes };
@@ -289,7 +292,7 @@
       `;
     });
     
-    // Delivery choice and shipping fee. The bitcoin discount applies to products, not shipping.
+    // Delivery choice and shipping fee. The bitcoin discount covers shipping too (Scott, 2026-10-08).
     const q = shippingQuote();
     html += `
         <div class="cart-delivery">
@@ -302,7 +305,7 @@
     // A cart holding only reservations has nothing to total yet.
     const anyPriced = cart.some(item => { const p = products.find(x => x.slug === item.slug) || {}; return p.price_usd != null && !(p.reserve && p.availability !== 'In stock'); });
     document.getElementById('cart-subtotal').textContent = anyPriced ? `$${(subtotal + q.fee).toFixed(2)}` : '—';
-    document.getElementById('cart-btc').textContent = anyPriced ? `$${(subtotal * 0.9 + q.fee).toFixed(2)}` : '—';
+    document.getElementById('cart-btc').textContent = anyPriced ? `$${((subtotal + q.fee) * 0.9).toFixed(2)}` : '—';
   }
 
   function addToCart(slug) {
@@ -454,7 +457,7 @@
     body += `\n${q.text}${q.fee ? ` — $${q.fee.toFixed(2)}` : ''}\n`;
     q.notes.forEach(n => { body += `${n}\n`; });
     body += `\nTotal: $${(subtotal + q.fee).toFixed(2)}\n`;
-    body += `Bitcoin (10% off products): $${(subtotal * 0.9 + q.fee).toFixed(2)}\n`;
+    body += `Bitcoin (10% off everything): $${((subtotal + q.fee) * 0.9).toFixed(2)}\n`;
     if (delivery === 'ship') body += '\nMy shipping address:\n';
     
     const encoded = encodeURIComponent(body);
