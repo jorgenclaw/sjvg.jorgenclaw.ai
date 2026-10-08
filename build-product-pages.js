@@ -66,12 +66,8 @@ const DILUTION = {
 // How the product gets to you, from data/shipping.json. Everything ships; honey only within California; oils and propolis by ground.
 const SHIPPING = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'catalog/data/shipping.json'), 'utf8'));
 function fineText(p) {
-  const [small, large] = SHIPPING.boxes;
-  const pay = 'Cash, Zelle, or bitcoin (save 10% on everything, shipping included).';
-  const link = ' <a href="/catalog/#shipping">Shipping options</a>.';
-  if (p.category === 'hydrosol') return `Pick up or get local delivery in the Manteca area, or have it shipped: $${small.price} for 1–2 bottles, $${large.price} for up to 6.${link} ${pay}`;
-  if (p.category === 'honey') return `Pick up or get local delivery in the Manteca area, or have it shipped to a California address: $${small.price} for 1 jar, $${large.price} for 2.${link} ${pay}`;
-  return `Pick up or get local delivery in the Manteca area, or have it shipped by ground: $${small.price} for up to 4 small bottles, or add it to a bigger box.${link} ${pay}`;
+  // Shipping is paused until the end of October (Scott, 2026-10-08), so every product shows the same notice.
+  return `Pick up or get local delivery in the Manteca area. ${SHIPPING.notice} Cash, Zelle, or bitcoin (save 10% on everything).`;
 }
 
 function priceBlock(p) {

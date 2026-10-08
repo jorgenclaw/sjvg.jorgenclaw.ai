@@ -33,9 +33,9 @@
 
     <!-- Payment Terms Banner -->
     <div class="payment-banner">
-      <strong>Pick up or get local delivery in the Manteca area, or have it shipped.</strong>
-      Shipping is a flat $12 or $16 by box size. <a href="#shipping">Shipping options →</a><br>
-      Cash or Zelle accepted at listed price. <strong>Pay in bitcoin and save 10% on everything, shipping included.</strong>
+      <strong>Pick up or get local delivery in the Manteca area.</strong>
+      Shipping options are being evaluated, and orders will be ready for shipment by the end of October.<br>
+      Cash or Zelle accepted at listed price. <strong>Pay in bitcoin and save 10% on everything.</strong>
     </div>
 
     <!-- Fresh-cut flowers: seasonal, so a banner rather than product cards -->
@@ -110,15 +110,6 @@
       <p class="cart-note">Opens your SMS app pre-addressed to (209) 684-0510 with your order summary.</p>
     </section>
 
-    <!-- Shipping options, from data/shipping.json -->
-    <section class="shipping-section" id="shipping">
-      <h2>Shipping options</h2>
-      <p class="ship-lede">Pick up your order, get it delivered around town, or have it shipped. Shipping is a flat price by box size, the same anywhere it can go.</p>
-      <div class="ship-cards" id="ship-cards"></div>
-      <h3>Good to know</h3>
-      <ul class="ship-notes" id="ship-notes"></ul>
-    </section>
-
     <!-- Consult / Contact -->
     <section class="consult-section">
       <h2>Get in Touch</h2>
@@ -140,7 +131,8 @@
   // Product data loaded from JSON
   let products = [];
   let shipping = null;
-  let delivery = localStorage.getItem('sjvg-delivery') === 'ship' ? 'ship' : 'local';
+  // Shipping is paused until the end of October (Scott, 2026-10-08): pickup or local delivery only.
+  let delivery = 'local';
   let cart = JSON.parse(localStorage.getItem('sjvg-cart') || '[]')
     .map(item => item.slug === 'prostrate-rosemary-hydrosol' ? { ...item, slug: 'rosemary-hydrosol' } : item)
     .map(item => item.slug === 'yerba-buena-hydrosol' ? { ...item, slug: 'spearmint-hydrosol' } : item);
@@ -163,7 +155,6 @@
       const [resp, shipResp] = await Promise.all([fetch('/catalog/data/products.json'), fetch('/catalog/data/shipping.json')]);
       products = await resp.json();
       shipping = await shipResp.json();
-      renderShipping();
       renderProducts();
       updateCartUI();
     } catch (e) {
@@ -292,13 +283,10 @@
       `;
     });
     
-    // Delivery choice and shipping fee. The bitcoin discount covers shipping too (Scott, 2026-10-08).
+    // Pickup or local delivery only while shipping is paused; the notice comes from data/shipping.json.
     const q = shippingQuote();
     html += `
-        <div class="cart-delivery">
-          <label><input type="radio" name="delivery" value="local" ${delivery === 'local' ? 'checked' : ''} onchange="setDelivery('local')"> Pickup or local delivery (free)</label>
-          <label><input type="radio" name="delivery" value="ship" ${delivery === 'ship' ? 'checked' : ''} onchange="setDelivery('ship')"> Ship it ($${shipping ? shipping.boxes[0].price : 12} or $${shipping ? shipping.boxes[1].price : 16}) · <a href="#shipping">options</a></label>
-        </div>
+        <p class="cart-ship-note">${shipping && shipping.notice ? shipping.notice : ''}</p>
         <div class="cart-item cart-ship"><span class="cart-item-name">${q.text}</span><span class="cart-item-total">${q.fee ? '$' + q.fee.toFixed(2) : ''}</span></div>
         ${q.notes.map(n => `<p class="cart-ship-note">${n}</p>`).join('')}`;
     cartItems.innerHTML = html;

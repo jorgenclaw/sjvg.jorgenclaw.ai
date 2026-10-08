@@ -230,6 +230,7 @@ table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
 .ship-n { font-size: 13pt; font-weight: 700; }
 .ship-n span { font-size: 8.5pt; font-weight: 400; color: var(--olive); }
 .ship-p { font-size: 16pt; font-weight: 700; color: var(--amber); }
+.ship-notice { font-size: 20pt; font-weight: 700; color: var(--amber); text-align: center; line-height: 1.3; margin: 0.6in 0.4in 0.25in; }
 .ship-how { margin-top: auto; padding-top: 0.06in; font-size: 8pt; color: var(--olive); }
 .bigqr { display: flex; gap: 0.2in; align-items: center; }
 .bigqr svg { width: 1.05in; height: 1.05in; flex: none; }
@@ -535,7 +536,7 @@ function coverSheet(variant = 'live') {
     <h1 class="cv-title">San Joaquin Victory Gardens</h1>
     <p class="cv-sub">Essential oil and hydrosol distillery, live plant sales, and beehive products.</p>
   </header>`;
-  const ship = `<p class="cv-ship sans">Take it home, get local delivery, or ship it for a flat $${SHIPPING.boxes[0].price} or $${SHIPPING.boxes[1].price}. Bitcoin saves ${ordered[0].btc_discount_pct}% on everything, shipping included.</p>`;
+  const ship = `<p class="cv-ship sans">Take it home or get local delivery. ${esc(SHIPPING.notice)} Bitcoin saves ${ordered[0].btc_discount_pct}% on everything.</p>`;
   const sbd = `<div class="cv-sbd">
       <p class="cv-sbd-h">Also in this binder: Sovereignty <span>by</span> Design</p>
       <p class="cv-sbd-sub">Privacy setup, done in person at your kitchen table.</p>
@@ -784,7 +785,7 @@ function pricesSheet() {
       <tr><th>Hydrosol</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(ordered)}
     </table>
-    <p class="body" style="margin-top:0.08in;">Shipping: $${SHIPPING.boxes[0].price} for 1–2 bottles, $${SHIPPING.boxes[1].price} for up to 6. Free pickup or local delivery. See the Shipping page.</p>
+    <p class="body" style="margin-top:0.08in;">Free pickup or local delivery. ${esc(SHIPPING.notice)}</p>
   </div>
 
   ${hive.length ? `<div class="section">
@@ -793,7 +794,7 @@ function pricesSheet() {
       <tr><th>Product</th><th>Size</th><th class="num">Price</th><th class="num">Paying in bitcoin</th></tr>
       ${priceRows(hive)}
     </table>
-    <p class="body" style="margin-top:0.08in;">From our own hives. Reserve now: no payment until it's ready. Honey ships within California only.</p>
+    <p class="body" style="margin-top:0.08in;">From our own hives. Reserve now: no payment until it's ready.</p>
   </div>` : ''}
 
   <div class="section">
@@ -818,7 +819,7 @@ function orderSheet() {
     <img class="panel-art" src="${img(bySlug['lemongrass-hydrosol'].art)}" alt="">
     <p class="kicker">San Joaquin Victory Gardens</p>
     <h1 class="page-title">How to order &amp; pay</h1>
-    <p class="page-lede">Cash and Zelle pay the listed price. Pay in bitcoin and save ${pct}% on everything, shipping included.</p>
+    <p class="page-lede">Cash and Zelle pay the listed price. Pay in bitcoin and save ${pct}% on everything.</p>
   </header>
 
   <div class="section">
@@ -836,7 +837,7 @@ function orderSheet() {
       <h2 class="h2">Order anytime</h2>
       <div class="bigqr">${qr(catalog)}
         <div><p class="body">Buy here at the table today, or order later from our online catalog.
-          Pick up or get local delivery in the Manteca area, or have it shipped (see Shipping, next page).</p>
+          Pick up or get local delivery in the Manteca area. ${esc(SHIPPING.notice)}</p>
           <p class="qr-t" style="margin-top:0.06in;">Scan for the online catalog</p><p class="qr-u sans">${CATALOG_ADDR}</p></div></div>
     </div>
     <div>
@@ -870,41 +871,19 @@ function boxSvg(kind) {
     <rect x="${w / 2 - 6}" y="${d}" width="12" height="${h}" fill="#d9c4a0" opacity="0.6"/>${bottles}</svg>`;
 }
 
+// Shipping is paused while Scott tests smaller boxes (2026-10-08), so the sheet only carries the notice.
 function shippingSheet() {
-  const [small, large] = SHIPPING.boxes;
-  const card = (title, price, lines, art, how) => `<div class="ship-card">${art}
-      <p class="ship-n">${title}</p><p class="ship-p">${price}</p><p class="body">${lines.join('<br>')}</p>${how ? `<p class="ship-how sans">${how}</p>` : ''}</div>`;
   return `<section class="sheet">
   <header class="panel page-head">
     <img class="panel-art" src="${img(bySlug['meyer-lemon-hydrosol'].art)}" alt="">
     <p class="kicker">San Joaquin Victory Gardens</p>
     <h1 class="page-title">Shipping</h1>
-    <p class="page-lede">Take it home today, get it delivered around town, or have it shipped. Shipping is a flat price by box size.</p>
+    <p class="page-lede">${esc(SHIPPING.notice)}</p>
   </header>
 
   <div class="section">
-    <h2 class="h2">Your options</h2>
-    <div class="ship-cards">
-      ${card(SHIPPING.local.name, 'Free', [`Anything in this binder, ${SHIPPING.local.where}.`, 'Text us to set a time.'], '<p class="ship-home">⌂</p>')}
-      ${card(`${small.name} <span>${small.size}</span>`, `$${small.price} flat`, small.holds, boxSvg('small'), `${SHIPPING.carrier}, ${SHIPPING.days}`)}
-      ${card(`${large.name} <span>${large.size}</span>`, `$${large.price} flat`, large.holds, boxSvg('large'), `${SHIPPING.carrier}, ${SHIPPING.days}`)}
-    </div>
-  </div>
-
-  <div class="section two">
-    <div>
-      <h2 class="h2">How we pack glass</h2>
-      <ul class="uses">
-        <li>Caps tightened, sprayers taped down</li>
-        <li>Every bottle and jar sealed in its own bag</li>
-        <li>Two layers of honeycomb paper or bubble wrap around each one</li>
-        <li>Paper padding all around, so nothing moves</li>
-      </ul>
-    </div>
-    <div>
-      <h2 class="h2">Good to know</h2>
-      <ul class="uses">${SHIPPING.good_to_know.filter(t => !/sealed in its own bag/.test(t)).map(t => `<li>${esc(t)}</li>`).join('')}</ul>
-    </div>
+    <p class="ship-notice">${esc(SHIPPING.notice)}</p>
+    <p class="body" style="text-align:center;">Until then, pick up your order or get local delivery in the Manteca area. Text us to set a time.</p>
   </div>
 
   <div style="margin-top:auto;">${footer(`${CONTACT.phone} · ${CONTACT.email}`, CATALOG_ADDR)}</div>
