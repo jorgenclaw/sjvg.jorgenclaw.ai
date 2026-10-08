@@ -219,8 +219,8 @@ table.prices { width: 100%; border-collapse: collapse; margin-top: 0.08in; }
 .pay span { font-size: 8.5pt; color: var(--olive); }
 .pay .btc { border-color: var(--amber); }
 .pay svg, .pay-qr { display: block; width: 0.95in; height: 0.95in; margin: 0.08in auto 0.05in; }
-.pay-lg svg, .pay-lg .pay-qr { width: 1.35in; height: 1.35in; }
-.pay-a { font-size: 5.5pt; color: var(--olive); word-break: break-all; line-height: 1.3; }
+.pay-lg svg, .pay-lg .pay-qr { width: 1.7in; height: 1.7in; }
+.pay-a { font-size: 7.5pt; color: var(--olive); overflow-wrap: anywhere; line-height: 1.3; }
 .contact { font-size: 11pt; line-height: 1.8; }
 .contact b { display: inline-block; width: 0.8in; font-weight: 700; }
 .ship-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.18in; margin-top: 0.1in; }
@@ -525,7 +525,8 @@ function coverBackground() {
   fs.unlinkSync(png); fs.unlinkSync(html);
   return out;
 }
-// variant: 'live' (the cover in use) or 'labels' (draft A4: every product shown by its label, on a lavender plate).
+// variant: 'live' (the cover in use), 'labels' (draft A4: every product as its label on the lavender plate; rejected as
+// unreadable in print) or 'plate' (option 2: the live layout and captions on the lavender plate).
 function coverSheet(variant = 'live') {
   const shelf = ordered.filter(p => p.bottle_photo);
   const hiveItems = [['bee-propolis-tincture', 'Ready Nov 10'], ['urban-wildflower-honey', 'Coming May 2027']].map(([s, w]) => [bySlug[s], w]);
@@ -564,7 +565,9 @@ function coverSheet(variant = 'live') {
 </section>`;
   }
 
-  return `<section class="sheet cover">
+  const plate = variant === 'plate';
+  return `<section class="sheet cover${plate ? ' cv-bg' : ''}">
+  ${plate ? `<img class="cv-bg-flat" src="file://${coverBackground()}" alt="">` : ''}
   ${head}
 
   <p class="cv-k">Our hydrosols <span>· 4 oz. amber glass spray · $${ordered[0].price_usd}</span></p>
@@ -946,7 +949,7 @@ if (COVER_DRAFTS) {
   const dir = path.join(LLC, 'market-binder/cover-drafts');
   const cdrome = (url, pdf) => execFileSync('google-chrome', ['--headless=new', '--disable-gpu', '--no-sandbox',
     '--allow-file-access-from-files', '--no-pdf-header-footer', '--virtual-time-budget=5000', `--print-to-pdf=${pdf}`, url], { stdio: 'ignore' });
-  for (const [v, name] of [['labels', 'cover-a4-labels']]) {
+  for (const [v, name] of [['plate', 'cover-option2-plate']]) {
     const html = path.join(dir, name + '.html');
     fs.writeFileSync(html, doc('Cover draft', coverSheet(v)));
     cdrome('file://' + html, path.join(dir, name + '.pdf'));
@@ -959,7 +962,7 @@ if (COVER_DRAFTS) {
     const { chromium } = require(require.resolve('playwright-core', { paths: [path.join(process.env.HOME, 'NanoClaw')] }));
     const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome' });
     const page = await browser.newPage({ viewport: { width: 816, height: 1056 } });
-    for (const name of ['cover-a4-labels']) {
+    for (const name of ['cover-option2-plate']) {
       await page.goto('file://' + path.join(dir, name + '.html'));
       const over = await page.evaluate(() => { const s = document.querySelector('.sheet'); const b = s.getBoundingClientRect().bottom;
         return Math.max(0, ...[...s.querySelectorAll('*')].map(e => e.getBoundingClientRect().bottom - b)); });
